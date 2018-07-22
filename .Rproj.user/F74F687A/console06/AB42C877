@@ -655,4 +655,118 @@ OOP.git[0K[?25h[?25l$ git commit -m":art:"[0K[?25h[?25l$ git add .[0K[
 .LAPTOP-LLR84L1D/Desktop/R_OOP/R_OOP/.git/[0K
 [0K[?25h[?25l
 [0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
-$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git a[0K[?25hd[0Kd[0K[11G[?25l$ git add .[0K[?25h
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git a[0K[?25hd[0Kd[0K[11G[?25l$ git add .[0K[?25h[?25l
+[0K[?25hwarning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko[?25l
+k-2.6.7/css/plugin-bookdown.css.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/css/plugin-fontsettings.css.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/css/plugin-highlight.css.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/css/plugin-search.css.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/css/style.css.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/app.min.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/jquery.highlight.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+[0K[?25hwarning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko[?25l
+k-2.6.7/js/lunr.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/plugin-bookdown.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/plugin-fontsettings.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/plugin-search.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/gitbo[0Ko
+k-2.6.7/js/plugin-sharing.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+warning: LF will be replaced by CRLF in docs/libs/jquer[0Ky
+-2.2.3/jquery.min.js.[0K
+The file will have its original line endings in your wo[0Kr
+king directory.[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git c[0K[?25h[?25lo[0K[8G[?25h[9G[?25l$ git com[0K[?25hm[0Ki[0Kt[0K[14G[?25l$ git commit -[0K[?25hm[0K"[0K:[0Ka[0Kr[0Kt[0K"[0K"[0K[?25l$ git commit -m":art"[0K[?25h[?25l$ git commit -m":art[0K[?25h:[0K"[0K[?25l
+[0K[?25h[master a4805f3] :art:[0K[?25l
+ 11 files changed, 670 insertions(+), 254 deletions(-)[0K
+ delete mode 100644 .RData[0K
+ delete mode 100644 .Rhistory[0K
+ create mode 100644 .nojekyll[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ git remote add origin https://github.com/DataXujing/R[0K_
+OOP.git[0K[?25h[?25l
+[0K[?25hfatal: remote origin already exists.[0K[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[14G[?25l$ git remote r[0K[?25hm[0K[17G[?25l$ git remote rm o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ git remote rm origin[0K[?25h[?25l$ git remote add origin https://github.com/DataXujing/R[0K_
+OOP.git[0K[?25h[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git p[0K[?25hu[0Ks[0Kh[0K[12G[?25l$ git push -[0K[?25hu[0K[15G[?25l$ git push -u o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[22G[?25l$ git push -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K[?25l
+[0K[?25hEnumerating objects: 244, done.[0K[?25l
+Counting objects:  21% (52/244)[0K[1G[?25h[?25lCounting objects:  73% (179/244)[0K[2G[?25h[?25lCounting objects: 100% (244/244), done.[0K
+Delta compression using up to 4 threads.[0K
+Compressing objects:  29% (54/185)[0K[1G[?25h[?25lCompressing objects:  82% (152/185)[0K[1G[?25hCompressing objects: 100% (185/185), done.[0K[?25l
+Writing objects:   9% (22/244)[0K[1G[?25h[?25lWriting objects:  28% (69/244)[0K[1G[?25h[?25lWriting objects:  71% (174/244)[0K[1G[?25h[?25lWriting objects:  75% (184/244)[0K[1G[?25h[?25lWriting objects:  81% (198/244)[0K[1G[?25h[?25lWriting objects:  88% (215/244)[0K[1G[?25h[?25lWriting objects:  88% (217/244), 984.00 KiB | 95.00 KiB[0K/[1G[?25h[?25l
+Writing objects:  89% (218/244), 984.00 KiB | 95.00 KiB[0K/
+Writing objects:  90% (220/244), 984.00 KiB | 95.00 KiB[0K/
+Writing objects:  91% (223/244), 984.00 KiB | 95.00 KiB[0K/
+Writing objects:  92% (225/244), 984.00 KiB | 95.00 KiB[0K/
+s[0K[1G[?25hWriting objects:  93% (227/244), 984.00 KiB | 95.00 KiB[0K/[?25l
+Writing objects:  94% (230/244), 984.00 KiB | 95.00 KiB[0K/
+Writing objects:  95% (232/244), 984.00 KiB | 95.00 KiB[0K/
+s[0K[1G[?25hWriting objects:  96% (235/244), 984.00 KiB | 95.00 KiB[0K/[?25l
+Writing objects:  97% (237/244), 984.00 KiB | 95.00 KiB[0K/
+s[0K[1G[?25hWriting objects:  98% (240/244), 984.00 KiB | 95.00 KiB[0K/[?25l
+Writing objects:  99% (242/244), 984.00 KiB | 95.00 KiB[0K/
+Writing objects: 100% (244/244), 984.00 KiB | 95.00 KiB[0K/
+s[0K[1G[?25hWriting objects: 100% (244/244), 1.06 MiB | 98.00 KiB/s[0K,[?25l
+ done.[0K
+Total 244 (delta 28), reused 0 (delta 0)[0K
+[0K[?25h[?25lremote: Resolving deltas:  82% (23/28)[0K[1G[?25hremote: Resolving deltas: 100% (28/28), done.[0K[?25l
+[0K[?25hTo https://github.com/DataXujing/R_OOP.git[0K[?25l
+ * [new branch]      master -> master[0K
+[0K[?25hBranch 'master' set up to track remote branch 'master' [0Kf[?25l
+rom 'origin'.[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l[11AWriting objects: 100% (244/244), 984.00 KiB | 95.00 KiB/Writing objects: 100% (244/244), 1.06 MiB | 98.00 KiB/s, done.[0K
+Total 244 (delta 28), reused 0 (delta 0)[0K
+remote: Resolving deltas: 100% (28/28), done.[0K
+To https://github.com/DataXujing/R_OOP.git[0K
+ * [new branch]      master -> master[0K
+Branch 'master' set up to track remote branch 'master' from 'origin'.[0K
+[0K
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0K
+[0m$[0K
+[0K
+[0K
+[0K[3A[3G[?25h

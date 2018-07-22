@@ -158,7 +158,7 @@
 \end{quote}
 
 \begin{quote}
-John Chambers
+from John Chambers
 \end{quote}
 
 1年半之前就有计划整理一份R语言面向对象编程的详细文档，今天终于有了一点眉目。
@@ -192,7 +192,7 @@ migrating to Java.
   声明
 \end{itemize}
 
-本书内容并非笔者原创，而是对参考文献{[}1-3{]}学习之后的整理再现，特此说明。本电子书完全免费，但转载或用于其他商业用途请说明来源：\url{https://dataxujing.github.io/R_OOP/}
+本书内容并非笔者原创，而是对参考文献{[}1-3{]}学习之后的整理再现，特此说明。本电子书完全免费，但转载或用于其他商业用途请说明来源：\url{https://dataxujing.github.io/R_oop/}
 
 \begin{quote}
 学R不思则罔，思R不学则殆。
@@ -469,8 +469,8 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 \end{Shaded}
 
 \begin{verbatim}
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -2.1161 -1.0974 -0.5572 -0.6043 -0.2284  0.6827
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -0.77255 -0.00258  0.67462  0.81467  1.94720  2.11965
 \end{verbatim}
 
 \begin{Shaded}
@@ -487,13 +487,13 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.7308 -1.0410  0.1215  0.7082  2.4035 
+## -1.0329 -0.5940 -0.1191  0.4168  1.5375 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)
-## (Intercept)   0.5051     0.3962   1.275    0.234
+## (Intercept) -0.09061    0.24956  -0.363    0.725
 ## 
-## Residual standard error: 1.253 on 9 degrees of freedom
+## Residual standard error: 0.7892 on 9 degrees of freedom
 \end{verbatim}
 
 \section{R为什么要进行面向对象的编程}\label{r}
@@ -972,7 +972,7 @@ base包的S3对象
 \begin{verbatim}
 ## function (x, ...) 
 ## UseMethod("mean")
-## <bytecode: 0x0000000018ff4458>
+## <bytecode: 0x0000000018fc6468>
 ## <environment: namespace:base>
 \end{verbatim}
 
@@ -2466,7 +2466,7 @@ Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去�
 \end{Shaded}
 
 \begin{verbatim}
-## <environment: 0x000000001c32d098>
+## <environment: 0x00000000161e27d8>
 \end{verbatim}
 
 \begin{Shaded}
@@ -3002,7 +3002,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.4832402
+## [1] 0.9821196
 \end{verbatim}
 
 \begin{Shaded}
@@ -3012,7 +3012,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3886651
+## [1] 0.6599525
 \end{verbatim}
 
 \begin{Shaded}
