@@ -1,0 +1,4 @@
+"0","modify <- function(x){"
+"0","  x$a <- 2"
+"0","  invisible()"
+"0","}"

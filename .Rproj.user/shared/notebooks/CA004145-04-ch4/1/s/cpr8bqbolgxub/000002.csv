@@ -1,0 +1,6 @@
+"0","setClass(""Person"",slots=list(name=""character"",age=""numeric""))"
+"0","#传入错误age类型"
+"0","bad <- new(""Person"",name=""bad"",age=""abc"")"
+"2","Error in validObject(.Object) : 
+  类别为“Person”的对象不对: invalid object for slot ""age"" in class ""Person"": got class ""character"", should be or extend class ""numeric""
+"

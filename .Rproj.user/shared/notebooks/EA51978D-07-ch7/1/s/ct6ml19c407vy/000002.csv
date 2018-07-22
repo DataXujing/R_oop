@@ -1,0 +1,7 @@
+"0","e <- new.env()"
+"0","parent.env(e)"
+"1","<environment: R_GlobalEnv>
+"
+"0","ls(e)"
+"1","character(0)
+"

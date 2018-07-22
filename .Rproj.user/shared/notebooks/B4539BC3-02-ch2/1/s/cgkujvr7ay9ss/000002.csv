@@ -1,0 +1,5 @@
+"0","teacher <- function(x,...) UseMethod(""teacher"")"
+"0","teacher.lecture <- function(x,...) print(""上课"")"
+"0","teacher.assignment <- function(x,...) print(""布置作业"")"
+"0","teacher.correcting <- function(x,...) print(""批改作业"")"
+"0","teacher.default <- function(x,...) print(""你不是teacher"")"

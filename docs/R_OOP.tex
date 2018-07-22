@@ -1,0 +1,3163 @@
+\documentclass[]{book}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={R语言面向对象编程},
+            pdfauthor={徐静},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{apalike}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{R语言面向对象编程}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{徐静}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2018-07-22}
+
+\usepackage{booktabs}
+\usepackage{xeCJK}
+
+\setCJKmainfont{宋体}
+
+\setmainfont{Georgia}
+
+\setromanfont{Georgia}
+
+\setmonofont{Courier New}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\chapter*{写在书前}
+\addcontentsline{toc}{chapter}{写在书前}
+
+为了理解R中的计算，下面的两个口号是有用的
+
+\begin{quote}
+一切皆是对象
+\end{quote}
+
+\begin{quote}
+一切皆是函数调用
+\end{quote}
+
+\begin{quote}
+John Chambers
+\end{quote}
+
+1年半之前就有计划整理一份R语言面向对象编程的详细文档，今天终于有了一点眉目。
+从2016年初开始研究R语言中的一些黑魔法，一直在尝试R语言的面向对象的编程，本人经历了Java和Python面向对象编程的洗礼，加深了对R语言面向对象编程的深入理解。本电子书是我在应用Java和Python面向对象编程后，对R语言面向对象编程的进一步理解的学习文档，希望对R社区的小伙伴有帮助。
+
+所有代码本人均在Ubuntu 16.04 LTS和CentOs6.5下尝试正常通过。
+
+\chapter*{声明}
+\addcontentsline{toc}{chapter}{声明}
+
+\begin{itemize}
+\tightlist
+\item
+  关于我
+\end{itemize}
+
+徐静：
+
+硕士研究生,
+目前的研究兴趣主要包括：数理统计，统计机器学习，深度学习，网络爬虫，前端可视化，R语言和Python语言的超级粉丝，多个R包和Python模块的作者，现在正逐步向Java迁移。
+
+Graduate students,the current research interests include: mathematical
+statistics, statistical machine learning, deep learning, web crawler,
+front-end visualization. He is a super fan of R and Python, and the
+author of several R packages and Python modules, and now gradually
+migrating to Java.
+
+\begin{itemize}
+\tightlist
+\item
+  声明
+\end{itemize}
+
+本书内容并非笔者原创，而是对参考文献{[}1-3{]}学习之后的整理再现，特此说明。本电子书完全免费，但转载或用于其他商业用途请说明来源：\url{https://dataxujing.github.io/R_OOP/}
+
+\begin{quote}
+学R不思则罔，思R不学则殆。
+\end{quote}
+
+\chapter{R语言编程风格指南}\label{ch1}
+
+好的编程风格(程序编写格式)就像正确使用标点符号。没有他也可以，但是他会让你编写的程序易于理解。建议参考Google
+R语言编程风格指南(\url{https://nanx.me/rstyle/})。虽然你的代码只有一个作者，但通常有许多读者，所以好的风格是很重要的。当你和他人合作编写代码时，尤其要注意编程风格，但是要注意没有一种风格说是最优的，但是你们需要统一。YiHuiXie编写的formatR添加包使得整理格式混乱的代码变得容易，但是不能解决一切问题。
+
+\section{符号和名字}
+
+\subsection{文件名}
+
+文件名应该有一定的意义，并且以.R结尾
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\NormalTok{fit}\OperatorTok{-}\NormalTok{model.R}
+\NormalTok{utility}\OperatorTok{-}\NormalTok{function.R}
+
+\CommentTok{#bad}
+
+\NormalTok{foo.r}
+\NormalTok{stuff.r}
+\end{Highlighting}
+\end{Shaded}
+
+如果文件需要按照顺序执行，那么做好在命名时加上数字前缀
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{0}\OperatorTok{-}\NormalTok{download.R}
+\DecValTok{1}\OperatorTok{-}\NormalTok{parse.R}
+\DecValTok{2}\OperatorTok{-}\NormalTok{explore.R}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{对象名}
+
+在计算机科学中有两件非常难的事情，缓存失效和对象命名。变量和函数名应该是小写字母，使用下划线(\_)将名字中的单词分开。通常变量名应该是名词，函数名应该是动词。追求简洁而有意义的名字。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\NormalTok{day_one}
+\NormalTok{day_}\DecValTok{1}
+
+\CommentTok{#bad}
+
+\NormalTok{first_day_of_month}
+\NormalTok{DayOne}
+\NormalTok{dayone}
+\NormalTok{djm1}
+\end{Highlighting}
+\end{Shaded}
+
+\section{语法}
+
+\subsection{空格}
+
+所有中缀运算符(=,+,-,\textless{}-等)的两边使用空格。要在逗号的后面而非前面加上空格
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\NormalTok{average <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(feet }\OperatorTok{/}\StringTok{ }\DecValTok{12} \OperatorTok{+}\StringTok{ }\NormalTok{inches, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+
+\CommentTok{#bad}
+
+\NormalTok{average<-}\KeywordTok{mean}\NormalTok{(feet}\OperatorTok{/}\DecValTok{12}\OperatorTok{+}\NormalTok{inches,}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+这个规则有个小小的例外，:,::,:::的两边不需要空格
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\NormalTok{base}\OperatorTok{::}\NormalTok{get}
+
+\CommentTok{#bad}
+
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\NormalTok{base }\OperatorTok{::}\StringTok{ }\NormalTok{get}
+\end{Highlighting}
+\end{Shaded}
+
+在小括号的左边放置一个空格，函数调用例外
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\ControlFlowTok{if}\NormalTok{ (debug) }\KeywordTok{do}\NormalTok{(x)}
+\KeywordTok{plot}\NormalTok{(x, y)}
+
+\CommentTok{#bad}
+
+\ControlFlowTok{if}\NormalTok{(debug)}\KeywordTok{do}\NormalTok{(x)}
+\KeywordTok{plot}\NormalTok{ (x, y)}
+\end{Highlighting}
+\end{Shaded}
+
+如果是为了对齐等号或赋值符号，也可以使用额外的空格
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{list}\NormalTok{(}
+  \DataTypeTok{total =}\NormalTok{ a }\OperatorTok{+}\StringTok{ }\NormalTok{b }\OperatorTok{+}\StringTok{ }\NormalTok{c,}
+  \DataTypeTok{mean  =}\NormalTok{ (a }\OperatorTok{+}\StringTok{ }\NormalTok{b }\OperatorTok{+}\StringTok{ }\NormalTok{c) }\OperatorTok{/}\StringTok{ }\NormalTok{n}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+小括号或中括号内代码的两侧不需要放置空格(除非有逗号，要在逗号的后边放置空格)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\ControlFlowTok{if}\NormalTok{ (debug) }\KeywordTok{do}\NormalTok{(x)}
+\NormalTok{diamonds[}\DecValTok{5}\NormalTok{, ]}
+
+\CommentTok{#bad }
+
+\ControlFlowTok{if}\NormalTok{ ( debug ) }\KeywordTok{do}\NormalTok{(x)}
+\NormalTok{x[}\DecValTok{1}\NormalTok{,]}
+\NormalTok{x[}\DecValTok{1}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{大括号}
+
+大括号的左半边不能独占一行，它后边也应该新起一行，右半边应该独占一行或它的后边是else。对大括号中的代码要缩进
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\ControlFlowTok{if}\NormalTok{ (y }\OperatorTok{<}\StringTok{ }\DecValTok{0} \OperatorTok{&&}\StringTok{ }\NormalTok{debug) \{}
+  \KeywordTok{message}\NormalTok{(}\StringTok{"Y is negative"}\NormalTok{)}
+\NormalTok{\}}
+
+\ControlFlowTok{if}\NormalTok{ (y }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+  \KeywordTok{log}\NormalTok{(x)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  y}\OperatorTok{^}\NormalTok{x}
+\NormalTok{\}}
+
+
+\CommentTok{#bad}
+
+\ControlFlowTok{if}\NormalTok{ (y }\OperatorTok{<=}\StringTok{ }\DecValTok{0} \OperatorTok{&&}\StringTok{ }\NormalTok{debug) }
+\KeywordTok{message}\NormalTok{(}\StringTok{"Y is negative"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{ (y }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+  \KeywordTok{log}\NormalTok{(x)}
+\NormalTok{\}}
+\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  y}\OperatorTok{^}\NormalTok{x}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+可以在同一行上留下非常短的语句：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (y }\OperatorTok{<}\StringTok{ }\DecValTok{0} \OperatorTok{&&}\StringTok{ }\NormalTok{debug) }\KeywordTok{message}\NormalTok{(}\StringTok{"Y is message"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{行的长度}
+
+努力使每行代码不超过80个字符，如果你的代码超过了这个长度，这说明你应该将一些功能打包成独立的函数。
+
+\subsection{缩进}
+
+缩进代码使用两个空格，不要使用制表符(tab)或者制表符加空格。唯一的例外是，如果一个函数定义跨越了很多行。这种情况下，第二行要缩进到定义开始的地方:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{long_function_name <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{ (}\DataTypeTok{a =} \StringTok{"a long argument"}\NormalTok{,}
+                                \DataTypeTok{b =} \StringTok{"another argument"}\NormalTok{,}
+                                \DataTypeTok{c =} \StringTok{"another long argument"}\NormalTok{) \{}
+  \CommentTok{# As usual code is idented by two spaces.}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{赋值}
+
+赋值时使用 \textless{}- 而不是 =。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#good}
+
+\NormalTok{x <-}\StringTok{ }\DecValTok{5}
+
+\CommentTok{#bad}
+
+\NormalTok{x =}\StringTok{ }\DecValTok{5}
+\end{Highlighting}
+\end{Shaded}
+
+\section{结构}
+
+\textbf{注释指南}
+
+对代码进行注释，每行的注释都应该以注释符和一个空格开始: \#。
+注释应该解释为什么。而不是是什么。
+
+使用由-和=构成的注释行将文件分割成容易理解的段落(块)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Load Data --------------------------------------------}
+
+\CommentTok{# Plot Data --------------------------------------------}
+\end{Highlighting}
+\end{Shaded}
+
+好的程序猿一定有自己的编程风格，并且在团队中能够快速的调整使得编程风格达成一致，所以与其他人合作意味着你可能需要对自己喜好的某些风格做出让步。
+
+\chapter{R语言面向对象编程指南}\label{ch2}
+
+面向对象是一种对世界理解和抽象的方法，当代码复杂度增加难以维护的时候，面向对象就会显得很重要，我经历过Java和Python两种语言从面向过程到面向对象的改造，对R的面向对象的编程也早有些研究但开始的时候并不是那么的透彻。随着大数据时代AI时代的来临，R将走向大规模的企业级应用，因此面向对象的编程方式也会将成为R语言的一种非常重要的趋势，并且多位R语言大神，像Hadley
+Wickham等在R包开发中早就引入了面向对象的编程方式，R语言的发展也势必会面向对象。
+
+\section{什么是面向对象}
+
+学过计算机编程基础的人都知道，计算机是通过接受一些逻辑指令，然后翻译成机器码，进而控制CPU的电路，从而实现我们能看到的所有操作。无论是何种计算机编程语言，都可以认为是计算机和人类沟通的翻译，将一般人能懂的计算机语言翻译成计算机能懂的机器语言。
+
+简单的理解，有的语言比较接近机器的习惯，机器执行起来会更有效率；有的语言比较接近人的习惯，人类设计起来会更容易。面向对象的思想就属于第二种情况。
+
+人的思维方式和计算机是不同的，计算机习惯按照顺序执行不同的指令，依据严格的逻辑进行不同的行为，而人类处理问题的方式通常是先对问题进行分析，然后调动不同的资源做不同的事情。
+
+喜欢历史故事的朋友都知道诸葛亮打仗和刘邦打仗的区别。诸葛亮会命令某人埋伏，某人放火，某人举旗，某人不战而退，某人斜刺里杀出，每个人听到命令都不知道最后会发生什么。直到最后敌军被一条龙的歼灭后，得胜归来的将军们对诸葛亮佩服的五体投地。而刘邦打仗的故事远没有那么精彩，事情来了该让韩信做的交给韩信，该让萧何做的交给萧何。
+
+如何像刘邦一样的写程序，这就是面向对象的程序设计。韩信，萧何这些人都可以认为是对象，我们只需要知道他们有什么特点，根据问题的不同派不同的人去做就可以了，而诸葛亮关注的是具体流程，至于是关羽去放火还是张飞去放火反而不重要了，这就是过程式的编程思想。
+
+面向对象的程序设计在运行效率上可能没有优势，但是节约了开发者和设计者的时间，在R语言和S语言上这一点完全一致，S语言很重要的设计理念是``人的时间远比机器的时间宝贵''。对各种模型和算法的封装及重用与面向对象的编程目的是相同的。
+
+在面向对象的程序设计中，对象(object)是最基本的元素，不过对象指的是具体的实例，在对象之上还有一个类(class)的概念。这里的类和R中的类的概念没有任何不同，都是指某一种抽象对象的类型(和R中的type不同,type指的是在内存存储方面的类型)。
+
+比如说``马''就是一个类，随便牵来一匹白马或红马都属于马这个范畴，但都和马这个东西不一样，如果牵来的白马是刘备的的卢马，红马是关羽的赤兔马，那么这两匹马就是对象。所以类是抽象的概念，对象是类的具体实例。我们直接操作的是对象，但是需要定义的是类。
+
+用面向对象的专业术语来说，马就是一个``类''，白马和红马是马的``子类''，的卢马是白马实例化的对象，也是马实例化的对象。
+
+一般来说类包含属性和方法，属性指的是类具有的某些信息，在计算机程序中通常是变量，方法指的是类进行的操作，在计算机程序中相当于函数。
+
+并不是具有了类和对象的概念后就成了面向对象的程序设计，一般来说还得具备三个特性：封装、继承和多态。
+
+封装指的是隐藏对象的实现细节，仅对外公开接口，每个对象都可以独立的完成一定的功能，不需要和其他对象有过多的交互，所有的数据交换都通过接口来处理，专业术语是降低系统的``耦合度''。
+
+比如说马这种交通工具就是一个封装的很好的类，具有颜色、体重等属性，具有载人、奔跑等方法。用的时候把马牵出来，通过缰绳和马鞭这几个接口来控制动作。
+
+继承是一个类可以继承另一个类的各种属性及方法，重写或增加某些属性和方法，被继承的类称为``父类''，继承了父类的类的称为``子类''。通过继承可以重写父类方法或增加额外功能，注意R语言像Python一样支持多重继承，Java不支持多继承，但是有其他办法实现。当然除了继承也可以组合类。
+
+多态可以说是面向对象的程序设计中最关键的特性，如果某种语言支持以上所有特性但是不支持多态，我们称其为``基于对象''而不是面向对象，所谓多态简单来说就是希望能用相同的命令作用于不同的类，根据类的不同产生不同的结果。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#作用在数值数据}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -1.8096 -1.2608 -0.6319 -0.3514  0.6667  1.3195
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#作用在Model上}
+\KeywordTok{summary}\NormalTok{(}\KeywordTok{lm}\NormalTok{(}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{)}\OperatorTok{~}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = rnorm(10) ~ rnorm(10))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.5697 -0.3007  0.1317  0.4997  1.1643 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)
+## (Intercept)  -0.1063     0.2743  -0.387    0.707
+## 
+## Residual standard error: 0.8675 on 9 degrees of freedom
+\end{verbatim}
+
+\section{R为什么要进行面向对象的编程}\label{r}
+
+R主要面向统计计算，而且代码量一般不会很大，几十行，几百行，使用面向过程的编程方式就可以很好的完成编程任务。在R中流传着一个深入人心的说法``万物皆对象''，另一方面，R是一种函数式的语言，与面向对象的程序设计存在着天然的差异，实际上这两个对象的描述的含义是不同的。``万物皆对象''是指R的基本数据结构的地位都是相同的，任何东西包括函数都可以认为是对象，都能作为参数传入到函数中。而``面向对象''指的是一种编程泛型，已经成为一个专有的名词。
+
+但是随着R语言在工业界的火热，伴随着越来越多的工程背景的人的加入，R语言开始向更多领域发展，会有越来越难以维护的海量代码项目，所以必须使用面向对象的编程思想，此外如果你开发一些R包需要对特殊的对象重定义S3(下一章会讲)的方法，需要对大量程序代码最大化的重用和封装(S4(后面会讲到))，那么这时候你同样需要用到R语言的面向对象的编程。
+
+一句话，随着R语言的发展，R面向对象编程一定是一个大的趋势。
+
+\section{R的面向对象编程}\label{r}
+
+R的面向对象是基于泛型函数(generic
+function)的，而不是基于类层次结构，接下来我们从面向对象的3个特征入手，分别用R语言进行实现。
+
+\begin{itemize}
+\tightlist
+\item
+  封装
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义teacher对象和行为}
+\NormalTok{teacher <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{UseMethod}\NormalTok{(}\StringTok{"teacher"}\NormalTok{)}
+\NormalTok{teacher.lecture <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"上课"}\NormalTok{)}
+\NormalTok{teacher.assignment <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"布置作业"}\NormalTok{)}
+\NormalTok{teacher.correcting <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"批改作业"}\NormalTok{)}
+\NormalTok{teacher.default <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"你不是teacher"}\NormalTok{)}
+
+\CommentTok{# 定义同学对象和行为}
+
+\NormalTok{student <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{UseMethod}\NormalTok{(}\StringTok{"student"}\NormalTok{)}
+\NormalTok{student.attend <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"听课"}\NormalTok{)}
+\NormalTok{student.homework <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"写作业"}\NormalTok{)}
+\NormalTok{student.exam <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"考试"}\NormalTok{)}
+\NormalTok{student.default <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"你不是student"}\NormalTok{)}
+
+\CommentTok{#定义两个变量，a老师和b同学}
+
+\NormalTok{a <-}\StringTok{ 'teacher'}
+\NormalTok{b <-}\StringTok{ 'student'}
+
+\CommentTok{# 给老师变量设置行为}
+
+\KeywordTok{attr}\NormalTok{(a,}\StringTok{"class"}\NormalTok{) <-}\StringTok{ 'lecture'}
+\CommentTok{# 执行老师的行为}
+
+\KeywordTok{teacher}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "上课"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attr}\NormalTok{(b,}\StringTok{'class'}\NormalTok{) <-}\StringTok{ 'attend'}
+\KeywordTok{student}\NormalTok{(b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "听课"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attr}\NormalTok{(a,}\StringTok{'class'}\NormalTok{) <-}\StringTok{ 'assignment'}
+\KeywordTok{teacher}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "布置作业"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  继承
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给同学对象增加新的行为}
+\NormalTok{student.correcting <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{print}\NormalTok{(}\StringTok{"帮助老师批改作业"}\NormalTok{)}
+
+\CommentTok{# 辅助变量用于设置初始值}
+\NormalTok{char0 =}\StringTok{ }\KeywordTok{character}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\CommentTok{#实现继承关系}
+\NormalTok{create <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{classes=}\NormalTok{char0,}\DataTypeTok{parents=}\NormalTok{char0)\{}
+\NormalTok{  mro <-}\StringTok{ }\KeywordTok{c}\NormalTok{(classes)}
+  \ControlFlowTok{for}\NormalTok{(name }\ControlFlowTok{in}\NormalTok{ parents)\{}
+\NormalTok{    mro <-}\StringTok{ }\KeywordTok{c}\NormalTok{(mro,name)}
+\NormalTok{    ancestors <-}\StringTok{ }\KeywordTok{attr}\NormalTok{(}\KeywordTok{get}\NormalTok{(name),}\StringTok{'type'}\NormalTok{)}
+\NormalTok{    mro <-}\StringTok{ }\KeywordTok{c}\NormalTok{(mro,}\KeywordTok{ancestors}\NormalTok{(ancestors }\OperatorTok{!=}\StringTok{ }\NormalTok{name))}
+    
+\NormalTok{  \}}
+  
+  \KeywordTok{return}\NormalTok{(mro)}
+\NormalTok{\}}
+
+\CommentTok{# 定义构造函数，创建对象}
+\NormalTok{NewInstance <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{value=}\DecValTok{0}\NormalTok{,}\DataTypeTok{classes=}\NormalTok{char0,}\DataTypeTok{parents=}\NormalTok{char0) \{}
+\NormalTok{  obj <-}\StringTok{ }\NormalTok{value}
+  \KeywordTok{attr}\NormalTok{(obj,}\StringTok{'type'}\NormalTok{) <-}\StringTok{ }\KeywordTok{create}\NormalTok{(classes,parents)}
+  \KeywordTok{attr}\NormalTok{(obj,}\StringTok{"class"}\NormalTok{) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'homework'}\NormalTok{,}\StringTok{'correcting'}\NormalTok{,}\StringTok{'exam'}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(obj)}
+\NormalTok{\}}
+
+\CommentTok{# 创建对象实例}
+\NormalTok{StudentObj <-}\StringTok{ }\KeywordTok{NewInstance}\NormalTok{()}
+\CommentTok{# 创建子对象实例}
+\NormalTok{s1 <-}\StringTok{ }\KeywordTok{NewInstance}\NormalTok{(}\StringTok{"普通同学"}\NormalTok{,}\DataTypeTok{classes =} \StringTok{'normal'}\NormalTok{,}\DataTypeTok{parents =} \StringTok{"StudentObj"}\NormalTok{)}
+\NormalTok{s2 <-}\StringTok{ }\KeywordTok{NewInstance}\NormalTok{(}\StringTok{'课代表'}\NormalTok{,}\DataTypeTok{classes=}\StringTok{'leader'}\NormalTok{,}\DataTypeTok{parents=}\StringTok{'StudentObj'}\NormalTok{)}
+
+\CommentTok{# 给课代表，增加批改作业行为}
+\KeywordTok{attr}\NormalTok{(s2,}\StringTok{'class'}\NormalTok{) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{attr}\NormalTok{(s2,}\StringTok{'class'}\NormalTok{),}\StringTok{'correcting'}\NormalTok{)}
+\NormalTok{s1}
+\NormalTok{s2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  多态
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建优等生和次等生，两个实例}
+\NormalTok{e1 <-}\StringTok{ }\KeywordTok{NewInstance}\NormalTok{(}\StringTok{"优等生"}\NormalTok{,}\DataTypeTok{classes=}\StringTok{'excellent'}\NormalTok{,}\DataTypeTok{parents=}\StringTok{'StudentObj'}\NormalTok{)}
+
+\NormalTok{e2 <-}\StringTok{ }\KeywordTok{NewInstance}\NormalTok{(}\StringTok{"次等生"}\NormalTok{,}\DataTypeTok{classes=}\StringTok{'poor'}\NormalTok{,}\DataTypeTok{parents=}\StringTok{'StudentObj'}\NormalTok{)}
+
+\NormalTok{student.exam <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,score)\{}
+\NormalTok{  p <-}\StringTok{ '考试'}
+  \ControlFlowTok{if}\NormalTok{(score}\OperatorTok{>}\DecValTok{85}\NormalTok{) }\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(p,}\StringTok{"优秀"}\NormalTok{))}
+  \ControlFlowTok{if}\NormalTok{(score}\OperatorTok{<}\DecValTok{70}\NormalTok{) }\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(p,}\StringTok{"及格"}\NormalTok{))}
+
+\NormalTok{\}}
+
+\CommentTok{# 执行优等生的考试行为，并输入分数为90}
+\KeywordTok{attr}\NormalTok{(e1,}\StringTok{'class'}\NormalTok{) <-}\StringTok{ 'exam'}
+\KeywordTok{stuent}\NormalTok{(e1,}\DecValTok{90}\NormalTok{)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] “考试优秀}\StringTok{"}
+
+\StringTok{attr(e2,'class') <- 'exam'}
+
+\StringTok{student(e2,66)}
+\StringTok{[1] ”考试及格"}
+\end{Highlighting}
+\end{Shaded}
+
+通过R语言的面向对象的反省函数，我们就可以实现面向对象的编程。
+
+\chapter{基于S3的面向对象编程}\label{S3}
+
+对于R语言的面向对象编程，不同于其他编程语言，R语言提供了3种底层对象类型，一种是S3类型，一种是S4类型，还有一种是RC类型。
+
+S3对象简答，具有动态性，结构化特征不明显，S4对象结构化。功能强大，RC对象是R2.12版本后使用的新类型，用于解决S3,S4很难是想的对象。
+
+本章主要介绍S3的面向对象编程的细节
+
+\section{S3对象的介绍}\label{s3}
+
+在R语言中，基于S3对象的面向对象编程，是一种基于泛型函数的实现方式。泛型函数是一种特殊的函数，根据传入对象的类型决定调用那个具体的方法。基于S3对象实现面向对象编程，不同其他语言的面型对象编程，是一种动态函数调用的模拟实现。S3对象被广泛应用于R的早期的开发包中。
+
+\section{创建S3对象}\label{s3}
+
+注意：本文会用到pryr,为了方便我们检查对象的类型，引入pryr包作为辅助工具。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pryr)}
+
+\CommentTok{#通过变量创建S3对象}
+
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}
+\KeywordTok{attr}\NormalTok{(x,}\StringTok{'class'}\NormalTok{) <-}\StringTok{ 'foo'}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+## attr(,"class")
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attr}\NormalTok{(x,}\StringTok{"class"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#用pryr包的otype函数,检查x的类型}
+\KeywordTok{otype}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S3"
+\end{verbatim}
+
+通过structure()函数创建S3对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y <-}\StringTok{ }\KeywordTok{structure}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DataTypeTok{class=}\StringTok{"foo"}\NormalTok{)}
+
+\NormalTok{y}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+## attr(,"class")
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attr}\NormalTok{(y,}\StringTok{"class"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "foo"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S3"
+\end{verbatim}
+
+创建一个多类型的S3对象，S3独享没有明确结构关系，一个S3对象可以有多个类型，S3对象的class属性可以是一个响亮，包括多种类型
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}
+\KeywordTok{attr}\NormalTok{(x,}\StringTok{"class"}\NormalTok{) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"foo"}\NormalTok{,}\StringTok{"bar"}\NormalTok{)}
+\KeywordTok{class}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "foo" "bar"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S3"
+\end{verbatim}
+
+\section{泛型函数和方法调用}
+
+对于S3对象的使用，通常用UseMethod()函数来定义一个泛型函数的名称，通过传入参数的class属性，来确定方法调用。
+
+定义一个teacher的泛型函数
+
+\begin{itemize}
+\item
+  用UseMethod()定义teacher泛型函数
+\item
+  用teacher.xxx的语法格式定义teacher对象的行为
+\item
+  其中teacher.default是默认行为
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 用UseMethod()定义teacher泛型函数}
+\NormalTok{teacher <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{UseMethod}\NormalTok{(}\StringTok{"teacher"}\NormalTok{)}
+\CommentTok{# 用pryr包中ftype()函数，检查teacher类型}
+\KeywordTok{ftype}\NormalTok{(teacher)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"s3"} \StringTok{"generic"}
+
+\CommentTok{# 定义teacher内部函数}
+
+\NormalTok{teacher.lecture <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"讲课"}\NormalTok{)}
+\NormalTok{teacher.assignment <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"布置作业"}\NormalTok{)}
+\NormalTok{teacher.correcting <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"批改作业"}\NormalTok{)}
+\NormalTok{teacher.default <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{print}\NormalTok{(}\StringTok{"你不是teacher"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+方法调用通过传入参数的class属性，来确定不同方法调用
+
+\begin{itemize}
+\item
+  定义一个变量a，并设置a的class属性为lecture
+\item
+  把变量a传入到teacher泛型函数中
+\item
+  函数teacher.lecture()函数的行为被调用
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a <-}\StringTok{ "teacher"}
+\CommentTok{# 给老师变量设置行为}
+\KeywordTok{attr}\NormalTok{(a,}\StringTok{"class"}\NormalTok{) <-}\StringTok{ 'lecture'}
+\CommentTok{# 执行老师的行为}
+\KeywordTok{teacher}\NormalTok{(a)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] “讲课”}
+\end{Highlighting}
+\end{Shaded}
+
+当然我们可以直接调用teacher中定义的行为，如果这样做就失去了面向对象封装的意义
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{teacher.lecture}\NormalTok{()}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"讲课"}
+\KeywordTok{teacher.lecture}\NormalTok{(a)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"讲课"}
+\KeywordTok{teacher}\NormalTok{()}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"你不是teacher"}
+\end{Highlighting}
+\end{Shaded}
+
+\section{查看S3对象的函数}\label{s3}
+
+当我们使用S3队形进行面向对象封装后，可以使用methods()函数来查看S3对象中的定义的内部行为函数。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看teacher对象}
+\OperatorTok{>}\StringTok{ }\NormalTok{teacher}
+\ControlFlowTok{function}\NormalTok{(x,...) }\KeywordTok{Usemethod}\NormalTok{(}\StringTok{"teacher"}\NormalTok{)}
+
+\CommentTok{# 查看teacher对象的内部函数}
+\OperatorTok{>}\StringTok{ }\KeywordTok{methods}\NormalTok{(teacher)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] teacher.assignment teacher.correcting teacher.default teacher.lecture}
+
+\CommentTok{#通过methods()的generic.function参数，来匹配泛型函数名字}
+\OperatorTok{>}\StringTok{ }\KeywordTok{methods}\NormalTok{(}\DataTypeTok{generic.function =}\NormalTok{ predict)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] predict.ar}\OperatorTok{*}\StringTok{ }\NormalTok{......}
+\end{Highlighting}
+\end{Shaded}
+
+通过methods()的class参数，来匹配类的名字
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\KeywordTok{methods}\NormalTok{(}\DataTypeTok{class=}\NormalTok{lm)}
+\NormalTok{[}\DecValTok{1}\NormalTok{]add1.lm}\OperatorTok{*}\StringTok{ }\NormalTok{......}
+\end{Highlighting}
+\end{Shaded}
+
+用getAnywhere()函数,查看所有函数
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#查看teacher.lecture函数}
+
+\OperatorTok{>}\KeywordTok{getAnywhere}\NormalTok{(teacher.lecture)}
+\end{Highlighting}
+\end{Shaded}
+
+使用getS3method()函数，也同样可以查看不可见的函数
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# getS3method()函数查找predict.ppr}
+
+\NormalTok{get时}\KeywordTok{method}\NormalTok{(}\StringTok{"predict"}\NormalTok{,}\StringTok{"ppr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{S3对象的继承关系}\label{s3}
+
+S3独享有一种非常简单的继承方式，用NextMethod()函数来实现。
+
+定义一个node泛型函数
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>}\StringTok{ }\NormalTok{node <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{UseMethod}\NormalTok{(}\StringTok{"node"}\NormalTok{,x)}
+\OperatorTok{>}\StringTok{ }\NormalTok{node.default <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\StringTok{"Default node"}
+
+\CommentTok{#father函数}
+\OperatorTok{>}\StringTok{ }\NormalTok{node.father <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{c}\NormalTok{(}\StringTok{"father"}\NormalTok{)}
+
+\CommentTok{# son函数，通过NextMethod()函数只想father函数}
+\OperatorTok{>}\StringTok{ }\NormalTok{node.son <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{c}\NormalTok{(}\StringTok{'son'}\NormalTok{,}\KeywordTok{NextMethod}\NormalTok{())}
+
+\CommentTok{#定义n1}
+\OperatorTok{>}\StringTok{ }\NormalTok{n1 <-}\StringTok{ }\KeywordTok{structure}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{class=}\KeywordTok{c}\NormalTok{(}\StringTok{"father"}\NormalTok{))}
+\CommentTok{# 在node函数中传入n1,执行node.father()函数}
+\OperatorTok{>}\StringTok{ }\KeywordTok{node}\NormalTok{(n1)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"father"}
+
+\CommentTok{# 定义n2，设置class属性为两个}
+\OperatorTok{>}\StringTok{ }\NormalTok{n2 <-}\StringTok{ }\KeywordTok{structure}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DataTypeTok{class=}\KeywordTok{c}\NormalTok{(}\StringTok{"son"}\NormalTok{,}\StringTok{"father"}\NormalTok{))}
+\CommentTok{# 在node函数中传入n2,执行node.son()函数和node.father()函数}
+\OperatorTok{>}\StringTok{ }\KeywordTok{node}\NormalTok{(n2)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] }\StringTok{"son"} \StringTok{"father"}
+\end{Highlighting}
+\end{Shaded}
+
+通过对node()函数传入n2的参数，node.son()先被执行，然后通过NextMethod()函数继续执行了node.father()函数。这样其实就模拟了，子函数调用父函数的过程，实现了面向对象编程中的继承。
+
+\section{S3对象的缺点}\label{s3}
+
+从上面S3对象的介绍上来看，S3对象并不是完全的面向对象实现，而是一种通过泛型函数模拟的面向对象的实现。
+
+\begin{itemize}
+\item
+  S3用起来简单，但在实际的面向对象编程的过程中，当对象关系有一定的复杂度，S3对象所表达的意义就变得不太清楚
+\item
+  S3封装的内部函数，可以绕过泛型函数的检查，以直接被调用
+\item
+  S3参数的class属性，可以被任意设置，没有预处理的检查
+\item
+  S3参数，只能通过调用class属性进行函数调用，其他属性则不会被class()函数执行
+\item
+  S3参数的class属性有多个值时，调用时会被按照程序赋值顺序来调用第一个合法的函数
+\end{itemize}
+
+所以，S3只是R语言面向对象的一种简单的实现。
+
+\section{S3对象的使用}\label{s3}
+
+S3对象系统，被广泛的应用于R语言早期的开发中。在base包中，就有很多S3对象
+
+base包的S3对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# mean 函数}
+\NormalTok{mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (x, ...) 
+## UseMethod("mean")
+## <bytecode: 0x00000000191a98e8>
+## <environment: namespace:base>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ftype}\NormalTok{(mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "s3"      "generic"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# t函数}
+\KeywordTok{ftype}\NormalTok{(t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "s3"      "generic"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# plot函数}
+\KeywordTok{ftype}\NormalTok{(plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "s3"      "generic"
+\end{verbatim}
+
+自定义S3对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义数字变量a}
+
+\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+\CommentTok{# 变量a的class为number}
+\KeywordTok{class}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义泛型函数f1}
+\NormalTok{f1 <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  a <-}\DecValTok{2}
+  \KeywordTok{UseMethod}\NormalTok{(}\StringTok{"f1"}\NormalTok{)}
+\NormalTok{\}}
+\CommentTok{# 定义f1的内部函数}
+\NormalTok{f1.numeric <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) a}
+
+\CommentTok{# 给f1()传入变量a}
+\KeywordTok{f1}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给f1()传入99}
+\KeywordTok{f1}\NormalTok{(}\DecValTok{99}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义f1内部函数}
+\NormalTok{f1.character <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{paste}\NormalTok{(}\StringTok{"char"}\NormalTok{,x)}
+
+\CommentTok{# 给f1()传入字符a}
+\KeywordTok{f1}\NormalTok{(}\StringTok{"a"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "char a"
+\end{verbatim}
+
+这样，我们就对S3对象系统有了一个全面认识，开始R语言的面向对象编程之路。
+
+\chapter{基于S4的面向对象编程}\label{S4}
+
+S4对象系统具有明显的结构化特征，更适合面向对象的程序设计。Bioconductor社区以S4对象作为基础框架，只接受S4定义的R包。
+
+\section{S4对象介绍}\label{s4}
+
+S4对象系统是一种标准的R语言面向对象实现方式，S4对象有明确的类定义，参数定义，参数检查，继承关系，实例化等的面向对象系统的特征。
+
+\section{创建S4对象}\label{s4}
+
+使用辅助的pryr包
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 加载pryr包}
+\KeywordTok{library}\NormalTok{(pryr)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{如何创建S4对象?}\label{s4}
+
+由于S4对象是标准的面向对象实现方式，有专门的类定义函数setClass()和类的实例化函数new()，我们看一下setClass()和new()是如何工作的。
+
+\begin{itemize}
+\tightlist
+\item
+  setClass()
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(class,representation,prototype,}\DataTypeTok{contains=}\KeywordTok{character}\NormalTok{(),}
+\NormalTok{  validity,access,where,version,sealed,package,}
+  \DataTypeTok{S3methods=}\OtherTok{FALSE}\NormalTok{,slots)}
+\end{Highlighting}
+\end{Shaded}
+
+参数列表：
+
+\begin{itemize}
+\item
+  Class:定义类名
+\item
+  slots:定义属性和属性类型
+\item
+  prototype:定义属性的默认值
+\item
+  contains=character():定义父类，继承关系
+\item
+  validity:定义属性的类型检查
+\item
+  where:定义存储空间
+\item
+  sealed:如果设置TRUE,则同名类不能再次定义
+\item
+  package:定义所属的包
+\item
+  S3methods:R3.0.0后不建议使用
+\item
+  representation:R3.0.0后不建议使用
+\item
+  access:R3.0.0后不建议使用
+\item
+  version:R3.0.0后不建议使用
+\end{itemize}
+
+\subsection{创建一个S4对象实例}\label{s4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义一个S4对象}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+
+\CommentTok{# 实例化一个Person对象}
+
+\NormalTok{father <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"F"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{44}\NormalTok{)}
+
+\CommentTok{# 查看father对象，有两个属性name和age}
+\NormalTok{father}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "F"
+## 
+## Slot "age":
+## [1] 44
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看father对象类型为Person}
+\KeywordTok{class}\NormalTok{(father)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Person"
+## attr(,"package")
+## [1] ".GlobalEnv"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看father对象为S4的对象}
+\KeywordTok{otype}\NormalTok{(father)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S4"
+\end{verbatim}
+
+\subsection{创建一个有继承关系的S4对象}\label{s4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建一个S4对象Person}
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+
+\CommentTok{# 创建Person的子类}
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Son"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{father=}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{mother=}\StringTok{"Person"}\NormalTok{),}\DataTypeTok{contains =} \StringTok{"Person"}\NormalTok{)}
+
+\CommentTok{# 实例化Person对象}
+
+\NormalTok{father <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"F"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{44}\NormalTok{)}
+\NormalTok{mother <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"M"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{39}\NormalTok{)}
+
+\CommentTok{# 实例化一个Son对象}
+
+\NormalTok{son <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Son"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"S"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{16}\NormalTok{,}\DataTypeTok{father=}\NormalTok{father,}\DataTypeTok{mother=}\NormalTok{mother)}
+
+\CommentTok{# 查看son对象的name属性}
+\NormalTok{son}\OperatorTok{@}\NormalTok{name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看son对象的age属性}
+\NormalTok{son}\OperatorTok{@}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看son对象的father属性}
+\NormalTok{son}\OperatorTok{@}\NormalTok{father}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "F"
+## 
+## Slot "age":
+## [1] 44
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看son对象的mother属性}
+\NormalTok{son}\OperatorTok{@}\NormalTok{mother}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "M"
+## 
+## Slot "age":
+## [1] 39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看son类型}
+\KeywordTok{otype}\NormalTok{(son)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S4"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看son@name的属性}
+\KeywordTok{otype}\NormalTok{(son}\OperatorTok{@}\NormalTok{name)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "base"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#  查看son@mother的属性}
+\KeywordTok{otype}\NormalTok{(son}\OperatorTok{@}\NormalTok{mother)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S4"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 用isS4()检查S4对象的类型}
+\KeywordTok{isS4}\NormalTok{(son)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{isS4}\NormalTok{(son}\OperatorTok{@}\NormalTok{name)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{isS4}\NormalTok{(son}\OperatorTok{@}\NormalTok{mother)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\subsection{S4对象的默认值}\label{s4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+
+\CommentTok{# 属性age为空}
+\NormalTok{a <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"a"}\NormalTok{)}
+\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "a"
+## 
+## Slot "age":
+## numeric(0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 设置属性age的默认值为20}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{age=}\DecValTok{20}\NormalTok{))}
+
+\CommentTok{# 初始化b对象}
+\NormalTok{b <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"b"}\NormalTok{)}
+
+\CommentTok{# 属性age的默认值是20}
+\NormalTok{b }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "b"
+## 
+## Slot "age":
+## [1] 20
+\end{verbatim}
+
+\subsection{S4对象的类型检查}\label{s4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+\CommentTok{#传入错误age类型}
+\NormalTok{bad <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"bad"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"abc"}\NormalTok{)}
+
+\NormalTok{###}
+\NormalTok{Error }\ControlFlowTok{in} \KeywordTok{validObject}\NormalTok{(.Object) }\OperatorTok{:}\StringTok{ }\NormalTok{类别为“Person”的对象不对}\OperatorTok{:}\StringTok{ }\NormalTok{invalid object }\ControlFlowTok{for}\NormalTok{ slot }\StringTok{"age"} \ControlFlowTok{in}\NormalTok{ class }\StringTok{"Person"}\OperatorTok{:}\StringTok{ }\NormalTok{got class }\StringTok{"character"}\NormalTok{, should be or extend class }\StringTok{"numeric"}       
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 设置age的非负检查}
+\KeywordTok{setValidity}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(object)\{}
+  \ControlFlowTok{if}\NormalTok{(object}\OperatorTok{@}\NormalTok{age }\OperatorTok{<=}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{stop}\NormalTok{(}\StringTok{"Age is negative."}\NormalTok{)}
+\NormalTok{\})}
+
+\CommentTok{# 传入小于0的年龄}
+\NormalTok{bad2 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"bad"}\NormalTok{,}\DataTypeTok{age=}\OperatorTok{-}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{###}
+\NormalTok{Error }\ControlFlowTok{in} \KeywordTok{validityMethod}\NormalTok{(object) }\OperatorTok{:}\StringTok{ }\NormalTok{Age is negative.}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{从一个已经实例化的对象中创建新对象}
+
+S4对象,还支持从一个已经实例化的对象中创建新对象，创建时可以覆盖旧对象的值
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+
+\CommentTok{# 创建一个对象实例n1}
+
+\NormalTok{n1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"n1"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{19}\NormalTok{)}
+\NormalTok{n1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "n1"
+## 
+## Slot "age":
+## [1] 19
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 从实例n1中，创建实例n2，并修改name的属性值}
+
+\NormalTok{n2 <-}\StringTok{ }\KeywordTok{initialize}\NormalTok{(n1,}\DataTypeTok{name=}\StringTok{"n2"}\NormalTok{)}
+\NormalTok{n2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## An object of class "Person"
+## Slot "name":
+## [1] "n2"
+## 
+## Slot "age":
+## [1] 19
+\end{verbatim}
+
+\section{访问对象的属性}
+
+在S3对象中，一般我使用\$来访问一个对象的属性，但在S4对象中，\href{mailto:我们只能用@来访问一个对象的属性}{\nolinkurl{我们只能用@来访问一个对象的属性}}。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+\NormalTok{a <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"a"}\NormalTok{)}
+
+\CommentTok{# 访问S4对象的属性}
+
+\NormalTok{a}\OperatorTok{@}\NormalTok{name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{slot}\NormalTok{(a,}\StringTok{"name"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 错误的访问}
+\CommentTok{#a$name}
+\CommentTok{#a[1]}
+\end{Highlighting}
+\end{Shaded}
+
+\section{S4的泛型函数}\label{s4}
+
+S4的泛型函数实现有别于S3的实现，S4分离了方法的定义和实现，如在其他语言中我们常说的接口和实现分离。通过setGeneric()来定义接口，通过setMethod()来定义现实类。这样可以让S4对象系统，更符合面向对象的特征。
+
+普通函数的定义和调用
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{work <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{cat}\NormalTok{(x,}\StringTok{"is working"}\NormalTok{)}
+\KeywordTok{work}\NormalTok{(}\StringTok{"Conan"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Conan is working
+\end{verbatim}
+
+让我们看看如何用R分离接口和实现
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义Person对象}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{age=}\StringTok{"numeric"}\NormalTok{))}
+
+\CommentTok{# 定义泛型函数work即接口}
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"work"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(object) }\KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"work"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "work"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义work的实现，并指定参数类型为Person对象}
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"work"}\NormalTok{,}\KeywordTok{signature}\NormalTok{(}\DataTypeTok{object=}\StringTok{"Person"}\NormalTok{),}\ControlFlowTok{function}\NormalTok{(object) }\KeywordTok{cat}\NormalTok{(object}\OperatorTok{@}\NormalTok{name,}\StringTok{"is working"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "work"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建一个Person对象a}
+\NormalTok{a <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"Conan"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{16}\NormalTok{)}
+
+\CommentTok{# 把对象a传入work函数}
+\KeywordTok{work}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Conan is working
+\end{verbatim}
+
+通过S4对象系统，把原来的函数定义和调用2步完成的分成4步。
+
+\begin{itemize}
+\item
+  定义数据对象类型
+\item
+  定义接口函数
+\item
+  定义实现函数
+\item
+  把数据对象以参数传入到接口函数，执行实现函数
+\end{itemize}
+
+通过S4对象系统，是一个结构化的，完整的面向对象的实现。
+
+\section{查看S4对象的函数}\label{s4}
+
+当我们使用S4对象进行面向对象封装后，我们还需要能查看到S4对象的定义和函数定义，还是以上街中Person和work的例子
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pryr)}
+\CommentTok{# 检查work的类型}
+
+\KeywordTok{ftype}\NormalTok{(work)}
+
+\CommentTok{# 直接查看work函数}
+\NormalTok{work}
+
+\CommentTok{# 查看work函数的显示定义}
+\KeywordTok{showMethod}\NormalTok{(work)}
+
+\CommentTok{# 查看Person对象的work函数现实}
+\KeywordTok{getMethod}\NormalTok{(}\StringTok{"work"}\NormalTok{,}\StringTok{"Person"}\NormalTok{)}
+
+\CommentTok{# 检查Person对象有没有work函数}
+
+\KeywordTok{existMethod}\NormalTok{(}\StringTok{"work"}\NormalTok{,}\StringTok{"Person"}\NormalTok{)}
+\KeywordTok{hasMethod}\NormalTok{(}\StringTok{"work"}\NormalTok{,}\StringTok{"Person"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{S4对象的使用}\label{s4}
+
+下面我们用S4对象那个实现一个具体的例子。
+
+\subsection{任务1：定义一个图形库的数据结构和计算函数}\label{1}
+
+假设Shape为图形的基类，包括圆形(Circle)和椭圆形(Ellipse)，并计算出他们的面积(area)和周长(circum)
+
+\begin{itemize}
+\item
+  定义图形库的数据结构
+\item
+  定义圆形的数据结构，并计算面积和周长
+\item
+  定义椭圆形的数据结构，并计算面积和周长
+\end{itemize}
+
+定义基类Shape和圆形类Circle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义基类Shape}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{))}
+
+\CommentTok{# 定义圆形类，并继承shape,属性radius默认为1}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Circle"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\DecValTok{1}\NormalTok{))}
+
+\CommentTok{# 验正radius属性值要大于等于0}
+\KeywordTok{setValidity}\NormalTok{(}\StringTok{"Circle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(object)\{}
+  \ControlFlowTok{if}\NormalTok{(object}\OperatorTok{@}\NormalTok{radius }\OperatorTok{<=}\StringTok{ }\DecValTok{0}\NormalTok{) }\KeywordTok{stop}\NormalTok{(}\StringTok{"Radius is negative"}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Class "Circle" [in ".GlobalEnv"]
+## 
+## Slots:
+##                           
+## Name:     radius      name
+## Class:   numeric character
+## 
+## Extends: "Shape"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建两个圆形实例}
+
+\NormalTok{c1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Circle"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"c1"}\NormalTok{)}
+\NormalTok{c2 <-}\StringTok{ }\KeywordTok{new}\NormalTok{ (}\StringTok{"Circle"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"c2"}\NormalTok{,}\DataTypeTok{radius=}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+定义计算面积的接口和实现
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"area"}\NormalTok{)}
+  
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算面积的函数实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{"Circle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Area Circle Method"}\NormalTok{)}
+\NormalTok{  pi}\OperatorTok{*}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius}\OperatorTok{^}\DecValTok{2}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 分别计算c1和c2的两个圆形的面积}
+\KeywordTok{area}\NormalTok{(c1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Area Circle Method"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 3.141593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{area}\NormalTok{(c2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Area Circle Method"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 78.53982
+\end{verbatim}
+
+定义计算周长的接口和实现
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算周长泛型函数接口}
+
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"circum"}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算周长的函数实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Circle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 分别计算c1和c2的周长}
+
+\KeywordTok{circum}\NormalTok{(c1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 6.283185
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(c2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 31.41593
+\end{verbatim}
+
+上面代码，我们实现了圆形的定义，下面我们实现椭圆形
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义椭圆形的类，继承Shape,radius参数默认值为c(1,1)# 分别表示椭圆形的常半径和短半径}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)))}
+
+\CommentTok{# 验证radius参数}
+
+\KeywordTok{setValidity}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(object)\{}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(object}\OperatorTok{@}\NormalTok{radius)}\OperatorTok{!=}\DecValTok{2}\NormalTok{) }\KeywordTok{stop}\NormalTok{(}\StringTok{"It's note Ellipse"}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(}\KeywordTok{which}\NormalTok{(object}\OperatorTok{@}\NormalTok{radius}\OperatorTok{<=}\DecValTok{0}\NormalTok{))}\OperatorTok{>}\DecValTok{0}\NormalTok{) }\KeywordTok{stop}\NormalTok{(}\StringTok{"Radius is negative"}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Class "Ellipse" [in ".GlobalEnv"]
+## 
+## Slots:
+##                           
+## Name:     radius      name
+## Class:   numeric character
+## 
+## Extends: "Shape"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建两个椭圆形实例e1,e2}
+
+\NormalTok{e1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"e1"}\NormalTok{)}
+\NormalTok{e2 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"e2"}\NormalTok{,}\DataTypeTok{radius=}\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+
+\CommentTok{# 计算椭圆形面积的函数的实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{'Ellipse'}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Area Ellipse Method"}\NormalTok{)}
+\NormalTok{  pi}\OperatorTok{*}\KeywordTok{prod}\NormalTok{(obj}\OperatorTok{@}\NormalTok{radius)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算e1,e2的面积}
+
+\KeywordTok{area}\NormalTok{(e1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Area Ellipse Method"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 3.141593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{area}\NormalTok{(e2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Area Ellipse Method"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 15.70796
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算椭圆形周长的函数实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Ellipse"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Ellipse Circum:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{((obj}\OperatorTok{@}\NormalTok{radius[}\DecValTok{1}\NormalTok{]}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius[}\DecValTok{2}\NormalTok{]}\OperatorTok{^}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 计算e1,e2周长}
+
+\KeywordTok{circum}\NormalTok{(e1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Ellipse Circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 6.283185
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(e2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Ellipse Circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 22.65435
+\end{verbatim}
+
+\subsection{任务2：重构圆形和椭圆形的设计}\label{2}
+
+上一步，我们已经完成了圆形和椭圆形的数据结构定义，以及计算面积和周长的方法实现。不知大家有没有发现，圆形是椭圆的一个特例吗？当椭圆形的长轴和短轴相等时，形成的图形为圆形。椭圆是圆形的父类，而圆形是椭圆形的子类。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 基类Shape}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{shape=}\StringTok{"character"}\NormalTok{))}
+
+\CommentTok{# Ellipse继承Shape}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{shape=}\StringTok{"Ellipse"}\NormalTok{))}
+
+\CommentTok{# Circle继承Ellipse}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Circle"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\DecValTok{1}\NormalTok{,}\DataTypeTok{shape=}\StringTok{"Circle"}\NormalTok{))}
+
+\CommentTok{# 定义area接口}
+
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...) }\KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"area"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义area的Ellipse实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{"Ellipse"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Ellipse Area: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  pi}\OperatorTok{*}\KeywordTok{prod}\NormalTok{(obj}\OperatorTok{@}\NormalTok{radius)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义area的Circle实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{"Circle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Circle Area:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  pi}\OperatorTok{*}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius}\OperatorTok{^}\DecValTok{2}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义circum接口}
+
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...) }\KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"circum"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义circum的ellipse实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Ellipse"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Ellipse circum:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{((obj}\OperatorTok{@}\NormalTok{radius[}\DecValTok{1}\NormalTok{]}\OperatorTok{^}\DecValTok{2}\OperatorTok{+}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius[}\DecValTok{2}\NormalTok{]}\OperatorTok{^}\DecValTok{2}\NormalTok{)}\OperatorTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义circum的circle实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Circle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Ellipse circum:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \DecValTok{2}\OperatorTok{*}\NormalTok{pi}\OperatorTok{*}\NormalTok{obj}\OperatorTok{@}\NormalTok{radius}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建实例}
+
+\NormalTok{e1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"e1"}\NormalTok{,}\DataTypeTok{radius=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{))}
+\NormalTok{e2 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Circle"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"e2"}\NormalTok{,}\DataTypeTok{radius=}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{#计算面积和周长}
+
+\KeywordTok{area}\NormalTok{(e1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Ellipse Area:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 31.41593
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(e1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Ellipse circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 23.92566
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{area}\NormalTok{(e2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Circle Area:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 12.56637
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(e2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Ellipse circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 12.56637
+\end{verbatim}
+
+这样是不是显得更合理？
+
+\subsection{任务3：增加矩形的图形处理}\label{3}
+
+进一步扩充图形库需要加入矩形和正方形
+
+\begin{itemize}
+\item
+  定义矩形的数据结构，计算面积和周长
+\item
+  定义长方形的数据结构，计算面积和周长
+\item
+  矩形是正方形的父类，正方形是矩形的子类
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义矩形Rectangle，继承Shape}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Rectangle"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{edges=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{edges=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{shape=}\StringTok{"Rectangle"}\NormalTok{))}
+
+\CommentTok{# 定义正方形Square继承Rectangle}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Square"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{"Rectangle"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{edges=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{edges=}\DecValTok{1}\NormalTok{,}\DataTypeTok{shape=}\StringTok{"Square"}\NormalTok{))}
+
+\CommentTok{# 定义area的Rectangle实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{"Rectangle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Rectangle Area:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \KeywordTok{prod}\NormalTok{(obj}\OperatorTok{@}\NormalTok{edges)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义area的Square}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"area"}\NormalTok{,}\StringTok{"Square"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Square Area: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{  obj}\OperatorTok{@}\NormalTok{edges}\OperatorTok{^}\DecValTok{2}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "area"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义circum的Rectangle实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Rectangle"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Rectangle Circum:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \DecValTok{2}\OperatorTok{*}\KeywordTok{sum}\NormalTok{(obj}\OperatorTok{@}\NormalTok{edges)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义circum的Square实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"circum"}\NormalTok{,}\StringTok{"Square"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(}\StringTok{"Square circum:}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  \DecValTok{4}\OperatorTok{*}\NormalTok{obj}\OperatorTok{@}\NormalTok{edges}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "circum"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建实例}
+
+\NormalTok{r1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Rectangle"}\NormalTok{,}\DataTypeTok{name=}\StringTok{"r1"}\NormalTok{,}\DataTypeTok{edges=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{))}
+\NormalTok{s1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Square"}\NormalTok{,}\DataTypeTok{name=}\StringTok{'s1'}\NormalTok{,}\DataTypeTok{edges=}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{# 计算矩形的面积和周长}
+
+\KeywordTok{area}\NormalTok{(r1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rectangle Area:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(r1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rectangle Circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{area}\NormalTok{(s1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Square Area:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{circum}\NormalTok{(s1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Square circum:
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 8
+\end{verbatim}
+
+这样，图形库就支持4种图形了，用面向对象的结构去设计，就会非常清晰。
+
+\subsection{任务4：在基类Shape中增加shape属性和getShape方法}\label{4shapeshapegetshape}
+
+对图形库的所有图形定义图形类型的变量shape,然后在提供一个getShape函数来检查实例中的shape变量。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 重新定义基类Shape，增加shape属性}
+
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Shape"}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{shape=}\StringTok{"character"}\NormalTok{))}
+
+\CommentTok{# 定义getShape接口}
+
+\KeywordTok{setGeneric}\NormalTok{(}\StringTok{"getShape"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{standardGeneric}\NormalTok{(}\StringTok{"getShape"}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "getShape"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义getShape实现}
+
+\KeywordTok{setMethod}\NormalTok{(}\StringTok{"getShape"}\NormalTok{,}\StringTok{"Shape"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{(obj,...)\{}
+  \KeywordTok{cat}\NormalTok{(obj}\OperatorTok{@}\NormalTok{shape,}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "getShape"
+\end{verbatim}
+
+其实，这样改动一下就OK了，我们只需要重新实例化每个图形的对象就好了。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化一个Square对象，并给shape属性赋值}
+
+\NormalTok{s1 <-}\StringTok{ }\KeywordTok{new}\NormalTok{(}\StringTok{"Square"}\NormalTok{,}\DataTypeTok{name=}\StringTok{'s1'}\NormalTok{,}\DataTypeTok{edges=}\DecValTok{2}\NormalTok{,}\DataTypeTok{shape=}\StringTok{'Square'}\NormalTok{)}
+
+\CommentTok{# 调用基类的getShape()函数}
+
+\KeywordTok{getShape}\NormalTok{(s1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Square
+\end{verbatim}
+
+如果再多做一步，可以修改每个对象的定义，增加shape属性的默认值。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setClass}\NormalTok{(}\StringTok{"Ellipse"}\NormalTok{,}\DataTypeTok{contains =} \StringTok{'Shape'}\NormalTok{,}\DataTypeTok{slots=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\StringTok{"numeric"}\NormalTok{),}\DataTypeTok{prototype =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{radius=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{shape=}\StringTok{"Ellipse"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+通过这节的例子，我们全面的了解了R语言的面向的使用和S4对象系统的面向对象的程序设计。
+
+在程序猿的世界里，世间万物都可以抽象成对象！
+
+\chapter{基于RC的面向对象编程}\label{RC}
+
+RC(Reference
+Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去掉了泛型函数，其真正的以类为基础实现面向对象的特征。在R中常备简记为R5\url{http://adv-r.had.co.nz/R5.html}(但这不是官方的名称)，而是为了从形式上和S3和S4相匹配。
+
+\section{RC对象系统的介绍}\label{rc}
+
+\chapter{基于R6的面向对象}\label{R6}
+
+\chapter{环境}\label{env}
+
+环境就是作用域发挥作用的数据结构，本章将深入学习环境的概念，由于环境具有引用语义，所以本身他们也是一种很有用的数据结构，当在一个环境中对其绑定的元素进行修改时，环境不会被复制，修改会在原地进行。虽然不会经常使用引用语义，但他还是非常有用的。
+
+\section{环境基础}
+
+环境的作用就是将一些名字与一些值进行关联，或者绑定(bind),可以把环境看做一个装满名字的口袋
+
+\begin{center}\includegraphics{img/ch7-1} \end{center}
+
+每个名字都指向存储在内存中的一个对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\OtherTok{FALSE}
+\NormalTok{e}\OperatorTok{$}\NormalTok{b <-}\StringTok{ "a"}
+\NormalTok{e}\OperatorTok{$}\NormalTok{c <-}\StringTok{ }\FloatTok{2.3}
+\NormalTok{e}\OperatorTok{$}\NormalTok{d <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{img/ch7-2} \end{center}
+
+对象并不生存在环境中，所以多个名字可指向同一个对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\NormalTok{e}\OperatorTok{$}\NormalTok{d}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{img/ch7-3} \end{center}
+
+令人困惑的是，他们还可以指向具有相同值得不同对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{img/ch7-4} \end{center}
+
+如果对象没有指向它的名字，那么这个对象就会被垃圾回收器自动删除。
+
+每个环境都有父环境，他是另外一个环境。在下图中，黑色小圆球代表指向父环境的指针，父环境用于实现词法作用域:如果一个名字在一个环境中没有找到，R就会到他的父环境去找（直到找到或遍历所有环境），只有空（empty）环境没有父环境
+
+\begin{center}\includegraphics{img/ch7-5} \end{center}
+
+我们可以将环境之间的关系比作家庭中成员的关系。一个环境的爷爷就是他父亲的父亲，它的祖先就包括直到空环境的所有父环境。我们基本上不会说一个环境的子环境，因为他们之间没有反向链接，给定一个环境我们没有办法找到它的子环境。
+
+通常环境与列表相似，除一下4点外：
+
+\begin{itemize}
+\item
+  环境中的每个对象都有唯一的名字
+\item
+  环境中的对象没有顺序
+\item
+  环境有父环境
+\item
+  环境具有引用语义
+\end{itemize}
+
+更专业一点，环境是有两部分构成：对象框，它包含名称-对象的绑定关系（行为商更像一个命名列表);它的父环境。
+
+还有4个特殊的环境：
+
+\begin{itemize}
+\item
+  globaenv()或者全局环境，他是一个交互式的工作环境，通常情况下我们就是在这个环境工作。全局环境的父环境就是libtary()或require()添加的最后一个包
+\item
+  baseenv(),基础环境，他是R基础软件包的环境，他的父环境是空环境
+\item
+  emptyenv(),空环境，他是所有环境的祖先，也是唯一一个没有父环境的环境
+\item
+  environment(),他是当前环境
+\end{itemize}
+
+下面看一些环境方面的方法：
+
+\begin{itemize}
+\tightlist
+\item
+  search()
+\end{itemize}
+
+列出全局环境的所有父环境
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{search}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] ".GlobalEnv"        "package:pryr"      "package:stats"    
+##  [4] "package:graphics"  "package:grDevices" "package:utils"    
+##  [7] "package:datasets"  "package:methods"   "Autoloads"        
+## [10] "package:base"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  as.environment()
+\end{itemize}
+
+访问搜索列表中的任何环境
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{as.environment}\NormalTok{(}\StringTok{"package:stats"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: package:stats>
+## attr(,"name")
+## [1] "package:stats"
+## attr(,"path")
+## [1] "D:/R-3.4.3/library/stats"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  new.env()
+\end{itemize}
+
+手动创建一个环境，ls()可以列出将此环境的对象框中的所有绑定关系列出来，可以使用parent.env()查看他的父环境。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+
+\KeywordTok{parent.env}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: R_GlobalEnv>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ls}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## character(0)
+\end{verbatim}
+
+对一个环境中的绑定关系进行修改的最简单的方法就是将其看做列表
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+\NormalTok{e}\OperatorTok{$}\NormalTok{b <-}\StringTok{ }\DecValTok{2}
+\KeywordTok{ls}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a" "b"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+默认情况下，ls()只能列出不是一``.''开始的名字，可以通过设置参数all.names=TRUE来显示一个环境中的所有绑定关系：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{.a <-}\StringTok{ }\DecValTok{2}
+\KeywordTok{ls}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a" "b"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ls}\NormalTok{(e,}\DataTypeTok{all.names=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] ".a" "a"  "b"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  ls.str()
+\end{itemize}
+
+它可以将环境中的所有对象都显示出来，比str()更有用
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: 0x000000001b8fa630>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ls.str}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## a :  num 1
+## b :  num 2
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  获取绑定值
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e}\OperatorTok{$}\NormalTok{c <-}\StringTok{ }\DecValTok{3}
+\NormalTok{e}\OperatorTok{$}\NormalTok{c}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e[[}\StringTok{"c"}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get}\NormalTok{(}\StringTok{"c"}\NormalTok{,}\DataTypeTok{envir=}\NormalTok{e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  从环境中删除对象
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+\NormalTok{e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\OtherTok{NULL} \CommentTok{#这样相当于创建了一个新的对象}
+\KeywordTok{ls}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "a"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\DataTypeTok{envir=}\NormalTok{e)}
+\KeywordTok{ls}\NormalTok{(e)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## character(0)
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  exists()
+\end{itemize}
+
+确定一个绑定是否存在
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{10}
+\KeywordTok{exists}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\DataTypeTok{envir=}\NormalTok{e) }\CommentTok{#查找父环境}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{exists}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\DataTypeTok{envir=}\NormalTok{e,}\DataTypeTok{inherits=}\OtherTok{FALSE}\NormalTok{) }\CommentTok{#不希望在父环境中查找}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  identical()
+\end{itemize}
+
+identical()与==是不同的，是对两个环境进行比较
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{identical}\NormalTok{(}\KeywordTok{globalenv}\NormalTok{(),}\KeywordTok{environment}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#globalenv()==environment()}
+\end{Highlighting}
+\end{Shaded}
+
+\section{环境递归}
+
+环境可以构成一棵树，因此我们非常方便的写出一个递归函数，pryr::where()会使用R的作用域法则找到定义这个名字的空间
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pryr)}
+\NormalTok{x <-}\StringTok{ }\DecValTok{5}
+\CommentTok{# where函数由两个参数，一个是查找的名字(字符串)，一个是开始查找的环境}
+\KeywordTok{where}\NormalTok{(}\StringTok{"x"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: R_GlobalEnv>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{where <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(name,}\DataTypeTok{env=}\KeywordTok{parent.frame}\NormalTok{())\{}
+\ControlFlowTok{if}\NormalTok{(}\KeywordTok{identical}\NormalTok{(env,}\KeywordTok{emptyenv}\NormalTok{()))\{}
+  \CommentTok{# Base case}
+  \KeywordTok{stop}\NormalTok{(}\StringTok{"Can't find"}\NormalTok{,name,}\DataTypeTok{call.=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(}\KeywordTok{exists}\NormalTok{(name,}\DataTypeTok{envir=}\NormalTok{env,}\DataTypeTok{inherits=}\OtherTok{FALSE}\NormalTok{))\{}
+  \CommentTok{#Success case}
+\NormalTok{  env}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \CommentTok{#Recursive case}
+  \KeywordTok{where}\NormalTok{(name,}\KeywordTok{parent.env}\NormalTok{(env))}
+\NormalTok{\}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+有三种情况：
+
+\begin{itemize}
+\item
+  基本情况： 已经到达空环境，但没有找到绑定，抛出一个错误
+\item
+  成功情况： 在这个环境中存在该对象，返回该环境
+\item
+  递归情况：在这个环境中没有找到该环境的对象，所以尝试在父环境中继续查找
+\end{itemize}
+
+\section{函数环境}
+
+大对数环境并不是通过new.env()函数创建的，而是使用函数的结果，本节将讨论4种和函数相关的环境：封闭，绑定，执行和调用。
+
+\begin{itemize}
+\item
+  封闭环境： 创建函数的环境，每个函数有且仅有一个封闭环境
+\item
+  使用\textless{}-讲一个函数和一个名字进行绑定，就可以定义一个绑定环境
+\item
+  调用函数创建一个临时的执行环境，用来存储执行期间创建的各种变量
+\item
+  每个执行环境都与一个调用环境关联，他说明函数在哪调用
+\end{itemize}
+
+\subsection{封闭环境}
+
+当创建一个函数，他就获得对创建他的函数的引用，这就是封闭环境，他用作此法作用域。为了确定一个函数的封闭空间，只需调用environment()并将函数名作为第一个参数
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y <-}\StringTok{ }\DecValTok{1}
+\NormalTok{f <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{+}\NormalTok{y}
+
+\KeywordTok{environment}\NormalTok{(f)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: R_GlobalEnv>
+\end{verbatim}
+
+下图中，圆角矩形代表函数，黑色菱形代表一个函数的封闭环境
+
+\begin{center}\includegraphics{img/ch7-6} \end{center}
+
+\subsection{绑定环境}
+
+上图太简单，因为函数没有名字，函数的名字可以通过绑定来定义，一个函数的绑定环境就是与其绑定的所有环境，下图更好的反映这种关系，因为封闭环境包含一个从f到环境的绑定
+
+\begin{center}\includegraphics{img/ch7-7} \end{center}
+
+这种情况封闭环境和绑定环境是相同的，当将一个函数分配给另一个不同的环境，那么他们就同了
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+\NormalTok{e}\OperatorTok{$}\NormalTok{g <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{() }\DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{img/ch7-8} \end{center}
+
+封闭函数属于该环境，永远也不会发生改变，甚至将该函数移动到其他环境中，封闭环境决定了这个函数该如何找到值，而绑定环境空间决定如何找到该函数。
+
+绑定空间与封闭空间的区别在于软件包命名空间是非常重要的，例如如果软件包中A使用基础包中的mean()函数，那么如果软件包B也创建了自己的mean()函数会有什么后果呢？命名空间确保软件包A使用基础包中的mean(),而不受软件包B的影响（除非显式的调用）
+
+命名空间使用环境来实现，利用函数不一定存在于他们的封闭环境中的事实，例如基础包中的sd()函数，它的封闭环境与绑定环境是不同的
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{environment}\NormalTok{(sd)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: namespace:stats>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{where}\NormalTok{(}\StringTok{"sd"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <environment: package:stats>
+## attr(,"name")
+## [1] "package:stats"
+## attr(,"path")
+## [1] "D:/R-3.4.3/library/stats"
+\end{verbatim}
+
+函数sd()的定义使用var()，但是如果创建自己的var()函数，那么他也不会影响sd()
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\KeywordTok{sd}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.02765
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{var <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x,}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\DecValTok{100}
+
+\KeywordTok{sd}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.02765
+\end{verbatim}
+
+这是可执行的，因为每个软件包有两个与他相关的环境：软件包环境和命名空间环境。软件包环境包含所有可以访问的公共函数，并且存放在搜索路径上，命名空间环境包含所有函数，并且它的父环境也是比较重要的环境，其中包含了这个软件包需要的所有函数的绑定。软件包中的每一个到处函数都绑定到软件包环境，但都在命名空间环境中，如下图展示杉树关系：
+
+\begin{center}\includegraphics{img/ch7-9} \end{center}
+
+当输入var时，R首先会到全局环境中进行查找，当sd()查找var()时，他首先到命名空间中查找，而永远不会到globalenv()中查找。
+
+\subsection{执行环境}
+
+第一次执行下面的函数他返回什么？，第二次呢？
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+  \ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{exists}\NormalTok{(}\StringTok{"a"}\NormalTok{,}\DataTypeTok{inherits=}\OtherTok{FALSE}\NormalTok{))\{}
+    \KeywordTok{message}\NormalTok{(}\StringTok{"Default a"}\NormalTok{)}
+\NormalTok{    a <-}\StringTok{ }\DecValTok{1}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    a <-}\StringTok{ }\NormalTok{a }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+\NormalTok{  \}}
+\NormalTok{  a}
+\NormalTok{\}}
+
+\KeywordTok{g}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Default a
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{g}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Default a
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+每次调用这个函数都返回相同的值，每次调用函数时都创建一个新的宿主执行环境，执行环境的父环境就是函数的封闭环境，一旦函数执行结束，这个环境就会被销毁。
+
+通过图形简单了解这个过程：虚线包围的就是执行环境
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+\NormalTok{  a <-}\StringTok{ }\DecValTok{2}
+\NormalTok{  x }\OperatorTok{+}\StringTok{ }\NormalTok{a}
+\NormalTok{\}}
+
+\NormalTok{y <-}\StringTok{ }\KeywordTok{h}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+1.用 \(x=1\) 调用函数
+
+\begin{center}\includegraphics{img/ch7-10} \end{center}
+
+2.a被赋值为2
+
+\begin{center}\includegraphics{img/ch7-11} \end{center}
+
+3.函数完成后返回值为3
+
+\begin{center}\includegraphics{img/ch7-12} \end{center}
+
+当在另一个函数中创建一个函数的时候，子函数的封闭函数就是父函数的执行环境，而且执行环境也不再是临时的了。下面的栗子用一个函数工厂(相当于python闭包，装饰器)plus()来说明这个想法。我们使用这个工厂创建一个plus\_one()函数，plus\_one()的封闭环境是plus()的执行环境，其中x与数值1绑定
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plus <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \ControlFlowTok{function}\NormalTok{(y) x}\OperatorTok{+}\NormalTok{y}
+  \KeywordTok{message}\NormalTok{(}\StringTok{"Note: "}\NormalTok{,}\StringTok{"plus_one also a function"}\NormalTok{)}
+  
+\NormalTok{\}}
+\NormalTok{plus_one <-}\StringTok{ }\KeywordTok{plus}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Note: plus_one also a function
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#注意plus_one也是一个函数}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{img/ch7-13} \end{center}
+
+\subsection{调用环境}
+
+查看下面代码。当代码运行时，你期望i()返回什么？
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  x <-}\StringTok{ }\DecValTok{10}
+  \ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{    def <-}\StringTok{ }\KeywordTok{get}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\KeywordTok{environment}\NormalTok{())}
+    \CommentTok{#返回函数被调用的环境}
+\NormalTok{    call <-}\StringTok{ }\KeywordTok{get}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\KeywordTok{parent.frame}\NormalTok{())}
+    \KeywordTok{list}\NormalTok{(}\DataTypeTok{defined=}\NormalTok{def,}\DataTypeTok{called=}\NormalTok{call,}\DataTypeTok{x=}\NormalTok{x)}
+    \CommentTok{#x}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\NormalTok{i <-}\StringTok{ }\KeywordTok{h}\NormalTok{()}
+\NormalTok{x <-}\StringTok{ }\DecValTok{20}
+\KeywordTok{i}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $defined
+## [1] 10
+## 
+## $called
+## [1] 20
+## 
+## $x
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#[1] 10}
+\end{Highlighting}
+\end{Shaded}
+
+最外层的x（绑定到20）是为了分散你的注意力：使用普通作用域法则，h()首先找到自己是在哪里定义的，然后再寻找与x相关联的值10，但是在调用i()的环境中与x相关的值是多少？在定义h()的环境中x为10，在调用h()的环境中x为20.
+
+注意每个执行环境都有两个父环境：一个调用环境和一个封闭环境。R普通作用域法则只使用封闭的父环境，parent.frame()允许你访问调用父环境。在调用环境而不是封闭环境中查找变量称为动态作用域(注：很少的编程语言使用动态作用域，这是因为动态调用使我们更难理解函数式如何运行的，动态调用主要用于开发交互式数据分析的函数)
+
+\section{绑定名字和数值}
+
+赋值操作其实就是就是将一个名字和一个值进行绑定，它对应于作用域，这个规则决定如何找到与一个名字相关联的值。可能你已经使用过上千次的R赋值语句，赋值操作为当前环境中的名称和对象建立一种绑定关系。名字通常包括字母，数字，.和\_,但是不能以\_开头，如果不遵守这些规则，则会出错。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{_abc <-}\StringTok{ }\DecValTok{1}
+\CommentTok{#Error: unexpected input in "_"}
+\end{Highlighting}
+\end{Shaded}
+
+使用?Reserved可以获取完整的保留字列表，这些通常的规则也可以被重写。在一个由任何字符构成的名称的两遍加上反引号，就可以应用该名称了。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{`}\DataTypeTok{a=b}\StringTok{`}\NormalTok{ <-}\StringTok{ }\DecValTok{3}
+\StringTok{`}\DataTypeTok{:)}\StringTok{`}\NormalTok{ <-}\StringTok{ "smile"}
+\KeywordTok{ls}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] ":)"                 "a"                  "a=b"               
+##  [4] "area"               "b"                  "c1"                
+##  [7] "c2"                 "circum"             "e"                 
+## [10] "e1"                 "e2"                 "f"                 
+## [13] "f1"                 "f1.character"       "f1.numeric"        
+## [16] "father"             "g"                  "getShape"          
+## [19] "h"                  "i"                  "mother"            
+## [22] "n1"                 "n2"                 "plus"              
+## [25] "plus_one"           "r1"                 "s1"                
+## [28] "son"                "student"            "student.attend"    
+## [31] "student.default"    "student.exam"       "student.homework"  
+## [34] "teacher"            "teacher.assignment" "teacher.correcting"
+## [37] "teacher.default"    "teacher.lecture"    "var"               
+## [40] "work"               "x"                  "y"
+\end{verbatim}
+
+除了使用反引号外，还可以使用单引号或双引号来创建非语法的绑定，但是不推荐这样做(在赋值箭头左边使用字符串属于历史问题，在R开始支持反引号之前就已经开始使用了)
+
+普通的赋值箭头\textless{}-总是在当前环境中创建一个变量。强制赋值箭头\textless{}\textless{}-不会再当前环境中创建变量，但是他修改父环境中已有的变量，也可以使用assign来进行深度绑定：name
+\textless{}\textless{}-
+value就等价于assign(``name'',value,inherits=TRUE)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{0}
+\NormalTok{f <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  x <<-}\StringTok{ }\DecValTok{1}
+\NormalTok{\}}
+
+\KeywordTok{f}\NormalTok{()}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+还有另外两个绑定：延时绑定和主动绑定
+
+\begin{itemize}
+\tightlist
+\item
+  延时绑定：不是立即把结果赋给一个表达式，它创建和存储一个约定，在需要时对约定中的表达式进行求值，用特殊的赋值运算符号\%\textless{}d-\%来创建延迟绑定,他是对delayedAssign()函数的封装，如果需要更多的控制可以使用该函数。
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(pryr)}
+\KeywordTok{system.time}\NormalTok{(b }\OperatorTok{%<d-%}\StringTok{ }\NormalTok{\{}\KeywordTok{Sys.sleep}\NormalTok{(}\DecValTok{1}\NormalTok{); }\DecValTok{1}\NormalTok{\})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    user  system elapsed 
+##       0       0       0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{system.time}\NormalTok{(b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    user  system elapsed 
+##       0       0       1
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  主动绑定：不是绑定到常量对象，相反，每次对其进行访问时都要重新计算。\%\textless{}a-\%是对基础函数makeActiveBinding()的封装。
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OperatorTok{%<a-%}\StringTok{ }\KeywordTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1321824
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7713166
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{显式环境}
+
+除了服务于作用域之外，环境也是一种很有用的数据结构，因此他们有引用语义，与R中的大多数对象不同，当你对环境进行修改时，R不会对其进行复制，例如：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{modify <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  x}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{2}
+  \KeywordTok{invisible}\NormalTok{()}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+如果将这个函数应用于列表，原始列表不会被改变，因为修改列表实际上是创建和修改副本
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+
+\NormalTok{x_}\DecValTok{1}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+
+\KeywordTok{modify}\NormalTok{(x_}\DecValTok{1}\NormalTok{)}
+\NormalTok{x_}\DecValTok{1}\OperatorTok{$}\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#[1] 1}
+\end{Highlighting}
+\end{Shaded}
+
+但是如果将这个函数应用于环境，那么原始环境就会被修改
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x_e <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+\NormalTok{x_e}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+\KeywordTok{modify}\NormalTok{(x_e)}
+\NormalTok{x_e}\OperatorTok{$}\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#[1] 2}
+\end{Highlighting}
+\end{Shaded}
+
+就像可以使用列表传递数据一样，也可以使用环境，当你创建自己的环境时，应该将父环境设置为空环境，这样确保不会从其他地方继承对象：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{1}
+
+\NormalTok{e1 <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{()}
+
+\KeywordTok{get}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\DataTypeTok{envir=}\NormalTok{e1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# e2 <- new.env(parent=emptyenv())}
+\CommentTok{# get("x",envir = e2)}
+
+\CommentTok{#Error in get("x", envir = e2) : object 'x' not found}
+\end{Highlighting}
+\end{Shaded}
+
+环境时解决下面3类常见问题的有效数据结构
+
+\begin{itemize}
+\item
+  避免大数据的复制
+\item
+  管理一个软件包的内部状态
+\item
+  根据名字高效的查找与其绑定的值
+\end{itemize}
+
+\subsection{避免复制}
+
+由于环境具有引用语义，所有绝不会无意识的创建一个副本。Biocinductor包中经常使用这种技术，因为它经常需要对非常大的基因对象进行管理。在R3.1.0版本后，这种技术已经不像以前那么重要了，因为修改列表不再是深度复制了。以前修改列表的一个元素也要复制整个列表，如果有些元素非常大，就会造成昂贵的操作。
+
+\subsection{软件包状态}
+
+显式环境在软件包中很有用，因为他们允许你在函数调用之间保持软件包的状态，正常情况下软件包的对象是被锁定的，所以你不能直接修改他们，但是可以这样做：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_env <-}\StringTok{ }\KeywordTok{new.env}\NormalTok{(}\DataTypeTok{parent =} \KeywordTok{emptyenv}\NormalTok{())}
+\NormalTok{my_env}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\DecValTok{1}
+
+\NormalTok{get_a <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{  my_env}\OperatorTok{$}\NormalTok{a}
+\NormalTok{\}}
+
+\NormalTok{set_a <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(value)\{}
+\NormalTok{  old <-}\StringTok{ }\NormalTok{my_env}\OperatorTok{$}\NormalTok{a}
+\NormalTok{  my_env}\OperatorTok{$}\NormalTok{a <-}\StringTok{ }\NormalTok{value}
+  \KeywordTok{invisible}\NormalTok{(old) }\CommentTok{#不返回old}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{模拟hashmap}\label{hashmap}
+
+hashmap是一种非常有用的数据结构，它根据名字查找对象的时间复杂度为O(1)。环境默认提供这种行为，所以可以用它来模拟hashmap。CRAN的hash包就是用这种思想开发的
+
+\section{总结}
+
+截止到这，我们的R语言面型对象的内容介绍完了，回顾起来，首先我们介绍了R语言编程的一些规范，告诉读者要参考一些标准的规范构建自己的编程规范并在团队中做出调整，增加自己代码的可读性和运行效率，紧接着我们分了5章系统全面的介绍了R语言的面向对象编程:S3，S4,R5,R6;最后本章我们介绍了R语言环境的相关知识，环境不仅是作用域的描述，更是一种非常好用的数据结构。
+
+最后希望阅读本电子书的R语言用户，阅读完本书后对你有一点点的帮助。
+
+\chapter{参考文献}\label{Reference}
+
+{[}1{]}.高级R语言编程指南{[}M{]}. hadley Wickham 著，李洪成等 译.
+
+{[}2{]}.\href{https://wenku.baidu.com/view/fc1b919e10a6f524cdbf857d.html}{R语言面向对象编程}
+
+{[}3{]}.数据科学中的R语言{[}M{]}. 李舰，肖凯 著.
+
+\bibliography{book.bib,packages.bib}
+
+
+\end{document}

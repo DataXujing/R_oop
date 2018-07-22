@@ -1,0 +1,9 @@
+"0","identical(globalenv(),environment())"
+"1","[1]"
+"1"," TRUE"
+"1","
+"
+"0","globalenv()==environment()"
+"2","Error in globalenv() == environment() : 
+  comparison (1) is possible only for atomic and list types
+"

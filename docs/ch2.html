@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>R语言面向对象编程</title>
+  <meta name="description" content="R语言面向对象编程">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="R语言面向对象编程" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="R语言面向对象编程" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="R语言面向对象编程" />
+  
+  <meta name="twitter:description" content="R语言面向对象编程" />
+  
+
+<meta name="author" content="徐静">
+
+
+<meta name="date" content="2018-07-22">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="ch1.html">
+<link rel="next" href="S3.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css\style.css" type="text/css" />
+<link rel="stylesheet" href="css\toc.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://github.com/DataXujing/R_OOP" target='blank'>项目地址</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>写在书前</a></li>
+<li class="chapter" data-level="" data-path="e5a3b0e6988e.html"><a href="e5a3b0e6988e.html"><i class="fa fa-check"></i>声明</a></li>
+<li class="chapter" data-level="1" data-path="ch1.html"><a href="ch1.html"><i class="fa fa-check"></i><b>1</b> R语言编程风格指南</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch1.html"><a href="ch1.html#section-1.1"><i class="fa fa-check"></i><b>1.1</b> 符号和名字</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="ch1.html"><a href="ch1.html#section-1.1.1"><i class="fa fa-check"></i><b>1.1.1</b> 文件名</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ch1.html"><a href="ch1.html#section-1.1.2"><i class="fa fa-check"></i><b>1.1.2</b> 对象名</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="ch1.html"><a href="ch1.html#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 语法</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="ch1.html"><a href="ch1.html#section-1.2.1"><i class="fa fa-check"></i><b>1.2.1</b> 空格</a></li>
+<li class="chapter" data-level="1.2.2" data-path="ch1.html"><a href="ch1.html#section-1.2.2"><i class="fa fa-check"></i><b>1.2.2</b> 大括号</a></li>
+<li class="chapter" data-level="1.2.3" data-path="ch1.html"><a href="ch1.html#section-1.2.3"><i class="fa fa-check"></i><b>1.2.3</b> 行的长度</a></li>
+<li class="chapter" data-level="1.2.4" data-path="ch1.html"><a href="ch1.html#section-1.2.4"><i class="fa fa-check"></i><b>1.2.4</b> 缩进</a></li>
+<li class="chapter" data-level="1.2.5" data-path="ch1.html"><a href="ch1.html#section-1.2.5"><i class="fa fa-check"></i><b>1.2.5</b> 赋值</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="ch1.html"><a href="ch1.html#section-1.3"><i class="fa fa-check"></i><b>1.3</b> 结构</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i><b>2</b> R语言面向对象编程指南</a><ul>
+<li class="chapter" data-level="2.1" data-path="ch2.html"><a href="ch2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 什么是面向对象</a></li>
+<li class="chapter" data-level="2.2" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.2</b> R为什么要进行面向对象的编程</a></li>
+<li class="chapter" data-level="2.3" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.3</b> R的面向对象编程</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="S3.html"><a href="S3.html"><i class="fa fa-check"></i><b>3</b> 基于S3的面向对象编程</a><ul>
+<li class="chapter" data-level="3.1" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.1</b> S3对象的介绍</a></li>
+<li class="chapter" data-level="3.2" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.2</b> 创建S3对象</a></li>
+<li class="chapter" data-level="3.3" data-path="S3.html"><a href="S3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 泛型函数和方法调用</a></li>
+<li class="chapter" data-level="3.4" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.4</b> 查看S3对象的函数</a></li>
+<li class="chapter" data-level="3.5" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.5</b> S3对象的继承关系</a></li>
+<li class="chapter" data-level="3.6" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.6</b> S3对象的缺点</a></li>
+<li class="chapter" data-level="3.7" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.7</b> S3对象的使用</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="S4.html"><a href="S4.html"><i class="fa fa-check"></i><b>4</b> 基于S4的面向对象编程</a><ul>
+<li class="chapter" data-level="4.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.1</b> S4对象介绍</a></li>
+<li class="chapter" data-level="4.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2</b> 创建S4对象</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.1</b> 如何创建S4对象?</a></li>
+<li class="chapter" data-level="4.2.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.2</b> 创建一个S4对象实例</a></li>
+<li class="chapter" data-level="4.2.3" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.3</b> 创建一个有继承关系的S4对象</a></li>
+<li class="chapter" data-level="4.2.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.4</b> S4对象的默认值</a></li>
+<li class="chapter" data-level="4.2.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.5</b> S4对象的类型检查</a></li>
+<li class="chapter" data-level="4.2.6" data-path="S4.html"><a href="S4.html#section-4.2.6"><i class="fa fa-check"></i><b>4.2.6</b> 从一个已经实例化的对象中创建新对象</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="S4.html"><a href="S4.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 访问对象的属性</a></li>
+<li class="chapter" data-level="4.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.4</b> S4的泛型函数</a></li>
+<li class="chapter" data-level="4.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.5</b> 查看S4对象的函数</a></li>
+<li class="chapter" data-level="4.6" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.6</b> S4对象的使用</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="S4.html"><a href="S4.html#1"><i class="fa fa-check"></i><b>4.6.1</b> 任务1：定义一个图形库的数据结构和计算函数</a></li>
+<li class="chapter" data-level="4.6.2" data-path="S4.html"><a href="S4.html#2"><i class="fa fa-check"></i><b>4.6.2</b> 任务2：重构圆形和椭圆形的设计</a></li>
+<li class="chapter" data-level="4.6.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>4.6.3</b> 任务3：增加矩形的图形处理</a></li>
+<li class="chapter" data-level="4.6.4" data-path="S4.html"><a href="S4.html#4shapeshapegetshape"><i class="fa fa-check"></i><b>4.6.4</b> 任务4：在基类Shape中增加shape属性和getShape方法</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="RC.html"><a href="RC.html"><i class="fa fa-check"></i><b>5</b> 基于RC的面向对象编程</a><ul>
+<li class="chapter" data-level="5.1" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.1</b> RC对象系统的介绍</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
+<li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
+<li class="chapter" data-level="7.1" data-path="env.html"><a href="env.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 环境基础</a></li>
+<li class="chapter" data-level="7.2" data-path="env.html"><a href="env.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 环境递归</a></li>
+<li class="chapter" data-level="7.3" data-path="env.html"><a href="env.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 函数环境</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="env.html"><a href="env.html#section-7.3.1"><i class="fa fa-check"></i><b>7.3.1</b> 封闭环境</a></li>
+<li class="chapter" data-level="7.3.2" data-path="env.html"><a href="env.html#section-7.3.2"><i class="fa fa-check"></i><b>7.3.2</b> 绑定环境</a></li>
+<li class="chapter" data-level="7.3.3" data-path="env.html"><a href="env.html#section-7.3.3"><i class="fa fa-check"></i><b>7.3.3</b> 执行环境</a></li>
+<li class="chapter" data-level="7.3.4" data-path="env.html"><a href="env.html#section-7.3.4"><i class="fa fa-check"></i><b>7.3.4</b> 调用环境</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="env.html"><a href="env.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 绑定名字和数值</a></li>
+<li class="chapter" data-level="7.5" data-path="env.html"><a href="env.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 显式环境</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="env.html"><a href="env.html#section-7.5.1"><i class="fa fa-check"></i><b>7.5.1</b> 避免复制</a></li>
+<li class="chapter" data-level="7.5.2" data-path="env.html"><a href="env.html#section-7.5.2"><i class="fa fa-check"></i><b>7.5.2</b> 软件包状态</a></li>
+<li class="chapter" data-level="7.5.3" data-path="env.html"><a href="env.html#hashmap"><i class="fa fa-check"></i><b>7.5.3</b> 模拟hashmap</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="env.html"><a href="env.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 总结</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Reference.html"><a href="Reference.html"><i class="fa fa-check"></i><b>8</b> 参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://dataxujing.github.io/" target="blank">个人主页</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言面向对象编程</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch2" class="section level1">
+<h1><span class="header-section-number">第 2 章</span> R语言面向对象编程指南</h1>
+<p>面向对象是一种对世界理解和抽象的方法，当代码复杂度增加难以维护的时候，面向对象就会显得很重要，我经历过Java和Python两种语言从面向过程到面向对象的改造，对R的面向对象的编程也早有些研究但开始的时候并不是那么的透彻。随着大数据时代AI时代的来临，R将走向大规模的企业级应用，因此面向对象的编程方式也会将成为R语言的一种非常重要的趋势，并且多位R语言大神，像Hadley Wickham等在R包开发中早就引入了面向对象的编程方式，R语言的发展也势必会面向对象。</p>
+<div id="section-2.1" class="section level2">
+<h2><span class="header-section-number">2.1</span> 什么是面向对象</h2>
+<p>学过计算机编程基础的人都知道，计算机是通过接受一些逻辑指令，然后翻译成机器码，进而控制CPU的电路，从而实现我们能看到的所有操作。无论是何种计算机编程语言，都可以认为是计算机和人类沟通的翻译，将一般人能懂的计算机语言翻译成计算机能懂的机器语言。</p>
+<p>简单的理解，有的语言比较接近机器的习惯，机器执行起来会更有效率；有的语言比较接近人的习惯，人类设计起来会更容易。面向对象的思想就属于第二种情况。</p>
+<p>人的思维方式和计算机是不同的，计算机习惯按照顺序执行不同的指令，依据严格的逻辑进行不同的行为，而人类处理问题的方式通常是先对问题进行分析，然后调动不同的资源做不同的事情。</p>
+<p>喜欢历史故事的朋友都知道诸葛亮打仗和刘邦打仗的区别。诸葛亮会命令某人埋伏，某人放火，某人举旗，某人不战而退，某人斜刺里杀出，每个人听到命令都不知道最后会发生什么。直到最后敌军被一条龙的歼灭后，得胜归来的将军们对诸葛亮佩服的五体投地。而刘邦打仗的故事远没有那么精彩，事情来了该让韩信做的交给韩信，该让萧何做的交给萧何。</p>
+<p>如何像刘邦一样的写程序，这就是面向对象的程序设计。韩信，萧何这些人都可以认为是对象，我们只需要知道他们有什么特点，根据问题的不同派不同的人去做就可以了，而诸葛亮关注的是具体流程，至于是关羽去放火还是张飞去放火反而不重要了，这就是过程式的编程思想。</p>
+<p>面向对象的程序设计在运行效率上可能没有优势，但是节约了开发者和设计者的时间，在R语言和S语言上这一点完全一致，S语言很重要的设计理念是“人的时间远比机器的时间宝贵”。对各种模型和算法的封装及重用与面向对象的编程目的是相同的。</p>
+<p>在面向对象的程序设计中，对象(object)是最基本的元素，不过对象指的是具体的实例，在对象之上还有一个类(class)的概念。这里的类和R中的类的概念没有任何不同，都是指某一种抽象对象的类型(和R中的type不同,type指的是在内存存储方面的类型)。</p>
+<p>比如说“马”就是一个类，随便牵来一匹白马或红马都属于马这个范畴，但都和马这个东西不一样，如果牵来的白马是刘备的的卢马，红马是关羽的赤兔马，那么这两匹马就是对象。所以类是抽象的概念，对象是类的具体实例。我们直接操作的是对象，但是需要定义的是类。</p>
+<p>用面向对象的专业术语来说，马就是一个“类”，白马和红马是马的“子类”，的卢马是白马实例化的对象，也是马实例化的对象。</p>
+<p>一般来说类包含属性和方法，属性指的是类具有的某些信息，在计算机程序中通常是变量，方法指的是类进行的操作，在计算机程序中相当于函数。</p>
+<p>并不是具有了类和对象的概念后就成了面向对象的程序设计，一般来说还得具备三个特性：封装、继承和多态。</p>
+<p>封装指的是隐藏对象的实现细节，仅对外公开接口，每个对象都可以独立的完成一定的功能，不需要和其他对象有过多的交互，所有的数据交换都通过接口来处理，专业术语是降低系统的“耦合度”。</p>
+<p>比如说马这种交通工具就是一个封装的很好的类，具有颜色、体重等属性，具有载人、奔跑等方法。用的时候把马牵出来，通过缰绳和马鞭这几个接口来控制动作。</p>
+<p>继承是一个类可以继承另一个类的各种属性及方法，重写或增加某些属性和方法，被继承的类称为“父类”，继承了父类的类的称为“子类”。通过继承可以重写父类方法或增加额外功能，注意R语言像Python一样支持多重继承，Java不支持多继承，但是有其他办法实现。当然除了继承也可以组合类。</p>
+<p>多态可以说是面向对象的程序设计中最关键的特性，如果某种语言支持以上所有特性但是不支持多态，我们称其为“基于对象”而不是面向对象，所谓多态简单来说就是希望能用相同的命令作用于不同的类，根据类的不同产生不同的结果。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在数值数据</span>
+<span class="kw">summary</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>))</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -0.7695 -0.1972  0.7372  0.5093  0.9630  1.8962</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在Model上</span>
+<span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>)<span class="op">~</span><span class="kw">rnorm</span>(<span class="dv">10</span>)))</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = rnorm(10) ~ rnorm(10))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.1166 -0.4961  0.0663  0.2797  1.0362 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  0.05845    0.20973   0.279    0.787
+## 
+## Residual standard error: 0.6632 on 9 degrees of freedom</code></pre>
+</div>
+<div id="r" class="section level2">
+<h2><span class="header-section-number">2.2</span> R为什么要进行面向对象的编程</h2>
+<p>R主要面向统计计算，而且代码量一般不会很大，几十行，几百行，使用面向过程的编程方式就可以很好的完成编程任务。在R中流传着一个深入人心的说法“万物皆对象”，另一方面，R是一种函数式的语言，与面向对象的程序设计存在着天然的差异，实际上这两个对象的描述的含义是不同的。“万物皆对象”是指R的基本数据结构的地位都是相同的，任何东西包括函数都可以认为是对象，都能作为参数传入到函数中。而“面向对象”指的是一种编程泛型，已经成为一个专有的名词。</p>
+<p>但是随着R语言在工业界的火热，伴随着越来越多的工程背景的人的加入，R语言开始向更多领域发展，会有越来越难以维护的海量代码项目，所以必须使用面向对象的编程思想，此外如果你开发一些R包需要对特殊的对象重定义S3(下一章会讲)的方法，需要对大量程序代码最大化的重用和封装(S4(后面会讲到))，那么这时候你同样需要用到R语言的面向对象的编程。</p>
+<p>一句话，随着R语言的发展，R面向对象编程一定是一个大的趋势。</p>
+</div>
+<div id="r" class="section level2">
+<h2><span class="header-section-number">2.3</span> R的面向对象编程</h2>
+<p>R的面向对象是基于泛型函数(generic function)的，而不是基于类层次结构，接下来我们从面向对象的3个特征入手，分别用R语言进行实现。</p>
+<ul>
+<li>封装</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义teacher对象和行为</span>
+teacher &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">UseMethod</span>(<span class="st">&quot;teacher&quot;</span>)
+teacher.lecture &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;上课&quot;</span>)
+teacher.assignment &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;布置作业&quot;</span>)
+teacher.correcting &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;批改作业&quot;</span>)
+teacher.default &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;你不是teacher&quot;</span>)
+
+<span class="co"># 定义同学对象和行为</span>
+
+student &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">UseMethod</span>(<span class="st">&quot;student&quot;</span>)
+student.attend &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;听课&quot;</span>)
+student.homework &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;写作业&quot;</span>)
+student.exam &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;考试&quot;</span>)
+student.default &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;你不是student&quot;</span>)
+
+<span class="co">#定义两个变量，a老师和b同学</span>
+
+a &lt;-<span class="st"> &#39;teacher&#39;</span>
+b &lt;-<span class="st"> &#39;student&#39;</span>
+
+<span class="co"># 给老师变量设置行为</span>
+
+<span class="kw">attr</span>(a,<span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> &#39;lecture&#39;</span>
+<span class="co"># 执行老师的行为</span>
+
+<span class="kw">teacher</span>(a)</code></pre></div>
+<pre><code>## [1] &quot;上课&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(b,<span class="st">&#39;class&#39;</span>) &lt;-<span class="st"> &#39;attend&#39;</span>
+<span class="kw">student</span>(b)</code></pre></div>
+<pre><code>## [1] &quot;听课&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(a,<span class="st">&#39;class&#39;</span>) &lt;-<span class="st"> &#39;assignment&#39;</span>
+<span class="kw">teacher</span>(a)</code></pre></div>
+<pre><code>## [1] &quot;布置作业&quot;</code></pre>
+<ul>
+<li>继承</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给同学对象增加新的行为</span>
+student.correcting &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">print</span>(<span class="st">&quot;帮助老师批改作业&quot;</span>)
+
+<span class="co"># 辅助变量用于设置初始值</span>
+char0 =<span class="st"> </span><span class="kw">character</span>(<span class="dv">0</span>)
+<span class="co">#实现继承关系</span>
+create &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">classes=</span>char0,<span class="dt">parents=</span>char0){
+  mro &lt;-<span class="st"> </span><span class="kw">c</span>(classes)
+  <span class="cf">for</span>(name <span class="cf">in</span> parents){
+    mro &lt;-<span class="st"> </span><span class="kw">c</span>(mro,name)
+    ancestors &lt;-<span class="st"> </span><span class="kw">attr</span>(<span class="kw">get</span>(name),<span class="st">&#39;type&#39;</span>)
+    mro &lt;-<span class="st"> </span><span class="kw">c</span>(mro,<span class="kw">ancestors</span>(ancestors <span class="op">!=</span><span class="st"> </span>name))
+    
+  }
+  
+  <span class="kw">return</span>(mro)
+}
+
+<span class="co"># 定义构造函数，创建对象</span>
+NewInstance &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">value=</span><span class="dv">0</span>,<span class="dt">classes=</span>char0,<span class="dt">parents=</span>char0) {
+  obj &lt;-<span class="st"> </span>value
+  <span class="kw">attr</span>(obj,<span class="st">&#39;type&#39;</span>) &lt;-<span class="st"> </span><span class="kw">create</span>(classes,parents)
+  <span class="kw">attr</span>(obj,<span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;homework&#39;</span>,<span class="st">&#39;correcting&#39;</span>,<span class="st">&#39;exam&#39;</span>)
+  <span class="kw">return</span>(obj)
+}
+
+<span class="co"># 创建对象实例</span>
+StudentObj &lt;-<span class="st"> </span><span class="kw">NewInstance</span>()
+<span class="co"># 创建子对象实例</span>
+s1 &lt;-<span class="st"> </span><span class="kw">NewInstance</span>(<span class="st">&quot;普通同学&quot;</span>,<span class="dt">classes =</span> <span class="st">&#39;normal&#39;</span>,<span class="dt">parents =</span> <span class="st">&quot;StudentObj&quot;</span>)
+s2 &lt;-<span class="st"> </span><span class="kw">NewInstance</span>(<span class="st">&#39;课代表&#39;</span>,<span class="dt">classes=</span><span class="st">&#39;leader&#39;</span>,<span class="dt">parents=</span><span class="st">&#39;StudentObj&#39;</span>)
+
+<span class="co"># 给课代表，增加批改作业行为</span>
+<span class="kw">attr</span>(s2,<span class="st">&#39;class&#39;</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">attr</span>(s2,<span class="st">&#39;class&#39;</span>),<span class="st">&#39;correcting&#39;</span>)
+s1
+s2</code></pre></div>
+<ul>
+<li>多态</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建优等生和次等生，两个实例</span>
+e1 &lt;-<span class="st"> </span><span class="kw">NewInstance</span>(<span class="st">&quot;优等生&quot;</span>,<span class="dt">classes=</span><span class="st">&#39;excellent&#39;</span>,<span class="dt">parents=</span><span class="st">&#39;StudentObj&#39;</span>)
+
+e2 &lt;-<span class="st"> </span><span class="kw">NewInstance</span>(<span class="st">&quot;次等生&quot;</span>,<span class="dt">classes=</span><span class="st">&#39;poor&#39;</span>,<span class="dt">parents=</span><span class="st">&#39;StudentObj&#39;</span>)
+
+student.exam &lt;-<span class="st"> </span><span class="cf">function</span>(x,score){
+  p &lt;-<span class="st"> &#39;考试&#39;</span>
+  <span class="cf">if</span>(score<span class="op">&gt;</span><span class="dv">85</span>) <span class="kw">print</span>(<span class="kw">paste</span>(p,<span class="st">&quot;优秀&quot;</span>))
+  <span class="cf">if</span>(score<span class="op">&lt;</span><span class="dv">70</span>) <span class="kw">print</span>(<span class="kw">paste</span>(p,<span class="st">&quot;及格&quot;</span>))
+
+}
+
+<span class="co"># 执行优等生的考试行为，并输入分数为90</span>
+<span class="kw">attr</span>(e1,<span class="st">&#39;class&#39;</span>) &lt;-<span class="st"> &#39;exam&#39;</span>
+<span class="kw">stuent</span>(e1,<span class="dv">90</span>)
+[<span class="dv">1</span>] “考试优秀<span class="st">&quot;</span>
+
+<span class="st">attr(e2,&#39;class&#39;) &lt;- &#39;exam&#39;</span>
+
+<span class="st">student(e2,66)</span>
+<span class="st">[1] ”考试及格&quot;</span></code></pre></div>
+<p>通过R语言的面向对象的反省函数，我们就可以实现面向对象的编程。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="S3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["R_OOP.pdf", "R_OOP.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

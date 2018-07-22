@@ -1,0 +1,18 @@
+"0","x <- 10"
+"2","Warning message:
+"
+"2","In strsplit(code, ""\n"", fixed = TRUE) :"
+"2","
+ "
+"2"," input string 1 is invalid in this locale
+"
+"0","exists(""x"",envir=e) #查找父环境"
+"1","[1]"
+"1"," TRUE"
+"1","
+"
+"0","exists(""x"",envir=e,inherits=FALSE) #不希望在父环境中查找"
+"1","[1]"
+"1"," FALSE"
+"1","
+"

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>R语言面向对象编程</title>
+  <meta name="description" content="R语言面向对象编程">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="R语言面向对象编程" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="R语言面向对象编程" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="R语言面向对象编程" />
+  
+  <meta name="twitter:description" content="R语言面向对象编程" />
+  
+
+<meta name="author" content="徐静">
+
+
+<meta name="date" content="2018-07-22">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="S3.html">
+<link rel="next" href="RC.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css\style.css" type="text/css" />
+<link rel="stylesheet" href="css\toc.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://github.com/DataXujing/R_OOP" target='blank'>项目地址</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>写在书前</a></li>
+<li class="chapter" data-level="" data-path="e5a3b0e6988e.html"><a href="e5a3b0e6988e.html"><i class="fa fa-check"></i>声明</a></li>
+<li class="chapter" data-level="1" data-path="ch1.html"><a href="ch1.html"><i class="fa fa-check"></i><b>1</b> R语言编程风格指南</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch1.html"><a href="ch1.html#section-1.1"><i class="fa fa-check"></i><b>1.1</b> 符号和名字</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="ch1.html"><a href="ch1.html#section-1.1.1"><i class="fa fa-check"></i><b>1.1.1</b> 文件名</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ch1.html"><a href="ch1.html#section-1.1.2"><i class="fa fa-check"></i><b>1.1.2</b> 对象名</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="ch1.html"><a href="ch1.html#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 语法</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="ch1.html"><a href="ch1.html#section-1.2.1"><i class="fa fa-check"></i><b>1.2.1</b> 空格</a></li>
+<li class="chapter" data-level="1.2.2" data-path="ch1.html"><a href="ch1.html#section-1.2.2"><i class="fa fa-check"></i><b>1.2.2</b> 大括号</a></li>
+<li class="chapter" data-level="1.2.3" data-path="ch1.html"><a href="ch1.html#section-1.2.3"><i class="fa fa-check"></i><b>1.2.3</b> 行的长度</a></li>
+<li class="chapter" data-level="1.2.4" data-path="ch1.html"><a href="ch1.html#section-1.2.4"><i class="fa fa-check"></i><b>1.2.4</b> 缩进</a></li>
+<li class="chapter" data-level="1.2.5" data-path="ch1.html"><a href="ch1.html#section-1.2.5"><i class="fa fa-check"></i><b>1.2.5</b> 赋值</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="ch1.html"><a href="ch1.html#section-1.3"><i class="fa fa-check"></i><b>1.3</b> 结构</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i><b>2</b> R语言面向对象编程指南</a><ul>
+<li class="chapter" data-level="2.1" data-path="ch2.html"><a href="ch2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 什么是面向对象</a></li>
+<li class="chapter" data-level="2.2" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.2</b> R为什么要进行面向对象的编程</a></li>
+<li class="chapter" data-level="2.3" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.3</b> R的面向对象编程</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="S3.html"><a href="S3.html"><i class="fa fa-check"></i><b>3</b> 基于S3的面向对象编程</a><ul>
+<li class="chapter" data-level="3.1" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.1</b> S3对象的介绍</a></li>
+<li class="chapter" data-level="3.2" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.2</b> 创建S3对象</a></li>
+<li class="chapter" data-level="3.3" data-path="S3.html"><a href="S3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 泛型函数和方法调用</a></li>
+<li class="chapter" data-level="3.4" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.4</b> 查看S3对象的函数</a></li>
+<li class="chapter" data-level="3.5" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.5</b> S3对象的继承关系</a></li>
+<li class="chapter" data-level="3.6" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.6</b> S3对象的缺点</a></li>
+<li class="chapter" data-level="3.7" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.7</b> S3对象的使用</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="S4.html"><a href="S4.html"><i class="fa fa-check"></i><b>4</b> 基于S4的面向对象编程</a><ul>
+<li class="chapter" data-level="4.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.1</b> S4对象介绍</a></li>
+<li class="chapter" data-level="4.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2</b> 创建S4对象</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.1</b> 如何创建S4对象?</a></li>
+<li class="chapter" data-level="4.2.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.2</b> 创建一个S4对象实例</a></li>
+<li class="chapter" data-level="4.2.3" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.3</b> 创建一个有继承关系的S4对象</a></li>
+<li class="chapter" data-level="4.2.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.4</b> S4对象的默认值</a></li>
+<li class="chapter" data-level="4.2.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.5</b> S4对象的类型检查</a></li>
+<li class="chapter" data-level="4.2.6" data-path="S4.html"><a href="S4.html#section-4.2.6"><i class="fa fa-check"></i><b>4.2.6</b> 从一个已经实例化的对象中创建新对象</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="S4.html"><a href="S4.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 访问对象的属性</a></li>
+<li class="chapter" data-level="4.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.4</b> S4的泛型函数</a></li>
+<li class="chapter" data-level="4.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.5</b> 查看S4对象的函数</a></li>
+<li class="chapter" data-level="4.6" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.6</b> S4对象的使用</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="S4.html"><a href="S4.html#1"><i class="fa fa-check"></i><b>4.6.1</b> 任务1：定义一个图形库的数据结构和计算函数</a></li>
+<li class="chapter" data-level="4.6.2" data-path="S4.html"><a href="S4.html#2"><i class="fa fa-check"></i><b>4.6.2</b> 任务2：重构圆形和椭圆形的设计</a></li>
+<li class="chapter" data-level="4.6.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>4.6.3</b> 任务3：增加矩形的图形处理</a></li>
+<li class="chapter" data-level="4.6.4" data-path="S4.html"><a href="S4.html#4shapeshapegetshape"><i class="fa fa-check"></i><b>4.6.4</b> 任务4：在基类Shape中增加shape属性和getShape方法</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="RC.html"><a href="RC.html"><i class="fa fa-check"></i><b>5</b> 基于RC的面向对象编程</a><ul>
+<li class="chapter" data-level="5.1" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.1</b> RC对象系统的介绍</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
+<li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
+<li class="chapter" data-level="7.1" data-path="env.html"><a href="env.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 环境基础</a></li>
+<li class="chapter" data-level="7.2" data-path="env.html"><a href="env.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 环境递归</a></li>
+<li class="chapter" data-level="7.3" data-path="env.html"><a href="env.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 函数环境</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="env.html"><a href="env.html#section-7.3.1"><i class="fa fa-check"></i><b>7.3.1</b> 封闭环境</a></li>
+<li class="chapter" data-level="7.3.2" data-path="env.html"><a href="env.html#section-7.3.2"><i class="fa fa-check"></i><b>7.3.2</b> 绑定环境</a></li>
+<li class="chapter" data-level="7.3.3" data-path="env.html"><a href="env.html#section-7.3.3"><i class="fa fa-check"></i><b>7.3.3</b> 执行环境</a></li>
+<li class="chapter" data-level="7.3.4" data-path="env.html"><a href="env.html#section-7.3.4"><i class="fa fa-check"></i><b>7.3.4</b> 调用环境</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="env.html"><a href="env.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 绑定名字和数值</a></li>
+<li class="chapter" data-level="7.5" data-path="env.html"><a href="env.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 显式环境</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="env.html"><a href="env.html#section-7.5.1"><i class="fa fa-check"></i><b>7.5.1</b> 避免复制</a></li>
+<li class="chapter" data-level="7.5.2" data-path="env.html"><a href="env.html#section-7.5.2"><i class="fa fa-check"></i><b>7.5.2</b> 软件包状态</a></li>
+<li class="chapter" data-level="7.5.3" data-path="env.html"><a href="env.html#hashmap"><i class="fa fa-check"></i><b>7.5.3</b> 模拟hashmap</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="env.html"><a href="env.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 总结</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Reference.html"><a href="Reference.html"><i class="fa fa-check"></i><b>8</b> 参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://dataxujing.github.io/" target="blank">个人主页</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言面向对象编程</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="S4" class="section level1">
+<h1><span class="header-section-number">第 4 章</span> 基于S4的面向对象编程</h1>
+<p>S4对象系统具有明显的结构化特征，更适合面向对象的程序设计。Bioconductor社区以S4对象作为基础框架，只接受S4定义的R包。</p>
+<div id="s4" class="section level2">
+<h2><span class="header-section-number">4.1</span> S4对象介绍</h2>
+<p>S4对象系统是一种标准的R语言面向对象实现方式，S4对象有明确的类定义，参数定义，参数检查，继承关系，实例化等的面向对象系统的特征。</p>
+</div>
+<div id="s4" class="section level2">
+<h2><span class="header-section-number">4.2</span> 创建S4对象</h2>
+<p>使用辅助的pryr包</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 加载pryr包</span>
+<span class="kw">library</span>(pryr)</code></pre></div>
+<div id="s4" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> 如何创建S4对象?</h3>
+<p>由于S4对象是标准的面向对象实现方式，有专门的类定义函数setClass()和类的实例化函数new()，我们看一下setClass()和new()是如何工作的。</p>
+<ul>
+<li>setClass()</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(class,representation,prototype,<span class="dt">contains=</span><span class="kw">character</span>(),
+  validity,access,where,version,sealed,package,
+  <span class="dt">S3methods=</span><span class="ot">FALSE</span>,slots)</code></pre></div>
+<p>参数列表：</p>
+<ul>
+<li><p>Class:定义类名</p></li>
+<li><p>slots:定义属性和属性类型</p></li>
+<li><p>prototype:定义属性的默认值</p></li>
+<li><p>contains=character():定义父类，继承关系</p></li>
+<li><p>validity:定义属性的类型检查</p></li>
+<li><p>where:定义存储空间</p></li>
+<li><p>sealed:如果设置TRUE,则同名类不能再次定义</p></li>
+<li><p>package:定义所属的包</p></li>
+<li><p>S3methods:R3.0.0后不建议使用</p></li>
+<li><p>representation:R3.0.0后不建议使用</p></li>
+<li><p>access:R3.0.0后不建议使用</p></li>
+<li><p>version:R3.0.0后不建议使用</p></li>
+</ul>
+</div>
+<div id="s4" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> 创建一个S4对象实例</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义一个S4对象</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+
+<span class="co"># 实例化一个Person对象</span>
+
+father &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;F&quot;</span>,<span class="dt">age=</span><span class="dv">44</span>)
+
+<span class="co"># 查看father对象，有两个属性name和age</span>
+father</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;F&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 44</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看father对象类型为Person</span>
+<span class="kw">class</span>(father)</code></pre></div>
+<pre><code>## [1] &quot;Person&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;.GlobalEnv&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看father对象为S4的对象</span>
+<span class="kw">otype</span>(father)</code></pre></div>
+<pre><code>## [1] &quot;S4&quot;</code></pre>
+</div>
+<div id="s4" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> 创建一个有继承关系的S4对象</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建一个S4对象Person</span>
+<span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+
+<span class="co"># 创建Person的子类</span>
+<span class="kw">setClass</span>(<span class="st">&quot;Son&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">father=</span><span class="st">&quot;Person&quot;</span>,<span class="dt">mother=</span><span class="st">&quot;Person&quot;</span>),<span class="dt">contains =</span> <span class="st">&quot;Person&quot;</span>)
+
+<span class="co"># 实例化Person对象</span>
+
+father &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;F&quot;</span>,<span class="dt">age=</span><span class="dv">44</span>)
+mother &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;M&quot;</span>,<span class="dt">age=</span><span class="dv">39</span>)
+
+<span class="co"># 实例化一个Son对象</span>
+
+son &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Son&quot;</span>,<span class="dt">name=</span><span class="st">&quot;S&quot;</span>,<span class="dt">age=</span><span class="dv">16</span>,<span class="dt">father=</span>father,<span class="dt">mother=</span>mother)
+
+<span class="co"># 查看son对象的name属性</span>
+son<span class="op">@</span>name</code></pre></div>
+<pre><code>## [1] &quot;S&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看son对象的age属性</span>
+son<span class="op">@</span>age</code></pre></div>
+<pre><code>## [1] 16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看son对象的father属性</span>
+son<span class="op">@</span>father</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;F&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 44</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看son对象的mother属性</span>
+son<span class="op">@</span>mother</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;M&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 39</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看son类型</span>
+<span class="kw">otype</span>(son)</code></pre></div>
+<pre><code>## [1] &quot;S4&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看son@name的属性</span>
+<span class="kw">otype</span>(son<span class="op">@</span>name)</code></pre></div>
+<pre><code>## [1] &quot;base&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#  查看son@mother的属性</span>
+<span class="kw">otype</span>(son<span class="op">@</span>mother)</code></pre></div>
+<pre><code>## [1] &quot;S4&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 用isS4()检查S4对象的类型</span>
+<span class="kw">isS4</span>(son)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">isS4</span>(son<span class="op">@</span>name)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">isS4</span>(son<span class="op">@</span>mother)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="s4" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> S4对象的默认值</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+
+<span class="co"># 属性age为空</span>
+a &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;a&quot;</span>)
+a</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;a&quot;
+## 
+## Slot &quot;age&quot;:
+## numeric(0)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 设置属性age的默认值为20</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype=</span><span class="kw">list</span>(<span class="dt">age=</span><span class="dv">20</span>))
+
+<span class="co"># 初始化b对象</span>
+b &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;b&quot;</span>)
+
+<span class="co"># 属性age的默认值是20</span>
+b </code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;b&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 20</code></pre>
+</div>
+<div id="s4" class="section level3">
+<h3><span class="header-section-number">4.2.5</span> S4对象的类型检查</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+<span class="co">#传入错误age类型</span>
+bad &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;bad&quot;</span>,<span class="dt">age=</span><span class="st">&quot;abc&quot;</span>)
+
+###
+Error <span class="cf">in</span> <span class="kw">validObject</span>(.Object) <span class="op">:</span><span class="st"> </span>类别为“Person”的对象不对<span class="op">:</span><span class="st"> </span>invalid object <span class="cf">for</span> slot <span class="st">&quot;age&quot;</span> <span class="cf">in</span> class <span class="st">&quot;Person&quot;</span><span class="op">:</span><span class="st"> </span>got class <span class="st">&quot;character&quot;</span>, should be or extend class <span class="st">&quot;numeric&quot;</span>       </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 设置age的非负检查</span>
+<span class="kw">setValidity</span>(<span class="st">&quot;Person&quot;</span>,<span class="cf">function</span>(object){
+  <span class="cf">if</span>(object<span class="op">@</span>age <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">&quot;Age is negative.&quot;</span>)
+})
+
+<span class="co"># 传入小于0的年龄</span>
+bad2 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;bad&quot;</span>,<span class="dt">age=</span><span class="op">-</span><span class="dv">1</span>)
+
+###
+Error <span class="cf">in</span> <span class="kw">validityMethod</span>(object) <span class="op">:</span><span class="st"> </span>Age is negative.</code></pre></div>
+</div>
+<div id="section-4.2.6" class="section level3">
+<h3><span class="header-section-number">4.2.6</span> 从一个已经实例化的对象中创建新对象</h3>
+<p>S4对象,还支持从一个已经实例化的对象中创建新对象，创建时可以覆盖旧对象的值</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+
+<span class="co"># 创建一个对象实例n1</span>
+
+n1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;n1&quot;</span>,<span class="dt">age=</span><span class="dv">19</span>)
+n1</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;n1&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 19</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 从实例n1中，创建实例n2，并修改name的属性值</span>
+
+n2 &lt;-<span class="st"> </span><span class="kw">initialize</span>(n1,<span class="dt">name=</span><span class="st">&quot;n2&quot;</span>)
+n2</code></pre></div>
+<pre><code>## An object of class &quot;Person&quot;
+## Slot &quot;name&quot;:
+## [1] &quot;n2&quot;
+## 
+## Slot &quot;age&quot;:
+## [1] 19</code></pre>
+</div>
+</div>
+<div id="section-4.3" class="section level2">
+<h2><span class="header-section-number">4.3</span> 访问对象的属性</h2>
+<p>在S3对象中，一般我使用$来访问一个对象的属性，但在S4对象中，<a href="mailto:我们只能用@来访问一个对象的属性">我们只能用@来访问一个对象的属性</a>。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+a &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;a&quot;</span>)
+
+<span class="co"># 访问S4对象的属性</span>
+
+a<span class="op">@</span>name</code></pre></div>
+<pre><code>## [1] &quot;a&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slot</span>(a,<span class="st">&quot;name&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;a&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 错误的访问</span>
+<span class="co">#a$name</span>
+<span class="co">#a[1]</span></code></pre></div>
+</div>
+<div id="s4" class="section level2">
+<h2><span class="header-section-number">4.4</span> S4的泛型函数</h2>
+<p>S4的泛型函数实现有别于S3的实现，S4分离了方法的定义和实现，如在其他语言中我们常说的接口和实现分离。通过setGeneric()来定义接口，通过setMethod()来定义现实类。这样可以让S4对象系统，更符合面向对象的特征。</p>
+<p>普通函数的定义和调用</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">work &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">cat</span>(x,<span class="st">&quot;is working&quot;</span>)
+<span class="kw">work</span>(<span class="st">&quot;Conan&quot;</span>)</code></pre></div>
+<pre><code>## Conan is working</code></pre>
+<p>让我们看看如何用R分离接口和实现</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义Person对象</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">age=</span><span class="st">&quot;numeric&quot;</span>))
+
+<span class="co"># 定义泛型函数work即接口</span>
+<span class="kw">setGeneric</span>(<span class="st">&quot;work&quot;</span>,<span class="cf">function</span>(object) <span class="kw">standardGeneric</span>(<span class="st">&quot;work&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;work&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义work的实现，并指定参数类型为Person对象</span>
+<span class="kw">setMethod</span>(<span class="st">&quot;work&quot;</span>,<span class="kw">signature</span>(<span class="dt">object=</span><span class="st">&quot;Person&quot;</span>),<span class="cf">function</span>(object) <span class="kw">cat</span>(object<span class="op">@</span>name,<span class="st">&quot;is working&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;work&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建一个Person对象a</span>
+a &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Person&quot;</span>,<span class="dt">name=</span><span class="st">&quot;Conan&quot;</span>,<span class="dt">age=</span><span class="dv">16</span>)
+
+<span class="co"># 把对象a传入work函数</span>
+<span class="kw">work</span>(a)</code></pre></div>
+<pre><code>## Conan is working</code></pre>
+<p>通过S4对象系统，把原来的函数定义和调用2步完成的分成4步。</p>
+<ul>
+<li><p>定义数据对象类型</p></li>
+<li><p>定义接口函数</p></li>
+<li><p>定义实现函数</p></li>
+<li><p>把数据对象以参数传入到接口函数，执行实现函数</p></li>
+</ul>
+<p>通过S4对象系统，是一个结构化的，完整的面向对象的实现。</p>
+</div>
+<div id="s4" class="section level2">
+<h2><span class="header-section-number">4.5</span> 查看S4对象的函数</h2>
+<p>当我们使用S4对象进行面向对象封装后，我们还需要能查看到S4对象的定义和函数定义，还是以上街中Person和work的例子</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
+<span class="co"># 检查work的类型</span>
+
+<span class="kw">ftype</span>(work)
+
+<span class="co"># 直接查看work函数</span>
+work
+
+<span class="co"># 查看work函数的显示定义</span>
+<span class="kw">showMethod</span>(work)
+
+<span class="co"># 查看Person对象的work函数现实</span>
+<span class="kw">getMethod</span>(<span class="st">&quot;work&quot;</span>,<span class="st">&quot;Person&quot;</span>)
+
+<span class="co"># 检查Person对象有没有work函数</span>
+
+<span class="kw">existMethod</span>(<span class="st">&quot;work&quot;</span>,<span class="st">&quot;Person&quot;</span>)
+<span class="kw">hasMethod</span>(<span class="st">&quot;work&quot;</span>,<span class="st">&quot;Person&quot;</span>)</code></pre></div>
+</div>
+<div id="s4" class="section level2">
+<h2><span class="header-section-number">4.6</span> S4对象的使用</h2>
+<p>下面我们用S4对象那个实现一个具体的例子。</p>
+<div id="1" class="section level3">
+<h3><span class="header-section-number">4.6.1</span> 任务1：定义一个图形库的数据结构和计算函数</h3>
+<p>假设Shape为图形的基类，包括圆形(Circle)和椭圆形(Ellipse)，并计算出他们的面积(area)和周长(circum)</p>
+<ul>
+<li><p>定义图形库的数据结构</p></li>
+<li><p>定义圆形的数据结构，并计算面积和周长</p></li>
+<li><p>定义椭圆形的数据结构，并计算面积和周长</p></li>
+</ul>
+<p>定义基类Shape和圆形类Circle</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义基类Shape</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>))
+
+<span class="co"># 定义圆形类，并继承shape,属性radius默认为1</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Circle&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="dv">1</span>))
+
+<span class="co"># 验正radius属性值要大于等于0</span>
+<span class="kw">setValidity</span>(<span class="st">&quot;Circle&quot;</span>,<span class="cf">function</span>(object){
+  <span class="cf">if</span>(object<span class="op">@</span>radius <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">&quot;Radius is negative&quot;</span>)
+})</code></pre></div>
+<pre><code>## Class &quot;Circle&quot; [in &quot;.GlobalEnv&quot;]
+## 
+## Slots:
+##                           
+## Name:     radius      name
+## Class:   numeric character
+## 
+## Extends: &quot;Shape&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建两个圆形实例</span>
+
+c1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Circle&quot;</span>,<span class="dt">name=</span><span class="st">&quot;c1&quot;</span>)
+c2 &lt;-<span class="st"> </span><span class="kw">new</span> (<span class="st">&quot;Circle&quot;</span>,<span class="dt">name=</span><span class="st">&quot;c2&quot;</span>,<span class="dt">radius=</span><span class="dv">5</span>)</code></pre></div>
+<p>定义计算面积的接口和实现</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setGeneric</span>(<span class="st">&quot;area&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">standardGeneric</span>(<span class="st">&quot;area&quot;</span>)
+  
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算面积的函数实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&quot;Circle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">print</span>(<span class="st">&quot;Area Circle Method&quot;</span>)
+  pi<span class="op">*</span>obj<span class="op">@</span>radius<span class="op">^</span><span class="dv">2</span>
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 分别计算c1和c2的两个圆形的面积</span>
+<span class="kw">area</span>(c1)</code></pre></div>
+<pre><code>## [1] &quot;Area Circle Method&quot;</code></pre>
+<pre><code>## [1] 3.141593</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">area</span>(c2)</code></pre></div>
+<pre><code>## [1] &quot;Area Circle Method&quot;</code></pre>
+<pre><code>## [1] 78.53982</code></pre>
+<p>定义计算周长的接口和实现</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算周长泛型函数接口</span>
+
+<span class="kw">setGeneric</span>(<span class="st">&quot;circum&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">standardGeneric</span>(<span class="st">&quot;circum&quot;</span>)
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算周长的函数实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Circle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span>obj<span class="op">@</span>radius
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 分别计算c1和c2的周长</span>
+
+<span class="kw">circum</span>(c1)</code></pre></div>
+<pre><code>## [1] 6.283185</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(c2)</code></pre></div>
+<pre><code>## [1] 31.41593</code></pre>
+<p>上面代码，我们实现了圆形的定义，下面我们实现椭圆形</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义椭圆形的类，继承Shape,radius参数默认值为c(1,1)# 分别表示椭圆形的常半径和短半径</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype =</span> <span class="kw">list</span>(<span class="dt">radius=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))
+
+<span class="co"># 验证radius参数</span>
+
+<span class="kw">setValidity</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="cf">function</span>(object){
+  <span class="cf">if</span>(<span class="kw">length</span>(object<span class="op">@</span>radius)<span class="op">!=</span><span class="dv">2</span>) <span class="kw">stop</span>(<span class="st">&quot;It&#39;s note Ellipse&quot;</span>)
+  <span class="cf">if</span>(<span class="kw">length</span>(<span class="kw">which</span>(object<span class="op">@</span>radius<span class="op">&lt;=</span><span class="dv">0</span>))<span class="op">&gt;</span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">&quot;Radius is negative&quot;</span>)
+})</code></pre></div>
+<pre><code>## Class &quot;Ellipse&quot; [in &quot;.GlobalEnv&quot;]
+## 
+## Slots:
+##                           
+## Name:     radius      name
+## Class:   numeric character
+## 
+## Extends: &quot;Shape&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建两个椭圆形实例e1,e2</span>
+
+e1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">name=</span><span class="st">&quot;e1&quot;</span>)
+e2 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">name=</span><span class="st">&quot;e2&quot;</span>,<span class="dt">radius=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">1</span>))
+
+<span class="co"># 计算椭圆形面积的函数的实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&#39;Ellipse&#39;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">print</span>(<span class="st">&quot;Area Ellipse Method&quot;</span>)
+  pi<span class="op">*</span><span class="kw">prod</span>(obj<span class="op">@</span>radius)
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算e1,e2的面积</span>
+
+<span class="kw">area</span>(e1)</code></pre></div>
+<pre><code>## [1] &quot;Area Ellipse Method&quot;</code></pre>
+<pre><code>## [1] 3.141593</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">area</span>(e2)</code></pre></div>
+<pre><code>## [1] &quot;Area Ellipse Method&quot;</code></pre>
+<pre><code>## [1] 15.70796</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算椭圆形周长的函数实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Ellipse&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Ellipse Circum:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">sqrt</span>((obj<span class="op">@</span>radius[<span class="dv">1</span>]<span class="op">^</span><span class="dv">2</span><span class="op">+</span>obj<span class="op">@</span>radius[<span class="dv">2</span>]<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">2</span>)
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 计算e1,e2周长</span>
+
+<span class="kw">circum</span>(e1)</code></pre></div>
+<pre><code>## Ellipse Circum:</code></pre>
+<pre><code>## [1] 6.283185</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(e2)</code></pre></div>
+<pre><code>## Ellipse Circum:</code></pre>
+<pre><code>## [1] 22.65435</code></pre>
+</div>
+<div id="2" class="section level3">
+<h3><span class="header-section-number">4.6.2</span> 任务2：重构圆形和椭圆形的设计</h3>
+<p>上一步，我们已经完成了圆形和椭圆形的数据结构定义，以及计算面积和周长的方法实现。不知大家有没有发现，圆形是椭圆的一个特例吗？当椭圆形的长轴和短轴相等时，形成的图形为圆形。椭圆是圆形的父类，而圆形是椭圆形的子类。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 基类Shape</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">shape=</span><span class="st">&quot;character&quot;</span>))
+
+<span class="co"># Ellipse继承Shape</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype =</span> <span class="kw">list</span>(<span class="dt">radius=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="dt">shape=</span><span class="st">&quot;Ellipse&quot;</span>))
+
+<span class="co"># Circle继承Ellipse</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Circle&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Ellipse&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="dv">1</span>,<span class="dt">shape=</span><span class="st">&quot;Circle&quot;</span>))
+
+<span class="co"># 定义area接口</span>
+
+<span class="kw">setGeneric</span>(<span class="st">&quot;area&quot;</span>,<span class="cf">function</span>(obj,...) <span class="kw">standardGeneric</span>(<span class="st">&quot;area&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义area的Ellipse实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&quot;Ellipse&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Ellipse Area: </span><span class="ch">\n</span><span class="st">&quot;</span>)
+  pi<span class="op">*</span><span class="kw">prod</span>(obj<span class="op">@</span>radius)
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义area的Circle实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&quot;Circle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Circle Area:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  pi<span class="op">*</span>obj<span class="op">@</span>radius<span class="op">^</span><span class="dv">2</span>
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义circum接口</span>
+
+<span class="kw">setGeneric</span>(<span class="st">&quot;circum&quot;</span>,<span class="cf">function</span>(obj,...) <span class="kw">standardGeneric</span>(<span class="st">&quot;circum&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义circum的ellipse实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Ellipse&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Ellipse circum:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">sqrt</span>((obj<span class="op">@</span>radius[<span class="dv">1</span>]<span class="op">^</span><span class="dv">2</span><span class="op">+</span>obj<span class="op">@</span>radius[<span class="dv">2</span>]<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">2</span>)
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义circum的circle实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Circle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Ellipse circum:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span>obj<span class="op">@</span>radius
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建实例</span>
+
+e1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">name=</span><span class="st">&quot;e1&quot;</span>,<span class="dt">radius=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))
+e2 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Circle&quot;</span>,<span class="dt">name=</span><span class="st">&quot;e2&quot;</span>,<span class="dt">radius=</span><span class="dv">2</span>)
+
+<span class="co">#计算面积和周长</span>
+
+<span class="kw">area</span>(e1)</code></pre></div>
+<pre><code>## Ellipse Area:</code></pre>
+<pre><code>## [1] 31.41593</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(e1)</code></pre></div>
+<pre><code>## Ellipse circum:</code></pre>
+<pre><code>## [1] 23.92566</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">area</span>(e2)</code></pre></div>
+<pre><code>## Circle Area:</code></pre>
+<pre><code>## [1] 12.56637</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(e2)</code></pre></div>
+<pre><code>## Ellipse circum:</code></pre>
+<pre><code>## [1] 12.56637</code></pre>
+<p>这样是不是显得更合理？</p>
+</div>
+<div id="3" class="section level3">
+<h3><span class="header-section-number">4.6.3</span> 任务3：增加矩形的图形处理</h3>
+<p>进一步扩充图形库需要加入矩形和正方形</p>
+<ul>
+<li><p>定义矩形的数据结构，计算面积和周长</p></li>
+<li><p>定义长方形的数据结构，计算面积和周长</p></li>
+<li><p>矩形是正方形的父类，正方形是矩形的子类</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义矩形Rectangle，继承Shape</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Rectangle&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">edges=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype=</span><span class="kw">list</span>(<span class="dt">edges=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="dt">shape=</span><span class="st">&quot;Rectangle&quot;</span>))
+
+<span class="co"># 定义正方形Square继承Rectangle</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Square&quot;</span>,<span class="dt">contains =</span> <span class="st">&quot;Rectangle&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">edges=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype =</span> <span class="kw">list</span>(<span class="dt">edges=</span><span class="dv">1</span>,<span class="dt">shape=</span><span class="st">&quot;Square&quot;</span>))
+
+<span class="co"># 定义area的Rectangle实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&quot;Rectangle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Rectangle Area:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="kw">prod</span>(obj<span class="op">@</span>edges)
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义area的Square</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;area&quot;</span>,<span class="st">&quot;Square&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Square Area: </span><span class="ch">\n</span><span class="st">&quot;</span>)
+  obj<span class="op">@</span>edges<span class="op">^</span><span class="dv">2</span>
+})</code></pre></div>
+<pre><code>## [1] &quot;area&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义circum的Rectangle实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Rectangle&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Rectangle Circum:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="dv">2</span><span class="op">*</span><span class="kw">sum</span>(obj<span class="op">@</span>edges)
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义circum的Square实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;circum&quot;</span>,<span class="st">&quot;Square&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(<span class="st">&quot;Square circum:</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  <span class="dv">4</span><span class="op">*</span>obj<span class="op">@</span>edges
+})</code></pre></div>
+<pre><code>## [1] &quot;circum&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建实例</span>
+
+r1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Rectangle&quot;</span>,<span class="dt">name=</span><span class="st">&quot;r1&quot;</span>,<span class="dt">edges=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))
+s1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Square&quot;</span>,<span class="dt">name=</span><span class="st">&#39;s1&#39;</span>,<span class="dt">edges=</span><span class="dv">2</span>)
+
+<span class="co"># 计算矩形的面积和周长</span>
+
+<span class="kw">area</span>(r1)</code></pre></div>
+<pre><code>## Rectangle Area:</code></pre>
+<pre><code>## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(r1)</code></pre></div>
+<pre><code>## Rectangle Circum:</code></pre>
+<pre><code>## [1] 14</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">area</span>(s1)</code></pre></div>
+<pre><code>## Square Area:</code></pre>
+<pre><code>## [1] 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">circum</span>(s1)</code></pre></div>
+<pre><code>## Square circum:</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>这样，图形库就支持4种图形了，用面向对象的结构去设计，就会非常清晰。</p>
+</div>
+<div id="4shapeshapegetshape" class="section level3">
+<h3><span class="header-section-number">4.6.4</span> 任务4：在基类Shape中增加shape属性和getShape方法</h3>
+<p>对图形库的所有图形定义图形类型的变量shape,然后在提供一个getShape函数来检查实例中的shape变量。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 重新定义基类Shape，增加shape属性</span>
+
+<span class="kw">setClass</span>(<span class="st">&quot;Shape&quot;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">shape=</span><span class="st">&quot;character&quot;</span>))
+
+<span class="co"># 定义getShape接口</span>
+
+<span class="kw">setGeneric</span>(<span class="st">&quot;getShape&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">standardGeneric</span>(<span class="st">&quot;getShape&quot;</span>)
+})</code></pre></div>
+<pre><code>## [1] &quot;getShape&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义getShape实现</span>
+
+<span class="kw">setMethod</span>(<span class="st">&quot;getShape&quot;</span>,<span class="st">&quot;Shape&quot;</span>,<span class="cf">function</span>(obj,...){
+  <span class="kw">cat</span>(obj<span class="op">@</span>shape,<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+})</code></pre></div>
+<pre><code>## [1] &quot;getShape&quot;</code></pre>
+<p>其实，这样改动一下就OK了，我们只需要重新实例化每个图形的对象就好了。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化一个Square对象，并给shape属性赋值</span>
+
+s1 &lt;-<span class="st"> </span><span class="kw">new</span>(<span class="st">&quot;Square&quot;</span>,<span class="dt">name=</span><span class="st">&#39;s1&#39;</span>,<span class="dt">edges=</span><span class="dv">2</span>,<span class="dt">shape=</span><span class="st">&#39;Square&#39;</span>)
+
+<span class="co"># 调用基类的getShape()函数</span>
+
+<span class="kw">getShape</span>(s1)</code></pre></div>
+<pre><code>## Square</code></pre>
+<p>如果再多做一步，可以修改每个对象的定义，增加shape属性的默认值。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setClass</span>(<span class="st">&quot;Ellipse&quot;</span>,<span class="dt">contains =</span> <span class="st">&#39;Shape&#39;</span>,<span class="dt">slots=</span><span class="kw">list</span>(<span class="dt">radius=</span><span class="st">&quot;numeric&quot;</span>),<span class="dt">prototype =</span> <span class="kw">list</span>(<span class="dt">radius=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="dt">shape=</span><span class="st">&quot;Ellipse&quot;</span>))</code></pre></div>
+<p>通过这节的例子，我们全面的了解了R语言的面向的使用和S4对象系统的面向对象的程序设计。</p>
+<p>在程序猿的世界里，世间万物都可以抽象成对象！</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="S3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="RC.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["R_OOP.pdf", "R_OOP.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

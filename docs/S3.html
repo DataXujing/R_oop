@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>R语言面向对象编程</title>
+  <meta name="description" content="R语言面向对象编程">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="R语言面向对象编程" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="R语言面向对象编程" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="R语言面向对象编程" />
+  
+  <meta name="twitter:description" content="R语言面向对象编程" />
+  
+
+<meta name="author" content="徐静">
+
+
+<meta name="date" content="2018-07-22">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="ch2.html">
+<link rel="next" href="S4.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css\style.css" type="text/css" />
+<link rel="stylesheet" href="css\toc.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="https://github.com/DataXujing/R_OOP" target='blank'>项目地址</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>写在书前</a></li>
+<li class="chapter" data-level="" data-path="e5a3b0e6988e.html"><a href="e5a3b0e6988e.html"><i class="fa fa-check"></i>声明</a></li>
+<li class="chapter" data-level="1" data-path="ch1.html"><a href="ch1.html"><i class="fa fa-check"></i><b>1</b> R语言编程风格指南</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch1.html"><a href="ch1.html#section-1.1"><i class="fa fa-check"></i><b>1.1</b> 符号和名字</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="ch1.html"><a href="ch1.html#section-1.1.1"><i class="fa fa-check"></i><b>1.1.1</b> 文件名</a></li>
+<li class="chapter" data-level="1.1.2" data-path="ch1.html"><a href="ch1.html#section-1.1.2"><i class="fa fa-check"></i><b>1.1.2</b> 对象名</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="ch1.html"><a href="ch1.html#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 语法</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="ch1.html"><a href="ch1.html#section-1.2.1"><i class="fa fa-check"></i><b>1.2.1</b> 空格</a></li>
+<li class="chapter" data-level="1.2.2" data-path="ch1.html"><a href="ch1.html#section-1.2.2"><i class="fa fa-check"></i><b>1.2.2</b> 大括号</a></li>
+<li class="chapter" data-level="1.2.3" data-path="ch1.html"><a href="ch1.html#section-1.2.3"><i class="fa fa-check"></i><b>1.2.3</b> 行的长度</a></li>
+<li class="chapter" data-level="1.2.4" data-path="ch1.html"><a href="ch1.html#section-1.2.4"><i class="fa fa-check"></i><b>1.2.4</b> 缩进</a></li>
+<li class="chapter" data-level="1.2.5" data-path="ch1.html"><a href="ch1.html#section-1.2.5"><i class="fa fa-check"></i><b>1.2.5</b> 赋值</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="ch1.html"><a href="ch1.html#section-1.3"><i class="fa fa-check"></i><b>1.3</b> 结构</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch2.html"><a href="ch2.html"><i class="fa fa-check"></i><b>2</b> R语言面向对象编程指南</a><ul>
+<li class="chapter" data-level="2.1" data-path="ch2.html"><a href="ch2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> 什么是面向对象</a></li>
+<li class="chapter" data-level="2.2" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.2</b> R为什么要进行面向对象的编程</a></li>
+<li class="chapter" data-level="2.3" data-path="ch2.html"><a href="ch2.html#r"><i class="fa fa-check"></i><b>2.3</b> R的面向对象编程</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="S3.html"><a href="S3.html"><i class="fa fa-check"></i><b>3</b> 基于S3的面向对象编程</a><ul>
+<li class="chapter" data-level="3.1" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.1</b> S3对象的介绍</a></li>
+<li class="chapter" data-level="3.2" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.2</b> 创建S3对象</a></li>
+<li class="chapter" data-level="3.3" data-path="S3.html"><a href="S3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 泛型函数和方法调用</a></li>
+<li class="chapter" data-level="3.4" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.4</b> 查看S3对象的函数</a></li>
+<li class="chapter" data-level="3.5" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.5</b> S3对象的继承关系</a></li>
+<li class="chapter" data-level="3.6" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.6</b> S3对象的缺点</a></li>
+<li class="chapter" data-level="3.7" data-path="S3.html"><a href="S3.html#s3"><i class="fa fa-check"></i><b>3.7</b> S3对象的使用</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="S4.html"><a href="S4.html"><i class="fa fa-check"></i><b>4</b> 基于S4的面向对象编程</a><ul>
+<li class="chapter" data-level="4.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.1</b> S4对象介绍</a></li>
+<li class="chapter" data-level="4.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2</b> 创建S4对象</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.1</b> 如何创建S4对象?</a></li>
+<li class="chapter" data-level="4.2.2" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.2</b> 创建一个S4对象实例</a></li>
+<li class="chapter" data-level="4.2.3" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.3</b> 创建一个有继承关系的S4对象</a></li>
+<li class="chapter" data-level="4.2.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.4</b> S4对象的默认值</a></li>
+<li class="chapter" data-level="4.2.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.2.5</b> S4对象的类型检查</a></li>
+<li class="chapter" data-level="4.2.6" data-path="S4.html"><a href="S4.html#section-4.2.6"><i class="fa fa-check"></i><b>4.2.6</b> 从一个已经实例化的对象中创建新对象</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="S4.html"><a href="S4.html#section-4.3"><i class="fa fa-check"></i><b>4.3</b> 访问对象的属性</a></li>
+<li class="chapter" data-level="4.4" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.4</b> S4的泛型函数</a></li>
+<li class="chapter" data-level="4.5" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.5</b> 查看S4对象的函数</a></li>
+<li class="chapter" data-level="4.6" data-path="S4.html"><a href="S4.html#s4"><i class="fa fa-check"></i><b>4.6</b> S4对象的使用</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="S4.html"><a href="S4.html#1"><i class="fa fa-check"></i><b>4.6.1</b> 任务1：定义一个图形库的数据结构和计算函数</a></li>
+<li class="chapter" data-level="4.6.2" data-path="S4.html"><a href="S4.html#2"><i class="fa fa-check"></i><b>4.6.2</b> 任务2：重构圆形和椭圆形的设计</a></li>
+<li class="chapter" data-level="4.6.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>4.6.3</b> 任务3：增加矩形的图形处理</a></li>
+<li class="chapter" data-level="4.6.4" data-path="S4.html"><a href="S4.html#4shapeshapegetshape"><i class="fa fa-check"></i><b>4.6.4</b> 任务4：在基类Shape中增加shape属性和getShape方法</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="RC.html"><a href="RC.html"><i class="fa fa-check"></i><b>5</b> 基于RC的面向对象编程</a><ul>
+<li class="chapter" data-level="5.1" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.1</b> RC对象系统的介绍</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
+<li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
+<li class="chapter" data-level="7.1" data-path="env.html"><a href="env.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 环境基础</a></li>
+<li class="chapter" data-level="7.2" data-path="env.html"><a href="env.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 环境递归</a></li>
+<li class="chapter" data-level="7.3" data-path="env.html"><a href="env.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 函数环境</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="env.html"><a href="env.html#section-7.3.1"><i class="fa fa-check"></i><b>7.3.1</b> 封闭环境</a></li>
+<li class="chapter" data-level="7.3.2" data-path="env.html"><a href="env.html#section-7.3.2"><i class="fa fa-check"></i><b>7.3.2</b> 绑定环境</a></li>
+<li class="chapter" data-level="7.3.3" data-path="env.html"><a href="env.html#section-7.3.3"><i class="fa fa-check"></i><b>7.3.3</b> 执行环境</a></li>
+<li class="chapter" data-level="7.3.4" data-path="env.html"><a href="env.html#section-7.3.4"><i class="fa fa-check"></i><b>7.3.4</b> 调用环境</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="env.html"><a href="env.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 绑定名字和数值</a></li>
+<li class="chapter" data-level="7.5" data-path="env.html"><a href="env.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 显式环境</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="env.html"><a href="env.html#section-7.5.1"><i class="fa fa-check"></i><b>7.5.1</b> 避免复制</a></li>
+<li class="chapter" data-level="7.5.2" data-path="env.html"><a href="env.html#section-7.5.2"><i class="fa fa-check"></i><b>7.5.2</b> 软件包状态</a></li>
+<li class="chapter" data-level="7.5.3" data-path="env.html"><a href="env.html#hashmap"><i class="fa fa-check"></i><b>7.5.3</b> 模拟hashmap</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="env.html"><a href="env.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 总结</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="Reference.html"><a href="Reference.html"><i class="fa fa-check"></i><b>8</b> 参考文献</a></li>
+<li class="divider"></li>
+<li><a href="https://dataxujing.github.io/" target="blank">个人主页</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R语言面向对象编程</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="S3" class="section level1">
+<h1><span class="header-section-number">第 3 章</span> 基于S3的面向对象编程</h1>
+<p>对于R语言的面向对象编程，不同于其他编程语言，R语言提供了3种底层对象类型，一种是S3类型，一种是S4类型，还有一种是RC类型。</p>
+<p>S3对象简答，具有动态性，结构化特征不明显，S4对象结构化。功能强大，RC对象是R2.12版本后使用的新类型，用于解决S3,S4很难是想的对象。</p>
+<p>本章主要介绍S3的面向对象编程的细节</p>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.1</span> S3对象的介绍</h2>
+<p>在R语言中，基于S3对象的面向对象编程，是一种基于泛型函数的实现方式。泛型函数是一种特殊的函数，根据传入对象的类型决定调用那个具体的方法。基于S3对象实现面向对象编程，不同其他语言的面型对象编程，是一种动态函数调用的模拟实现。S3对象被广泛应用于R的早期的开发包中。</p>
+</div>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.2</span> 创建S3对象</h2>
+<p>注意：本文会用到pryr,为了方便我们检查对象的类型，引入pryr包作为辅助工具。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pryr)
+
+<span class="co">#通过变量创建S3对象</span>
+
+x &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="kw">attr</span>(x,<span class="st">&#39;class&#39;</span>) &lt;-<span class="st"> &#39;foo&#39;</span>
+x</code></pre></div>
+<pre><code>## [1] 1
+## attr(,&quot;class&quot;)
+## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(x,<span class="st">&quot;class&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(x)</code></pre></div>
+<pre><code>## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#用pryr包的otype函数,检查x的类型</span>
+<span class="kw">otype</span>(x)</code></pre></div>
+<pre><code>## [1] &quot;S3&quot;</code></pre>
+<p>通过structure()函数创建S3对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="dv">2</span>,<span class="dt">class=</span><span class="st">&quot;foo&quot;</span>)
+
+y</code></pre></div>
+<pre><code>## [1] 2
+## attr(,&quot;class&quot;)
+## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(y,<span class="st">&quot;class&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(y)</code></pre></div>
+<pre><code>## [1] &quot;foo&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(y)</code></pre></div>
+<pre><code>## [1] &quot;S3&quot;</code></pre>
+<p>创建一个多类型的S3对象，S3独享没有明确结构关系，一个S3对象可以有多个类型，S3对象的class属性可以是一个响亮，包括多种类型</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="kw">attr</span>(x,<span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>,<span class="st">&quot;bar&quot;</span>)
+<span class="kw">class</span>(x)</code></pre></div>
+<pre><code>## [1] &quot;foo&quot; &quot;bar&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(x)</code></pre></div>
+<pre><code>## [1] &quot;S3&quot;</code></pre>
+</div>
+<div id="section-3.3" class="section level2">
+<h2><span class="header-section-number">3.3</span> 泛型函数和方法调用</h2>
+<p>对于S3对象的使用，通常用UseMethod()函数来定义一个泛型函数的名称，通过传入参数的class属性，来确定方法调用。</p>
+<p>定义一个teacher的泛型函数</p>
+<ul>
+<li><p>用UseMethod()定义teacher泛型函数</p></li>
+<li><p>用teacher.xxx的语法格式定义teacher对象的行为</p></li>
+<li><p>其中teacher.default是默认行为</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 用UseMethod()定义teacher泛型函数</span>
+teacher &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">UseMethod</span>(<span class="st">&quot;teacher&quot;</span>)
+<span class="co"># 用pryr包中ftype()函数，检查teacher类型</span>
+<span class="kw">ftype</span>(teacher)
+[<span class="dv">1</span>] <span class="st">&quot;s3&quot;</span> <span class="st">&quot;generic&quot;</span>
+
+<span class="co"># 定义teacher内部函数</span>
+
+teacher.lecture &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;讲课&quot;</span>)
+teacher.assignment &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;布置作业&quot;</span>)
+teacher.correcting &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;批改作业&quot;</span>)
+teacher.default &lt;-<span class="st"> </span><span class="cf">function</span>(x,...) <span class="kw">print</span>(<span class="st">&quot;你不是teacher&quot;</span>)</code></pre></div>
+<p>方法调用通过传入参数的class属性，来确定不同方法调用</p>
+<ul>
+<li><p>定义一个变量a，并设置a的class属性为lecture</p></li>
+<li><p>把变量a传入到teacher泛型函数中</p></li>
+<li><p>函数teacher.lecture()函数的行为被调用</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> &quot;teacher&quot;</span>
+<span class="co"># 给老师变量设置行为</span>
+<span class="kw">attr</span>(a,<span class="st">&quot;class&quot;</span>) &lt;-<span class="st"> &#39;lecture&#39;</span>
+<span class="co"># 执行老师的行为</span>
+<span class="kw">teacher</span>(a)
+[<span class="dv">1</span>] “讲课”</code></pre></div>
+<p>当然我们可以直接调用teacher中定义的行为，如果这样做就失去了面向对象封装的意义</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">teacher.lecture</span>()
+[<span class="dv">1</span>] <span class="st">&quot;讲课&quot;</span>
+<span class="kw">teacher.lecture</span>(a)
+[<span class="dv">1</span>] <span class="st">&quot;讲课&quot;</span>
+<span class="kw">teacher</span>()
+[<span class="dv">1</span>] <span class="st">&quot;你不是teacher&quot;</span></code></pre></div>
+</div>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.4</span> 查看S3对象的函数</h2>
+<p>当我们使用S3队形进行面向对象封装后，可以使用methods()函数来查看S3对象中的定义的内部行为函数。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看teacher对象</span>
+<span class="op">&gt;</span><span class="st"> </span>teacher
+<span class="cf">function</span>(x,...) <span class="kw">Usemethod</span>(<span class="st">&quot;teacher&quot;</span>)
+
+<span class="co"># 查看teacher对象的内部函数</span>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">methods</span>(teacher)
+[<span class="dv">1</span>] teacher.assignment teacher.correcting teacher.default teacher.lecture
+
+<span class="co">#通过methods()的generic.function参数，来匹配泛型函数名字</span>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">methods</span>(<span class="dt">generic.function =</span> predict)
+[<span class="dv">1</span>] predict.ar<span class="op">*</span><span class="st"> </span>......</code></pre></div>
+<p>通过methods()的class参数，来匹配类的名字</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">methods</span>(<span class="dt">class=</span>lm)
+[<span class="dv">1</span>]add1.lm<span class="op">*</span><span class="st"> </span>......</code></pre></div>
+<p>用getAnywhere()函数,查看所有函数</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#查看teacher.lecture函数</span>
+
+<span class="op">&gt;</span><span class="kw">getAnywhere</span>(teacher.lecture)</code></pre></div>
+<p>使用getS3method()函数，也同样可以查看不可见的函数</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># getS3method()函数查找predict.ppr</span>
+
+get时<span class="kw">method</span>(<span class="st">&quot;predict&quot;</span>,<span class="st">&quot;ppr&quot;</span>)</code></pre></div>
+</div>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.5</span> S3对象的继承关系</h2>
+<p>S3独享有一种非常简单的继承方式，用NextMethod()函数来实现。</p>
+<p>定义一个node泛型函数</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span>node &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">UseMethod</span>(<span class="st">&quot;node&quot;</span>,x)
+<span class="op">&gt;</span><span class="st"> </span>node.default &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="st">&quot;Default node&quot;</span>
+
+<span class="co">#father函数</span>
+<span class="op">&gt;</span><span class="st"> </span>node.father &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">c</span>(<span class="st">&quot;father&quot;</span>)
+
+<span class="co"># son函数，通过NextMethod()函数只想father函数</span>
+<span class="op">&gt;</span><span class="st"> </span>node.son &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">c</span>(<span class="st">&#39;son&#39;</span>,<span class="kw">NextMethod</span>())
+
+<span class="co">#定义n1</span>
+<span class="op">&gt;</span><span class="st"> </span>n1 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="dv">1</span>,<span class="dt">class=</span><span class="kw">c</span>(<span class="st">&quot;father&quot;</span>))
+<span class="co"># 在node函数中传入n1,执行node.father()函数</span>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">node</span>(n1)
+[<span class="dv">1</span>] <span class="st">&quot;father&quot;</span>
+
+<span class="co"># 定义n2，设置class属性为两个</span>
+<span class="op">&gt;</span><span class="st"> </span>n2 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="dv">1</span>,<span class="dt">class=</span><span class="kw">c</span>(<span class="st">&quot;son&quot;</span>,<span class="st">&quot;father&quot;</span>))
+<span class="co"># 在node函数中传入n2,执行node.son()函数和node.father()函数</span>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">node</span>(n2)
+[<span class="dv">1</span>] <span class="st">&quot;son&quot;</span> <span class="st">&quot;father&quot;</span></code></pre></div>
+<p>通过对node()函数传入n2的参数，node.son()先被执行，然后通过NextMethod()函数继续执行了node.father()函数。这样其实就模拟了，子函数调用父函数的过程，实现了面向对象编程中的继承。</p>
+</div>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.6</span> S3对象的缺点</h2>
+<p>从上面S3对象的介绍上来看，S3对象并不是完全的面向对象实现，而是一种通过泛型函数模拟的面向对象的实现。</p>
+<ul>
+<li><p>S3用起来简单，但在实际的面向对象编程的过程中，当对象关系有一定的复杂度，S3对象所表达的意义就变得不太清楚</p></li>
+<li><p>S3封装的内部函数，可以绕过泛型函数的检查，以直接被调用</p></li>
+<li><p>S3参数的class属性，可以被任意设置，没有预处理的检查</p></li>
+<li><p>S3参数，只能通过调用class属性进行函数调用，其他属性则不会被class()函数执行</p></li>
+<li><p>S3参数的class属性有多个值时，调用时会被按照程序赋值顺序来调用第一个合法的函数</p></li>
+</ul>
+<p>所以，S3只是R语言面向对象的一种简单的实现。</p>
+</div>
+<div id="s3" class="section level2">
+<h2><span class="header-section-number">3.7</span> S3对象的使用</h2>
+<p>S3对象系统，被广泛的应用于R语言早期的开发中。在base包中，就有很多S3对象</p>
+<p>base包的S3对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># mean 函数</span>
+mean</code></pre></div>
+<pre><code>## function (x, ...) 
+## UseMethod(&quot;mean&quot;)
+## &lt;bytecode: 0x00000000191a98e8&gt;
+## &lt;environment: namespace:base&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ftype</span>(mean)</code></pre></div>
+<pre><code>## [1] &quot;s3&quot;      &quot;generic&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># t函数</span>
+<span class="kw">ftype</span>(t)</code></pre></div>
+<pre><code>## [1] &quot;s3&quot;      &quot;generic&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot函数</span>
+<span class="kw">ftype</span>(plot)</code></pre></div>
+<pre><code>## [1] &quot;s3&quot;      &quot;generic&quot;</code></pre>
+<p>自定义S3对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义数字变量a</span>
+
+a &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="co"># 变量a的class为number</span>
+<span class="kw">class</span>(a)</code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义泛型函数f1</span>
+f1 &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+  a &lt;-<span class="dv">2</span>
+  <span class="kw">UseMethod</span>(<span class="st">&quot;f1&quot;</span>)
+}
+<span class="co"># 定义f1的内部函数</span>
+f1.numeric &lt;-<span class="st"> </span><span class="cf">function</span>(x) a
+
+<span class="co"># 给f1()传入变量a</span>
+<span class="kw">f1</span>(a)</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给f1()传入99</span>
+<span class="kw">f1</span>(<span class="dv">99</span>)</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义f1内部函数</span>
+f1.character &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">paste</span>(<span class="st">&quot;char&quot;</span>,x)
+
+<span class="co"># 给f1()传入字符a</span>
+<span class="kw">f1</span>(<span class="st">&quot;a&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;char a&quot;</code></pre>
+<p>这样，我们就对S3对象系统有了一个全面认识，开始R语言的面向对象编程之路。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="S4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["R_OOP.pdf", "R_OOP.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

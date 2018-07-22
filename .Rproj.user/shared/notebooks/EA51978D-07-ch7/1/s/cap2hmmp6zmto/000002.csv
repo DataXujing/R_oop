@@ -1,0 +1,19 @@
+"0","e <- new.env()"
+"2","Warning message:
+"
+"2","In strsplit(code, ""\n"", fixed = TRUE) :"
+"2","
+ "
+"2"," input string 1 is invalid in this locale
+"
+"0","e$a <- 1"
+"0","e$a <- NULL #这样相当于创建了一个新的对象"
+"0","ls(e)"
+"1","[1]"
+"1"," ""a"""
+"1","
+"
+"0","rm(""a"",envir=e)"
+"0","ls(e)"
+"1","character(0)
+"

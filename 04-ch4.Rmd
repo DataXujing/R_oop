@@ -1,0 +1,571 @@
+# 基于S4的面向对象编程 {#S4}
+
+S4对象系统具有明显的结构化特征，更适合面向对象的程序设计。Bioconductor社区以S4对象作为基础框架，只接受S4定义的R包。
+
+## S4对象介绍
+
+S4对象系统是一种标准的R语言面向对象实现方式，S4对象有明确的类定义，参数定义，参数检查，继承关系，实例化等的面向对象系统的特征。
+
+## 创建S4对象
+
+使用辅助的pryr包
+
+```r
+# 加载pryr包
+library(pryr)
+```
+
+### 如何创建S4对象?
+
+由于S4对象是标准的面向对象实现方式，有专门的类定义函数setClass()和类的实例化函数new()，我们看一下setClass()和new()是如何工作的。
+
++ setClass()
+
+```r
+setClass(class,representation,prototype,contains=character(),
+  validity,access,where,version,sealed,package,
+  S3methods=FALSE,slots)
+```
+
+参数列表：
+
++ Class:定义类名
+
++ slots:定义属性和属性类型
+
++ prototype:定义属性的默认值
+
++ contains=character():定义父类，继承关系
+
++ validity:定义属性的类型检查
+
++ where:定义存储空间
+
++ sealed:如果设置TRUE,则同名类不能再次定义
+
++ package:定义所属的包
+
++ S3methods:R3.0.0后不建议使用
+
++ representation:R3.0.0后不建议使用
+
++ access:R3.0.0后不建议使用
+
++ version:R3.0.0后不建议使用
+
+### 创建一个S4对象实例
+
+```{r}
+# 定义一个S4对象
+
+setClass("Person",slots=list(name="character",age="numeric"))
+
+# 实例化一个Person对象
+
+father <- new("Person",name="F",age=44)
+
+# 查看father对象，有两个属性name和age
+father
+
+# 查看father对象类型为Person
+class(father)
+
+# 查看father对象为S4的对象
+otype(father)
+```
+
+### 创建一个有继承关系的S4对象
+
+```{r}
+# 创建一个S4对象Person
+setClass("Person",slots=list(name="character",age="numeric"))
+
+# 创建Person的子类
+setClass("Son",slots=list(father="Person",mother="Person"),contains = "Person")
+
+# 实例化Person对象
+
+father <- new("Person",name="F",age=44)
+mother <- new("Person",name="M",age=39)
+
+# 实例化一个Son对象
+
+son <- new("Son",name="S",age=16,father=father,mother=mother)
+
+# 查看son对象的name属性
+son@name
+
+# 查看son对象的age属性
+son@age
+
+# 查看son对象的father属性
+son@father
+
+# 查看son对象的mother属性
+son@mother
+
+# 查看son类型
+otype(son)
+
+# 查看son@name的属性
+otype(son@name)
+
+#  查看son@mother的属性
+otype(son@mother)
+
+# 用isS4()检查S4对象的类型
+isS4(son)
+isS4(son@name)
+isS4(son@mother)
+```
+
+### S4对象的默认值
+
+```{r}
+setClass("Person",slots=list(name="character",age="numeric"))
+
+# 属性age为空
+a <- new("Person",name="a")
+a
+
+# 设置属性age的默认值为20
+
+setClass("Person",slots=list(name="character",age="numeric"),prototype=list(age=20))
+
+# 初始化b对象
+b <- new("Person",name="b")
+
+# 属性age的默认值是20
+b 
+```
+
+### S4对象的类型检查
+
+```r
+setClass("Person",slots=list(name="character",age="numeric"))
+#传入错误age类型
+bad <- new("Person",name="bad",age="abc")
+
+###
+Error in validObject(.Object) : 类别为“Person”的对象不对: invalid object for slot "age" in class "Person": got class "character", should be or extend class "numeric"       
+```
+
+```r
+# 设置age的非负检查
+setValidity("Person",function(object){
+  if(object@age <= 0) stop("Age is negative.")
+})
+
+# 传入小于0的年龄
+bad2 <- new("Person",name="bad",age=-1)
+
+###
+Error in validityMethod(object) : Age is negative.
+```
+
+### 从一个已经实例化的对象中创建新对象
+
+S4对象,还支持从一个已经实例化的对象中创建新对象，创建时可以覆盖旧对象的值
+
+```{r}
+setClass("Person",slots=list(name="character",age="numeric"))
+
+# 创建一个对象实例n1
+
+n1 <- new("Person",name="n1",age=19)
+n1
+
+# 从实例n1中，创建实例n2，并修改name的属性值
+
+n2 <- initialize(n1,name="n2")
+n2
+```
+
+## 访问对象的属性
+
+在S3对象中，一般我使用$来访问一个对象的属性，但在S4对象中，我们只能用@来访问一个对象的属性。
+
+````{r}
+setClass("Person",slots=list(name="character",age="numeric"))
+a <- new("Person",name="a")
+
+# 访问S4对象的属性
+
+a@name
+slot(a,"name")
+
+# 错误的访问
+#a$name
+#a[1]
+```
+
+## S4的泛型函数
+
+S4的泛型函数实现有别于S3的实现，S4分离了方法的定义和实现，如在其他语言中我们常说的接口和实现分离。通过setGeneric()来定义接口，通过setMethod()来定义现实类。这样可以让S4对象系统，更符合面向对象的特征。
+
+普通函数的定义和调用
+
+```{r}
+work <- function(x) cat(x,"is working")
+work("Conan")
+```
+
+让我们看看如何用R分离接口和实现
+
+```{r}
+# 定义Person对象
+
+setClass("Person",slots=list(name="character",age="numeric"))
+
+# 定义泛型函数work即接口
+setGeneric("work",function(object) standardGeneric("work"))
+
+# 定义work的实现，并指定参数类型为Person对象
+setMethod("work",signature(object="Person"),function(object) cat(object@name,"is working"))
+
+# 创建一个Person对象a
+a <- new("Person",name="Conan",age=16)
+
+# 把对象a传入work函数
+work(a)
+```
+
+通过S4对象系统，把原来的函数定义和调用2步完成的分成4步。
+
++ 定义数据对象类型
+
++ 定义接口函数
+
++ 定义实现函数
+
++ 把数据对象以参数传入到接口函数，执行实现函数
+
+通过S4对象系统，是一个结构化的，完整的面向对象的实现。
+
+
+## 查看S4对象的函数
+
+当我们使用S4对象进行面向对象封装后，我们还需要能查看到S4对象的定义和函数定义，还是以上街中Person和work的例子
+
+```r
+library(pryr)
+# 检查work的类型
+
+ftype(work)
+
+# 直接查看work函数
+work
+
+# 查看work函数的显示定义
+showMethod(work)
+
+# 查看Person对象的work函数现实
+getMethod("work","Person")
+
+# 检查Person对象有没有work函数
+
+existMethod("work","Person")
+hasMethod("work","Person")
+```
+
+## S4对象的使用
+
+下面我们用S4对象那个实现一个具体的例子。
+
+### 任务1：定义一个图形库的数据结构和计算函数
+
+假设Shape为图形的基类，包括圆形(Circle)和椭圆形(Ellipse)，并计算出他们的面积(area)和周长(circum)
+
++ 定义图形库的数据结构
+
++ 定义圆形的数据结构，并计算面积和周长
+
++ 定义椭圆形的数据结构，并计算面积和周长
+
+定义基类Shape和圆形类Circle
+
+```{r}
+# 定义基类Shape
+
+setClass("Shape",slots=list(name="character"))
+
+# 定义圆形类，并继承shape,属性radius默认为1
+
+setClass("Circle",contains = "Shape",slots=list(radius="numeric"),prototype=list(radius=1))
+
+# 验正radius属性值要大于等于0
+setValidity("Circle",function(object){
+  if(object@radius <= 0) stop("Radius is negative")
+})
+
+# 创建两个圆形实例
+
+c1 <- new("Circle",name="c1")
+c2 <- new ("Circle",name="c2",radius=5)
+```
+
+定义计算面积的接口和实现
+
+```{r}
+setGeneric("area",function(obj,...){
+  standardGeneric("area")
+  
+})
+# 计算面积的函数实现
+
+setMethod("area","Circle",function(obj,...){
+  print("Area Circle Method")
+  pi*obj@radius^2
+})
+
+# 分别计算c1和c2的两个圆形的面积
+area(c1)
+area(c2)
+```
+
+定义计算周长的接口和实现
+
+```{r}
+# 计算周长泛型函数接口
+
+setGeneric("circum",function(obj,...){
+  standardGeneric("circum")
+})
+
+# 计算周长的函数实现
+
+setMethod("circum","Circle",function(obj,...){
+  2*pi*obj@radius
+})
+
+# 分别计算c1和c2的周长
+
+circum(c1)
+circum(c2)
+```
+
+上面代码，我们实现了圆形的定义，下面我们实现椭圆形
+
+```{r}
+# 定义椭圆形的类，继承Shape,radius参数默认值为c(1,1)# 分别表示椭圆形的常半径和短半径
+
+setClass("Ellipse",contains = "Shape",slots=list(radius="numeric"),prototype = list(radius=c(1,1)))
+
+# 验证radius参数
+
+setValidity("Ellipse",function(object){
+  if(length(object@radius)!=2) stop("It's note Ellipse")
+  if(length(which(object@radius<=0))>0) stop("Radius is negative")
+})
+
+# 创建两个椭圆形实例e1,e2
+
+e1 <- new("Ellipse",name="e1")
+e2 <- new("Ellipse",name="e2",radius=c(5,1))
+
+# 计算椭圆形面积的函数的实现
+
+setMethod("area",'Ellipse',function(obj,...){
+  print("Area Ellipse Method")
+  pi*prod(obj@radius)
+})
+
+# 计算e1,e2的面积
+
+area(e1)
+area(e2)
+
+# 计算椭圆形周长的函数实现
+
+setMethod("circum","Ellipse",function(obj,...){
+  cat("Ellipse Circum:\n")
+  2*pi*sqrt((obj@radius[1]^2+obj@radius[2]^2)/2)
+})
+
+# 计算e1,e2周长
+
+circum(e1)
+circum(e2)
+
+```
+
+### 任务2：重构圆形和椭圆形的设计
+
+上一步，我们已经完成了圆形和椭圆形的数据结构定义，以及计算面积和周长的方法实现。不知大家有没有发现，圆形是椭圆的一个特例吗？当椭圆形的长轴和短轴相等时，形成的图形为圆形。椭圆是圆形的父类，而圆形是椭圆形的子类。
+
+```{r}
+
+# 基类Shape
+
+setClass("Shape",slots=list(name="character",shape="character"))
+
+# Ellipse继承Shape
+
+setClass("Ellipse",contains = "Shape",slots=list(radius="numeric"),prototype = list(radius=c(1,1),shape="Ellipse"))
+
+# Circle继承Ellipse
+
+setClass("Circle",contains = "Ellipse",slots=list(radius="numeric"),prototype=list(radius=1,shape="Circle"))
+
+# 定义area接口
+
+setGeneric("area",function(obj,...) standardGeneric("area"))
+
+# 定义area的Ellipse实现
+
+setMethod("area","Ellipse",function(obj,...){
+  cat("Ellipse Area: \n")
+  pi*prod(obj@radius)
+})
+
+# 定义area的Circle实现
+
+setMethod("area","Circle",function(obj,...){
+  cat("Circle Area:\n")
+  pi*obj@radius^2
+})
+
+# 定义circum接口
+
+setGeneric("circum",function(obj,...) standardGeneric("circum"))
+
+# 定义circum的ellipse实现
+
+setMethod("circum","Ellipse",function(obj,...){
+  cat("Ellipse circum:\n")
+  2*pi*sqrt((obj@radius[1]^2+obj@radius[2]^2)/2)
+})
+
+# 定义circum的circle实现
+
+setMethod("circum","Circle",function(obj,...){
+  cat("Ellipse circum:\n")
+  2*pi*obj@radius
+})
+
+# 创建实例
+
+e1 <- new("Ellipse",name="e1",radius=c(2,5))
+e2 <- new("Circle",name="e2",radius=2)
+
+#计算面积和周长
+
+area(e1)
+circum(e1)
+
+area(e2)
+circum(e2)
+```
+
+这样是不是显得更合理？
+
+### 任务3：增加矩形的图形处理
+
+进一步扩充图形库需要加入矩形和正方形
+
++ 定义矩形的数据结构，计算面积和周长
+
++ 定义长方形的数据结构，计算面积和周长
+
++ 矩形是正方形的父类，正方形是矩形的子类
+
+```{r}
+# 定义矩形Rectangle，继承Shape
+
+setClass("Rectangle",contains = "Shape",slots=list(edges="numeric"),prototype=list(edges=c(1,1),shape="Rectangle"))
+
+# 定义正方形Square继承Rectangle
+
+setClass("Square",contains = "Rectangle",slots=list(edges="numeric"),prototype = list(edges=1,shape="Square"))
+
+# 定义area的Rectangle实现
+
+setMethod("area","Rectangle",function(obj,...){
+  cat("Rectangle Area:\n")
+  prod(obj@edges)
+})
+
+
+# 定义area的Square
+
+setMethod("area","Square",function(obj,...){
+  cat("Square Area: \n")
+  obj@edges^2
+})
+
+# 定义circum的Rectangle实现
+
+setMethod("circum","Rectangle",function(obj,...){
+  cat("Rectangle Circum:\n")
+  2*sum(obj@edges)
+})
+
+# 定义circum的Square实现
+
+setMethod("circum","Square",function(obj,...){
+  cat("Square circum:\n")
+  4*obj@edges
+})
+
+# 创建实例
+
+r1 <- new("Rectangle",name="r1",edges=c(2,5))
+s1 <- new("Square",name='s1',edges=2)
+
+# 计算矩形的面积和周长
+
+area(r1)
+circum(r1)
+
+area(s1)
+circum(s1)
+```
+
+这样，图形库就支持4种图形了，用面向对象的结构去设计，就会非常清晰。
+
+### 任务4：在基类Shape中增加shape属性和getShape方法
+
+对图形库的所有图形定义图形类型的变量shape,然后在提供一个getShape函数来检查实例中的shape变量。
+
+```{r}
+# 重新定义基类Shape，增加shape属性
+
+setClass("Shape",slots=list(name="character",shape="character"))
+
+# 定义getShape接口
+
+setGeneric("getShape",function(obj,...){
+  standardGeneric("getShape")
+})
+
+# 定义getShape实现
+
+setMethod("getShape","Shape",function(obj,...){
+  cat(obj@shape,"\n")
+})
+
+```
+
+
+其实，这样改动一下就OK了，我们只需要重新实例化每个图形的对象就好了。
+
+```{r}
+# 实例化一个Square对象，并给shape属性赋值
+
+s1 <- new("Square",name='s1',edges=2,shape='Square')
+
+# 调用基类的getShape()函数
+
+getShape(s1)
+```
+
+如果再多做一步，可以修改每个对象的定义，增加shape属性的默认值。
+
+```{r}
+setClass("Ellipse",contains = 'Shape',slots=list(radius="numeric"),prototype = list(radius=c(1,1),shape="Ellipse"))
+
+```
+
+通过这节的例子，我们全面的了解了R语言的面向的使用和S4对象系统的面向对象的程序设计。
+
+在程序猿的世界里，世间万物都可以抽象成对象！
