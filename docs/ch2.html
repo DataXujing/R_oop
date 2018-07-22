@@ -218,8 +218,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>多态可以说是面向对象的程序设计中最关键的特性，如果某种语言支持以上所有特性但是不支持多态，我们称其为“基于对象”而不是面向对象，所谓多态简单来说就是希望能用相同的命令作用于不同的类，根据类的不同产生不同的结果。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在数值数据</span>
 <span class="kw">summary</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>))</code></pre></div>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -0.7695 -0.1972  0.7372  0.5093  0.9630  1.8962</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -1.82339 -0.63033 -0.33536 -0.18950  0.03202  2.03039</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在Model上</span>
 <span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>)<span class="op">~</span><span class="kw">rnorm</span>(<span class="dv">10</span>)))</code></pre></div>
 <pre><code>## 
@@ -228,13 +228,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.1166 -0.4961  0.0663  0.2797  1.0362 
+## -1.4811 -0.6038 -0.1711  0.5143  1.9342 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  0.05845    0.20973   0.279    0.787
+## (Intercept)   0.2117     0.3039   0.697    0.504
 ## 
-## Residual standard error: 0.6632 on 9 degrees of freedom</code></pre>
+## Residual standard error: 0.9612 on 9 degrees of freedom</code></pre>
 </div>
 <div id="r" class="section level2">
 <h2><span class="header-section-number">2.2</span> R为什么要进行面向对象的编程</h2>
