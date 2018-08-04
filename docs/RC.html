@@ -25,7 +25,7 @@
 <meta name="author" content="徐静">
 
 
-<meta name="date" content="2018-07-22">
+<meta name="date" content="2018-08-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -156,6 +156,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="5" data-path="RC.html"><a href="RC.html"><i class="fa fa-check"></i><b>5</b> 基于RC的面向对象编程</a><ul>
 <li class="chapter" data-level="5.1" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.1</b> RC对象系统的介绍</a></li>
+<li class="chapter" data-level="5.2" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.2</b> 如何创建RC类？</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="RC.html"><a href="RC.html#setrefclass"><i class="fa fa-check"></i><b>5.2.1</b> setRefClass()</a></li>
+<li class="chapter" data-level="5.2.2" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.2.2</b> 创建RC类和实例</a></li>
+<li class="chapter" data-level="5.2.3" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.2.3</b> 创建一个有继承关系的RC类</a></li>
+<li class="chapter" data-level="5.2.4" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.2.4</b> RC对象的默认值</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="RC.html"><a href="RC.html#section-5.3"><i class="fa fa-check"></i><b>5.3</b> 对象赋值</a></li>
+<li class="chapter" data-level="5.4" data-path="RC.html"><a href="RC.html#section-5.4"><i class="fa fa-check"></i><b>5.4</b> 定义对象的方法</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
 <li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
@@ -201,6 +209,213 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>RC(Reference Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去掉了泛型函数，其真正的以类为基础实现面向对象的特征。在R中常备简记为R5<a href="http://adv-r.had.co.nz/R5.html" class="uri">http://adv-r.had.co.nz/R5.html</a>(但这不是官方的名称)，而是为了从形式上和S3和S4相匹配。</p>
 <div id="rc" class="section level2">
 <h2><span class="header-section-number">5.1</span> RC对象系统的介绍</h2>
+<p>RC是Reference Classes的简称，又称为R5,在R语言的2.12版本被引入，是最新一代的面向对象系统。</p>
+<p>RC不同于原来的S3和S4独享系统，RC队形系统得的方法是在类中自定的，而不是泛型函数。RC对象的行为更相似于其他的编程语言，实例化队形的语法也有所改变。</p>
+<p>从面向对象的角度来说，我们下面重定义几个名词。</p>
+<ul>
+<li><p>类：面向对象系统的基本类型，类是静态结构定义。</p></li>
+<li><p>对象：类实例化之后，在内存中生成结构体</p></li>
+<li><p>方法：是类中的函数定义，不通过泛型函数实现。</p></li>
+</ul>
+</div>
+<div id="rc" class="section level2">
+<h2><span class="header-section-number">5.2</span> 如何创建RC类？</h2>
+<p>RC对象是以类为基本类型，有专门的类的定义函数setRefClass(),实例化则通过类的方法生成。</p>
+<div id="setrefclass" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> setRefClass()</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">setRefClass</span>(Class,<span class="dt">fields=</span>,<span class="dt">contains=</span>,<span class="dt">methods=</span>,<span class="dt">where=</span>,...)</code></pre></div>
+<p>参数列表：</p>
+<ul>
+<li><p>Class: 定义类名</p></li>
+<li><p>fields: 定义属性和属性类型</p></li>
+<li><p>contains:定义父类，继承关系</p></li>
+<li><p>methods: 定义类中的方法</p></li>
+<li><p>where: 定义存储空间</p></li>
+</ul>
+<p>从setRefClass()函数的定义来看，参数比S4的setClass()函数变少了</p>
+</div>
+<div id="rc" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> 创建RC类和实例</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义一个RC类</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,<span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>))
+
+<span class="co"># 查看User的定义</span>
+User</code></pre></div>
+<pre><code>## Generator for class &quot;User&quot;:
+## 
+## Class fields:
+##                 
+## Name:       name
+## Class: character
+## 
+## Class Methods: 
+##      &quot;field&quot;, &quot;trace&quot;, &quot;getRefClass&quot;, &quot;initFields&quot;, &quot;copy&quot;, &quot;callSuper&quot;, 
+##      &quot;.objectPackage&quot;, &quot;export&quot;, &quot;untrace&quot;, &quot;getClass&quot;, &quot;show&quot;, 
+##      &quot;usingMethods&quot;, &quot;.objectParent&quot;, &quot;import&quot;
+## 
+## Reference Superclasses: 
+##      &quot;envRefClass&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化一个User对象u1</span>
+
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&#39;u1&#39;</span>)
+
+<span class="co"># 查看u1对对象</span>
+
+u1</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;u1&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 检查User类的类型</span>
+<span class="kw">library</span>(pryr)
+<span class="kw">class</span>(User)</code></pre></div>
+<pre><code>## [1] &quot;refObjectGenerator&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;methods&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.object</span>(User)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(User)</code></pre></div>
+<pre><code>## [1] &quot;RC&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 检查u1的类型</span>
+
+<span class="kw">class</span>(u1)</code></pre></div>
+<pre><code>## [1] &quot;User&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;.GlobalEnv&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is.object</span>(u1)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(u1)</code></pre></div>
+<pre><code>## [1] &quot;RC&quot;</code></pre>
+</div>
+<div id="rc" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> 创建一个有继承关系的RC类</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建RC类User</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,<span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>))
+
+<span class="co"># 创建User的子类Member</span>
+
+Member &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Member&quot;</span>,<span class="dt">contains=</span><span class="st">&quot;User&quot;</span>,<span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">manager=</span><span class="st">&quot;User&quot;</span>))
+
+<span class="co"># 实例化User</span>
+manager &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&quot;manager&quot;</span>)
+
+<span class="co"># 实例化一个son对象</span>
+
+member &lt;-<span class="st"> </span>Member<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&quot;member&quot;</span>,<span class="dt">manager=</span>manager)
+
+<span class="co"># 查看Mebmber对象</span>
+
+member</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;member&quot;
+## Field &quot;manager&quot;:
+## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;manager&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看member对象的name属性</span>
+
+member<span class="op">$</span>name</code></pre></div>
+<pre><code>## [1] &quot;member&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看member对象的manager属性</span>
+
+member<span class="op">$</span>manager</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;manager&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看对象的属性类型</span>
+
+<span class="kw">otype</span>(member<span class="op">$</span>name)</code></pre></div>
+<pre><code>## [1] &quot;base&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(member<span class="op">$</span>manager)</code></pre></div>
+<pre><code>## [1] &quot;RC&quot;</code></pre>
+</div>
+<div id="rc" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> RC对象的默认值</h3>
+<p>RC类有一个指定构造器方法$initialize(),这个构造器方法在实例化对象时，会自动被运行一次，通过这个构造方法可以设置属性的默认值。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义一个RC类</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,
+                    <span class="co"># 定义两个属性</span>
+                    <span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">level=</span><span class="st">&quot;numeric&quot;</span>),
+                    <span class="dt">methods =</span> <span class="kw">list</span>(<span class="dt">initialize=</span><span class="cf">function</span>(name,level){
+                      <span class="kw">print</span>(<span class="st">&quot;User::initialize&quot;</span>)
+                      <span class="co"># 给属性增加默认值</span>
+                      name &lt;&lt;-<span class="st"> &quot;conan&quot;</span>
+                      level &lt;&lt;-<span class="st"> </span><span class="dv">1</span>
+                    }))
+
+<span class="co"># 实例化u1</span>
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看对象u1属性被增加了默认值</span>
+
+u1</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;conan&quot;
+## Field &quot;level&quot;:
+## [1] 1</code></pre>
+</div>
+</div>
+<div id="section-5.3" class="section level2">
+<h2><span class="header-section-number">5.3</span> 对象赋值</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义User类</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,<span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&#39;character&#39;</span>,<span class="dt">age=</span><span class="st">&#39;numeric&#39;</span>,<span class="dt">gender=</span><span class="st">&#39;factor&#39;</span>))
+
+<span class="co"># 定义一个factor类型</span>
+genderFactor &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&#39;F&#39;</span>,<span class="st">&#39;M&#39;</span>))
+
+<span class="co"># 实例化u1</span>
+
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&quot;u1&quot;</span>,<span class="dt">age=</span><span class="dv">44</span>,<span class="dt">gender=</span>genderFactor[<span class="dv">1</span>])
+
+<span class="co"># 查看age属性值</span>
+u1<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 44</code></pre>
+<p>给u1的age属性赋值</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 重新赋值</span>
+
+u1<span class="op">$</span>age &lt;-<span class="st"> </span><span class="dv">10</span>
+
+<span class="co"># age属性改变</span>
+u1<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>把u1对象赋给u2对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 把u1赋值给u2对象</span>
+u2 &lt;-<span class="st"> </span>u1
+
+<span class="co"># 查看u2的age属性</span>
+u2<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 重新赋值</span>
+u1<span class="op">$</span>age &lt;-<span class="st"> </span><span class="dv">20</span>
+
+<span class="co"># 查看u1,u2的age属性都发生了改变</span>
+
+u1<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u2<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 20</code></pre>
+<p>这是由于把u1赋值给u2，传递的是u1的实例化对象的引用，而不是值本身，这一点与其他语言中对象赋值时一样的。</p>
+<p>如果想进行赋值而不是引入传递，可以进行下面的操作</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 调用u1的内置方法copy(),赋值给u3</span>
+
+u3 &lt;-<span class="st"> </span>u1<span class="op">$</span><span class="kw">copy</span>()
+
+<span class="co"># 查看u3的age属性</span>
+u3<span class="op">$</span>age</code></pre></div>
+<pre><code>## [1] 20</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 重新赋值,u3的age属性值并未变化</span>
+
+u1<span class="op">$</span>age &lt;-<span class="st"> </span><span class="dv">30</span></code></pre></div>
+<p>对引入关系把我，可以减少值传递过程中的内存复制过程，可以让我们的程序运行效率更高。</p>
+</div>
+<div id="section-5.4" class="section level2">
+<h2><span class="header-section-number">5.4</span> 定义对象的方法</h2>
+<p>在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。</p>
 
 </div>
 </div>

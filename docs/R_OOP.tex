@@ -124,7 +124,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2018-07-22}
+  \date{2018-08-04}
 
 \usepackage{booktabs}
 \usepackage{xeCJK}
@@ -470,7 +470,7 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 
 \begin{verbatim}
 ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -0.77255 -0.00258  0.67462  0.81467  1.94720  2.11965
+## -1.30080 -0.68184 -0.37412 -0.28150  0.09321  0.64552
 \end{verbatim}
 
 \begin{Shaded}
@@ -487,13 +487,13 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.0329 -0.5940 -0.1191  0.4168  1.5375 
+## -1.7837 -0.7340  0.3075  0.6405  1.2717 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)
-## (Intercept) -0.09061    0.24956  -0.363    0.725
+## (Intercept)  0.04369    0.31364   0.139    0.892
 ## 
-## Residual standard error: 0.7892 on 9 degrees of freedom
+## Residual standard error: 0.9918 on 9 degrees of freedom
 \end{verbatim}
 
 \section{R为什么要进行面向对象的编程}\label{r}
@@ -972,7 +972,7 @@ base包的S3对象
 \begin{verbatim}
 ## function (x, ...) 
 ## UseMethod("mean")
-## <bytecode: 0x0000000018fc6468>
+## <bytecode: 0x0000000018dc1800>
 ## <environment: namespace:base>
 \end{verbatim}
 
@@ -2247,6 +2247,408 @@ Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去�
 
 \section{RC对象系统的介绍}\label{rc}
 
+RC是Reference
+Classes的简称，又称为R5,在R语言的2.12版本被引入，是最新一代的面向对象系统。
+
+RC不同于原来的S3和S4独享系统，RC队形系统得的方法是在类中自定的，而不是泛型函数。RC对象的行为更相似于其他的编程语言，实例化队形的语法也有所改变。
+
+从面向对象的角度来说，我们下面重定义几个名词。
+
+\begin{itemize}
+\item
+  类：面向对象系统的基本类型，类是静态结构定义。
+\item
+  对象：类实例化之后，在内存中生成结构体
+\item
+  方法：是类中的函数定义，不通过泛型函数实现。
+\end{itemize}
+
+\section{如何创建RC类？}\label{rc}
+
+RC对象是以类为基本类型，有专门的类的定义函数setRefClass(),实例化则通过类的方法生成。
+
+\subsection{setRefClass()}\label{setrefclass}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setRefClass}\NormalTok{(Class,}\DataTypeTok{fields=}\NormalTok{,}\DataTypeTok{contains=}\NormalTok{,}\DataTypeTok{methods=}\NormalTok{,}\DataTypeTok{where=}\NormalTok{,...)}
+\end{Highlighting}
+\end{Shaded}
+
+参数列表：
+
+\begin{itemize}
+\item
+  Class: 定义类名
+\item
+  fields: 定义属性和属性类型
+\item
+  contains:定义父类，继承关系
+\item
+  methods: 定义类中的方法
+\item
+  where: 定义存储空间
+\end{itemize}
+
+从setRefClass()函数的定义来看，参数比S4的setClass()函数变少了
+
+\subsection{创建RC类和实例}\label{rc}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义一个RC类}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}\DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{))}
+
+\CommentTok{# 查看User的定义}
+\NormalTok{User}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Generator for class "User":
+## 
+## Class fields:
+##                 
+## Name:       name
+## Class: character
+## 
+## Class Methods: 
+##      "field", "trace", "getRefClass", "initFields", "copy", "callSuper", 
+##      ".objectPackage", "export", "untrace", "getClass", "show", 
+##      "usingMethods", ".objectParent", "import"
+## 
+## Reference Superclasses: 
+##      "envRefClass"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化一个User对象u1}
+
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{'u1'}\NormalTok{)}
+
+\CommentTok{# 查看u1对对象}
+
+\NormalTok{u1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "u1"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 检查User类的类型}
+\KeywordTok{library}\NormalTok{(pryr)}
+\KeywordTok{class}\NormalTok{(User)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "refObjectGenerator"
+## attr(,"package")
+## [1] "methods"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{is.object}\NormalTok{(User)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(User)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RC"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 检查u1的类型}
+
+\KeywordTok{class}\NormalTok{(u1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User"
+## attr(,"package")
+## [1] ".GlobalEnv"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{is.object}\NormalTok{(u1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(u1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RC"
+\end{verbatim}
+
+\subsection{创建一个有继承关系的RC类}\label{rc}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建RC类User}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}\DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{))}
+
+\CommentTok{# 创建User的子类Member}
+
+\NormalTok{Member <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Member"}\NormalTok{,}\DataTypeTok{contains=}\StringTok{"User"}\NormalTok{,}\DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{manager=}\StringTok{"User"}\NormalTok{))}
+
+\CommentTok{# 实例化User}
+\NormalTok{manager <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{"manager"}\NormalTok{)}
+
+\CommentTok{# 实例化一个son对象}
+
+\NormalTok{member <-}\StringTok{ }\NormalTok{Member}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{"member"}\NormalTok{,}\DataTypeTok{manager=}\NormalTok{manager)}
+
+\CommentTok{# 查看Mebmber对象}
+
+\NormalTok{member}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "member"
+## Field "manager":
+## Reference class object of class "User"
+## Field "name":
+## [1] "manager"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看member对象的name属性}
+
+\NormalTok{member}\OperatorTok{$}\NormalTok{name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "member"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看member对象的manager属性}
+
+\NormalTok{member}\OperatorTok{$}\NormalTok{manager}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "manager"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看对象的属性类型}
+
+\KeywordTok{otype}\NormalTok{(member}\OperatorTok{$}\NormalTok{name)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "base"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(member}\OperatorTok{$}\NormalTok{manager)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RC"
+\end{verbatim}
+
+\subsection{RC对象的默认值}\label{rc}
+
+RC类有一个指定构造器方法\$initialize(),这个构造器方法在实例化对象时，会自动被运行一次，通过这个构造方法可以设置属性的默认值。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义一个RC类}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}
+                    \CommentTok{# 定义两个属性}
+                    \DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{level=}\StringTok{"numeric"}\NormalTok{),}
+                    \DataTypeTok{methods =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{initialize=}\ControlFlowTok{function}\NormalTok{(name,level)\{}
+                      \KeywordTok{print}\NormalTok{(}\StringTok{"User::initialize"}\NormalTok{)}
+                      \CommentTok{# 给属性增加默认值}
+\NormalTok{                      name <<-}\StringTok{ "conan"}
+\NormalTok{                      level <<-}\StringTok{ }\DecValTok{1}
+\NormalTok{                    \}))}
+
+\CommentTok{# 实例化u1}
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看对象u1属性被增加了默认值}
+
+\NormalTok{u1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "conan"
+## Field "level":
+## [1] 1
+\end{verbatim}
+
+\section{对象赋值}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义User类}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}\DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{'character'}\NormalTok{,}\DataTypeTok{age=}\StringTok{'numeric'}\NormalTok{,}\DataTypeTok{gender=}\StringTok{'factor'}\NormalTok{))}
+
+\CommentTok{# 定义一个factor类型}
+\NormalTok{genderFactor <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{'F'}\NormalTok{,}\StringTok{'M'}\NormalTok{))}
+
+\CommentTok{# 实例化u1}
+
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{"u1"}\NormalTok{,}\DataTypeTok{age=}\DecValTok{44}\NormalTok{,}\DataTypeTok{gender=}\NormalTok{genderFactor[}\DecValTok{1}\NormalTok{])}
+
+\CommentTok{# 查看age属性值}
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 44
+\end{verbatim}
+
+给u1的age属性赋值
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 重新赋值}
+
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age <-}\StringTok{ }\DecValTok{10}
+
+\CommentTok{# age属性改变}
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+把u1对象赋给u2对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 把u1赋值给u2对象}
+\NormalTok{u2 <-}\StringTok{ }\NormalTok{u1}
+
+\CommentTok{# 查看u2的age属性}
+\NormalTok{u2}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 重新赋值}
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age <-}\StringTok{ }\DecValTok{20}
+
+\CommentTok{# 查看u1,u2的age属性都发生了改变}
+
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u2}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+这是由于把u1赋值给u2，传递的是u1的实例化对象的引用，而不是值本身，这一点与其他语言中对象赋值时一样的。
+
+如果想进行赋值而不是引入传递，可以进行下面的操作
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 调用u1的内置方法copy(),赋值给u3}
+
+\NormalTok{u3 <-}\StringTok{ }\NormalTok{u1}\OperatorTok{$}\KeywordTok{copy}\NormalTok{()}
+
+\CommentTok{# 查看u3的age属性}
+\NormalTok{u3}\OperatorTok{$}\NormalTok{age}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 重新赋值,u3的age属性值并未变化}
+
+\NormalTok{u1}\OperatorTok{$}\NormalTok{age <-}\StringTok{ }\DecValTok{30}
+\end{Highlighting}
+\end{Shaded}
+
+对引入关系把我，可以减少值传递过程中的内存复制过程，可以让我们的程序运行效率更高。
+
+\section{定义对象的方法}
+
+在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。
+
 \chapter{基于R6的面向对象}\label{R6}
 
 \chapter{环境}\label{env}
@@ -2466,7 +2868,7 @@ Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去�
 \end{Shaded}
 
 \begin{verbatim}
-## <environment: 0x00000000161e27d8>
+## <environment: 0x000000001cd32420>
 \end{verbatim}
 
 \begin{Shaded}
@@ -2924,15 +3326,18 @@ identical()与==是不同的，是对两个环境进行比较
 ##  [7] "c2"                 "circum"             "e"                 
 ## [10] "e1"                 "e2"                 "f"                 
 ## [13] "f1"                 "f1.character"       "f1.numeric"        
-## [16] "father"             "g"                  "getShape"          
-## [19] "h"                  "i"                  "mother"            
-## [22] "n1"                 "n2"                 "plus"              
-## [25] "plus_one"           "r1"                 "s1"                
-## [28] "son"                "student"            "student.attend"    
-## [31] "student.default"    "student.exam"       "student.homework"  
-## [34] "teacher"            "teacher.assignment" "teacher.correcting"
-## [37] "teacher.default"    "teacher.lecture"    "var"               
-## [40] "work"               "x"                  "y"
+## [16] "father"             "g"                  "genderFactor"      
+## [19] "getShape"           "h"                  "i"                 
+## [22] "manager"            "member"             "Member"            
+## [25] "mother"             "n1"                 "n2"                
+## [28] "plus"               "plus_one"           "r1"                
+## [31] "s1"                 "son"                "student"           
+## [34] "student.attend"     "student.default"    "student.exam"      
+## [37] "student.homework"   "teacher"            "teacher.assignment"
+## [40] "teacher.correcting" "teacher.default"    "teacher.lecture"   
+## [43] "u1"                 "u2"                 "u3"                
+## [46] "User"               "var"                "work"              
+## [49] "x"                  "y"
 \end{verbatim}
 
 除了使用反引号外，还可以使用单引号或双引号来创建非语法的绑定，但是不推荐这样做(在赋值箭头左边使用字符串属于历史问题，在R开始支持反引号之前就已经开始使用了)
@@ -3002,7 +3407,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.9821196
+## [1] 0.4754039
 \end{verbatim}
 
 \begin{Shaded}
@@ -3012,7 +3417,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.6599525
+## [1] 0.2683967
 \end{verbatim}
 
 \begin{Shaded}
@@ -3145,9 +3550,9 @@ hashmap是一种非常有用的数据结构，它根据名字查找对象的时�
 
 \section{总结}
 
-截止到这，我们的R语言面型对象的内容介绍完了，回顾起来，首先我们介绍了R语言编程的一些规范，告诉读者要参考一些标准的规范构建自己的编程规范并在团队中做出调整，增加自己代码的可读性和运行效率，紧接着我们分了5章系统全面的介绍了R语言的面向对象编程:S3，S4,R5,R6;最后本章我们介绍了R语言环境的相关知识，环境不仅是作用域的描述，更是一种非常好用的数据结构。
+截止到这，我们的R语言面型对象的内容介绍完了，回顾起来，首先我们介绍了R语言编程的一些规范，告诉读者要参考一些标准的规范构建自己的编程规范并在团队中做出调整，增加自己代码的可读性和运行效率，紧接着我们分了5章系统全面的介绍了R语言的面向对象编程:S3,S4,R5,R6;最后本章我们介绍了R语言环境的相关知识，环境不仅是作用域的描述，更是一种非常好用的数据结构。
 
-最后希望阅读本电子书的R语言用户，阅读完本书后对你有一点点的帮助。
+最后希望阅读本电子书的R语言用户,阅读完本书后对你有一点点的帮助。
 
 \chapter{参考文献}\label{Reference}
 

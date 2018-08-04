@@ -3,3 +3,207 @@
 RC(Reference Class)对象系统从底层上改变了原有S3和S4对象系统的设计，去掉了泛型函数，其真正的以类为基础实现面向对象的特征。在R中常备简记为R5<http://adv-r.had.co.nz/R5.html>(但这不是官方的名称)，而是为了从形式上和S3和S4相匹配。
 
 ## RC对象系统的介绍
+
+RC是Reference Classes的简称，又称为R5,在R语言的2.12版本被引入，是最新一代的面向对象系统。
+
+RC不同于原来的S3和S4独享系统，RC队形系统得的方法是在类中自定的，而不是泛型函数。RC对象的行为更相似于其他的编程语言，实例化队形的语法也有所改变。
+
+从面向对象的角度来说，我们下面重定义几个名词。
+
++ 类：面向对象系统的基本类型，类是静态结构定义。
+
++ 对象：类实例化之后，在内存中生成结构体
+
++ 方法：是类中的函数定义，不通过泛型函数实现。
+
+## 如何创建RC类？
+
+RC对象是以类为基本类型，有专门的类的定义函数setRefClass(),实例化则通过类的方法生成。
+
+### setRefClass()
+
+```r
+setRefClass(Class,fields=,contains=,methods=,where=,...)
+```
+
+参数列表：
+
++ Class: 定义类名
+
++ fields: 定义属性和属性类型
+
++ contains:定义父类，继承关系
+
++ methods: 定义类中的方法
+
++ where: 定义存储空间
+
+从setRefClass()函数的定义来看，参数比S4的setClass()函数变少了
+
+### 创建RC类和实例
+
+
+```{r warning=FALSE}
+
+# 定义一个RC类
+
+User <- setRefClass("User",fields=list(name="character"))
+
+# 查看User的定义
+User
+
+# 实例化一个User对象u1
+
+u1 <- User$new(name='u1')
+
+# 查看u1对对象
+
+u1
+
+# 检查User类的类型
+library(pryr)
+class(User)
+is.object(User)
+otype(User)
+
+# 检查u1的类型
+
+class(u1)
+is.object(u1)
+otype(u1)
+
+```
+
+### 创建一个有继承关系的RC类
+
+```{r warning=FALSE}
+# 创建RC类User
+
+User <- setRefClass("User",fields=list(name="character"))
+
+# 创建User的子类Member
+
+Member <- setRefClass("Member",contains="User",fields=list(manager="User"))
+
+# 实例化User
+manager <- User$new(name="manager")
+
+# 实例化一个son对象
+
+member <- Member$new(name="member",manager=manager)
+
+# 查看Mebmber对象
+
+member
+
+# 查看member对象的name属性
+
+member$name
+
+# 查看member对象的manager属性
+
+member$manager
+
+# 查看对象的属性类型
+
+otype(member$name)
+otype(member$manager)
+```
+
+### RC对象的默认值
+
+RC类有一个指定构造器方法$initialize(),这个构造器方法在实例化对象时，会自动被运行一次，通过这个构造方法可以设置属性的默认值。
+
+```{r warning=FALSE}
+# 定义一个RC类
+
+User <- setRefClass("User",
+                    # 定义两个属性
+                    fields=list(name="character",level="numeric"),
+                    methods = list(initialize=function(name,level){
+                      print("User::initialize")
+                      # 给属性增加默认值
+                      name <<- "conan"
+                      level <<- 1
+                    }))
+
+# 实例化u1
+u1 <- User$new()
+
+# 查看对象u1属性被增加了默认值
+
+u1
+
+
+```
+
+## 对象赋值
+
+```{r warning=FALSE}
+# 定义User类
+
+User <- setRefClass("User",fields=list(name='character',age='numeric',gender='factor'))
+
+# 定义一个factor类型
+genderFactor <- factor(c('F','M'))
+
+# 实例化u1
+
+u1 <- User$new(name="u1",age=44,gender=genderFactor[1])
+
+# 查看age属性值
+u1$age
+
+```
+给u1的age属性赋值
+
+```{r warning=FALSE}
+# 重新赋值
+
+u1$age <- 10
+
+# age属性改变
+u1$age
+```
+
+把u1对象赋给u2对象
+
+```{r warning=FALSE}
+# 把u1赋值给u2对象
+u2 <- u1
+
+# 查看u2的age属性
+u2$age
+
+# 重新赋值
+u1$age <- 20
+
+# 查看u1,u2的age属性都发生了改变
+
+u1$age
+u2$age
+```
+
+这是由于把u1赋值给u2，传递的是u1的实例化对象的引用，而不是值本身，这一点与其他语言中对象赋值时一样的。
+
+如果想进行赋值而不是引入传递，可以进行下面的操作
+
+```{r warning=FALSE}
+# 调用u1的内置方法copy(),赋值给u3
+
+u3 <- u1$copy()
+
+# 查看u3的age属性
+u3$age
+
+# 重新赋值,u3的age属性值并未变化
+
+u1$age <- 30
+
+```
+
+对引入关系把我，可以减少值传递过程中的内存复制过程，可以让我们的程序运行效率更高。
+
+## 定义对象的方法
+
+在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。
