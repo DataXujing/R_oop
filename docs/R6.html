@@ -25,7 +25,7 @@
 <meta name="author" content="徐静">
 
 
-<meta name="date" content="2018-08-05">
+<meta name="date" content="2018-08-06">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.7.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>5.7.3</b> 任务3：定义动物的行动方式</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
+<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a><ul>
+<li class="chapter" data-level="6.1" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.1</b> 初识R6</a></li>
+<li class="chapter" data-level="6.2" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2</b> 创建R6类和实例化对象</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2.1</b> 如何创建R6类?</a></li>
+<li class="chapter" data-level="6.2.2" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2.2</b> 创建R6的类和实例化对象</a></li>
+<li class="chapter" data-level="6.2.3" data-path="R6.html"><a href="R6.html#section-6.2.3"><i class="fa fa-check"></i><b>6.2.3</b> 公有成员和私有成员</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.3</b> R6类的主动绑定</a></li>
+<li class="chapter" data-level="6.4" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.4</b> R6类的继承关系</a></li>
+<li class="chapter" data-level="6.5" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.5</b> R6类的对象的静态属性</a></li>
+<li class="chapter" data-level="6.6" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.6</b> R6类的可移植类型</a></li>
+<li class="chapter" data-level="6.7" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.7</b> R6类的动态绑定</a></li>
+<li class="chapter" data-level="6.8" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.8</b> R6类的打印函数</a></li>
+<li class="chapter" data-level="6.9" data-path="R6.html"><a href="R6.html#section-6.9"><i class="fa fa-check"></i><b>6.9</b> 实例化对象的存储</a></li>
+<li class="chapter" data-level="6.10" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.10</b> R6面向对象案例</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
 <li class="chapter" data-level="7.1" data-path="env.html"><a href="env.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 环境基础</a></li>
 <li class="chapter" data-level="7.2" data-path="env.html"><a href="env.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 环境递归</a></li>
@@ -216,7 +231,543 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="R6" class="section level1">
 <h1><span class="header-section-number">第 6 章</span> 基于R6的面向对象</h1>
+<p>R6是什么？听说过S3,S4,RC(R5),R6难道是一种新的类型吗？其实R6是R语言的一个面向对象的R包，R6类型非常接近RC类型，但是比RC类型更轻，由于R6不依赖于S4的对象系统，所以用R6的构建面向对象系统更加有效率。</p>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.1</span> 初识R6</h2>
+<p>R6是一个单独的R包，与我们熟悉的原生的面向对象系统S3,S4,RC类型不一样。在R语言的面向对象系统中，R6类型与RC类型是比较相似的，但R6并不急于S4的对象系统，因此我们在使用R6类型开发R包的时候，不依赖于methods包，而用RC类开发R包时必须设置methods包的依赖，可以参见：<a href="http://blog.fens.me/tag/package/">发布gridgame游戏包</a></p>
+<p>RC类型比RC类型更符合其他编程对于现象对象的设置，支持类的公有成员和私有成员，支持函数的主动绑定，并支持跨包的继承关系，由于RC类型的面向对象系统设计并不彻底，所以才会有R6这样的包出现。</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.2</span> 创建R6类和实例化对象</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;R6&quot;)</span>
+<span class="kw">library</span>(R6)
+<span class="kw">library</span>(pryr)</code></pre></div>
+<div id="r6" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> 如何创建R6类?</h3>
+<p>R6对象系统是以类为基本类型，有专门的类的定义函数R6Class()和实例化对象的生成方法，下面我们用R6对象创建一个类</p>
+<p>先查看R6的类创建函数R6Class()函数定义</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">R6Class
+<span class="cf">function</span>(<span class="dt">classname=</span><span class="ot">NULL</span>,<span class="dt">public=</span><span class="kw">list</span>(),<span class="dt">private=</span><span class="ot">NULL</span>,<span class="dt">activate=</span><span class="ot">NULL</span>,<span class="dt">inherit=</span><span class="ot">NULL</span>,<span class="dt">lock=</span><span class="ot">TRUE</span>,<span class="dt">class=</span><span class="ot">TRUE</span>,<span class="dt">portable=</span><span class="ot">TRUE</span>,<span class="dt">parent_env=</span><span class="kw">parent.frame</span>())</code></pre></div>
+<p>参数列表：</p>
+<ul>
+<li><p>classname 定义类名</p></li>
+<li><p>public 定义共有成员，包括公有方法和属性</p></li>
+<li><p>private 定义私有成员，包括私有方法和属性</p></li>
+<li><p>active 主动绑定的函数列表</p></li>
+<li><p>inherit 定义父类，继承关系</p></li>
+<li><p>lock 是否上锁，如果上锁则用于变量存储的环境空间被锁定，不能修改</p></li>
+<li><p>class 是否把属性封装成对象，默认是封装，如果选择不封装，类中属性存在一个环境空间中</p></li>
+<li><p>portable 是否可移植类型，默认是可移植型类，类中成员访问需要调用self和private对象</p></li>
+<li><p>parent_env 定义对象的父环境空间</p></li>
+</ul>
+<p>从R6Class()函数的定义来看，参数比RC类定义的setRefClass()函数有更多的对象特征。</p>
+</div>
+<div id="r6" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> 创建R6的类和实例化对象</h3>
+<p>首先创建一个最简单的R6的类，只包括一个公有方法。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,<span class="co"># 定义一个R6类</span>
+                  <span class="dt">public=</span><span class="kw">list</span>(
+                    <span class="dt">hello =</span> <span class="cf">function</span>(){ <span class="co"># 定义公有方法hello</span>
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;hello&quot;</span>))
+                    }
+                  ))
 
+Person <span class="co"># 查看Person的定义</span></code></pre></div>
+<pre><code>## &lt;Person&gt; object generator
+##   Public:
+##     hello: function () 
+##     clone: function (deep = FALSE) 
+##   Parent env: &lt;environment: R_GlobalEnv&gt;
+##   Locked objects: TRUE
+##   Locked class: FALSE
+##   Portable: TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(Person) <span class="co"># 检查Person的类型</span></code></pre></div>
+<pre><code>## [1] &quot;R6ClassGenerator&quot;</code></pre>
+<p>接下来，实例化Person对象，使用$new()函数完成。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u1 &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>() <span class="co"># 实例化一个Person对象u1</span>
+
+u1</code></pre></div>
+<pre><code>## &lt;Person&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     hello: function ()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(u1)</code></pre></div>
+<pre><code>## [1] &quot;Person&quot; &quot;R6&quot;</code></pre>
+<p>通过pryr包的otype检查Person类的类型和u1对象的实例化类型</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(Person) <span class="co"># 查看Person类型</span></code></pre></div>
+<pre><code>## [1] &quot;S3&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(u1) <span class="co"># 查看u1类型</span></code></pre></div>
+<pre><code>## [1] &quot;S3&quot;</code></pre>
+<p>完全没有想到，Person和u1都是S3类型的，如果R6是基于S3系统构建的，那么其实就可以解释R6类型与RC类型的不同，并且R6在传值和继承上会更有效率。</p>
+</div>
+<div id="section-6.2.3" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> 公有成员和私有成员</h3>
+<p>类的成员，包括属性和方法2部分。R6类定义中，可以分为设置公有成员和私有成员。我们设置类的共有成员，修改Person类的定义，在public参数中增加公有属性name,并通过help()方法打印name的属性值，让这个R6的类更像是Java语言.在类中访问公有成员时，需要使用self对象进行调用。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,
+                  <span class="dt">public=</span><span class="kw">list</span>(
+                    <span class="dt">name=</span><span class="ot">NA</span>, <span class="co"># 公有属性</span>
+                    <span class="dt">initialize =</span> <span class="cf">function</span>(name){ <span class="co">#构造函数</span>
+                      self<span class="op">$</span>name &lt;-<span class="st"> </span>name
+                    },
+                    <span class="dt">hello =</span> <span class="cf">function</span>(){ <span class="co">#public方法</span>
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;hello&quot;</span>,self<span class="op">$</span>name))
+                    }
+                    
+                  ))
+
+connan &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Connan&quot;</span>) <span class="co"># 实例化对象</span>
+connan<span class="op">$</span><span class="kw">hello</span>()  <span class="co"># 调用hello方法</span></code></pre></div>
+<pre><code>## [1] &quot;hello Connan&quot;</code></pre>
+<p>接下来设置私有成员，给person类中增加private参数，并在公有函数有调用私有成员变量，调用私有成员变量时，通过private对象进行访问。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">name=</span><span class="ot">NA</span>,
+                    <span class="dt">initialize =</span> <span class="cf">function</span>(name,gender){
+                      self<span class="op">$</span>name &lt;-<span class="st"> </span>name
+                      private<span class="op">$</span>gender &lt;-<span class="st"> </span>gender <span class="co"># 给私有属性赋值</span>
+                      
+                    },
+                    <span class="dt">hello =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;hello&quot;</span>,self<span class="op">$</span>name))
+                      private<span class="op">$</span><span class="kw">myGender</span>() <span class="co"># 调用私有方法</span>
+                    }
+                  ),
+                  <span class="dt">private =</span> <span class="kw">list</span>( <span class="co"># 私有成员</span>
+                    <span class="dt">gender =</span> <span class="ot">NA</span>,
+                    <span class="dt">myGender =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(self<span class="op">$</span>name,<span class="st">&quot;is&quot;</span>,private<span class="op">$</span>gender))
+                    }
+                    
+                  ))
+
+conan &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Connan&quot;</span>,<span class="st">&quot;Male&quot;</span>) <span class="co"># 实例化对象</span>
+
+connan<span class="op">$</span><span class="kw">hello</span>() <span class="co"># 调用hello()方法</span></code></pre></div>
+<pre><code>## [1] &quot;hello Connan&quot;</code></pre>
+<p>在给Person类中增加私有成员时,通过private参数定义gender的私有属性和mygender()的私有方法。值得注意的是在类的内部，需要访问私有成员时，需要使用private对象进行调用。</p>
+<p>那我直接访问公有属性和私有属性时，公有属性返回正确，而私有属性就是NULL值，并且访问私有方法不可见</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">connan<span class="op">$</span>name  <span class="co"># 公有属性</span></code></pre></div>
+<pre><code>## [1] &quot;Connan&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">connan<span class="op">$</span>gender <span class="co"># 私有属性</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># connan$myGender() # 私有方法</span></code></pre></div>
+<p>进一步的，我们看看self对象和private对象,具体是什么。在Person类中，增加公有方法member(),在member方法中分别打印self和private对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">name =</span> <span class="ot">NA</span>,
+                    <span class="dt">initialize =</span> <span class="cf">function</span>(name,gender){
+                      self<span class="op">$</span>name &lt;-<span class="st"> </span>name
+                      private<span class="op">$</span>gender &lt;-<span class="st"> </span>gender
+                    },
+                    <span class="dt">hello =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;Hello&quot;</span>,self<span class="op">$</span>name))
+                      private<span class="op">$</span><span class="kw">myGender</span>()
+                    },
+                    <span class="dt">member =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(self)
+                      <span class="kw">print</span>(private)
+                      <span class="kw">print</span>(<span class="kw">ls</span>(<span class="dt">envir =</span> private))
+                    }
+                  ),
+                  <span class="dt">private =</span> <span class="kw">list</span>(
+                    <span class="dt">gender =</span> <span class="ot">NA</span>,
+                    <span class="dt">myGender =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(self<span class="op">$</span>name,<span class="st">&quot;is&quot;</span>,private<span class="op">$</span>gender))
+                    }
+                  ))
+
+conan &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Conan&quot;</span>,<span class="st">&quot;Male&quot;</span>)
+
+conan<span class="op">$</span><span class="kw">member</span>()</code></pre></div>
+<pre><code>## &lt;Person&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     hello: function () 
+##     initialize: function (name, gender) 
+##     member: function () 
+##     name: Conan
+##   Private:
+##     gender: Male
+##     myGender: function () 
+## &lt;environment: 0x000000001bd15390&gt;
+## [1] &quot;gender&quot;   &quot;myGender&quot;</code></pre>
+<p>从测试结果看，我们可以看出self对象，就像实例化的对象本身。private对象则是一个环境空间，是self对象所在环境空间中的一个子空间，所以私有成员只能在当前类中被调用，外部访问私有成员时，就会找不到。在环境中保存私有成员的属性和方法，通过环境控件的访问控制让外部调用无法使用私有属性和方法，这种方式经常被用在R包开发上的技巧。关于R的环境请详细阅读本书第七章。</p>
+</div>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.3</span> R6类的主动绑定</h2>
+<p>主动绑定(Active binding)是R6中一种特殊的函数调用方式，把对函数的访问表现为对属性的访问，主动绑定属于公有成员。在类的定义中，通过设置activate参数实现主动绑定的功能，给Person类增加两个主动绑定的函数activate和rand</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">num=</span><span class="dv">100</span>
+                  ),
+                  <span class="dt">active =</span> <span class="kw">list</span>( <span class="co"># 主动绑定</span>
+                    <span class="dt">active=</span> <span class="cf">function</span>(value){
+                      <span class="cf">if</span>(<span class="kw">missing</span>(value)) 
+                        <span class="kw">return</span> (self<span class="op">$</span>num<span class="op">+</span><span class="dv">10</span>)
+<span class="cf">else</span> self<span class="op">$</span>num &lt;-<span class="st"> </span>value<span class="op">/</span><span class="dv">2</span>                    },
+
+<span class="dt">rand =</span> <span class="cf">function</span>() <span class="kw">rnorm</span>(<span class="dv">1</span>)
+
+                    
+                  )
+                  )
+
+conan &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>()
+
+conan<span class="op">$</span>num <span class="co"># 查看公有属性</span></code></pre></div>
+<pre><code>## [1] 100</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conan<span class="op">$</span>active <span class="co">#调用主动绑定的active()函数,结果为num +10 = 100+10 </span></code></pre></div>
+<pre><code>## [1] 110</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给主动绑定额active函数传参书，用赋值符号&quot;&lt;-&quot;,而不是方法调用&quot;()&quot;</span>
+conan<span class="op">$</span>active &lt;-<span class="st"> </span><span class="dv">20</span>
+
+conan<span class="op">$</span>num</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conan<span class="op">$</span>active</code></pre></div>
+<pre><code>## [1] 20</code></pre>
+<p>通过主动绑定，可以把函数的行为转换成属性的行为，让类中额函数操作更加灵活。</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.4</span> R6类的继承关系</h2>
+<p>继承是函数面向对象的基本特征，R6的面向对象系统也是支持继承的。当创建一个类时，可以继承另一个类作为父类存在。</p>
+<p>先创建一个父类Person,包括共有尘缘和私有成员</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Person&quot;</span>,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">name=</span><span class="ot">NA</span>,
+                    <span class="dt">initialize =</span> <span class="cf">function</span>(name,gender){
+                      self<span class="op">$</span>name &lt;-<span class="st"> </span>name
+                      private<span class="op">$</span>gender &lt;-<span class="st"> </span>gender
+                      
+                    },
+                    <span class="dt">hello =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;hello&quot;</span>,self<span class="op">$</span>name))
+                      private<span class="op">$</span><span class="kw">myGender</span>()
+                    }
+                  ),
+                  <span class="dt">private=</span><span class="kw">list</span>(
+                    <span class="dt">gender =</span> <span class="ot">NA</span>,
+                    <span class="dt">myGender =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(self<span class="op">$</span>name,<span class="st">&quot;is&quot;</span>,private<span class="op">$</span>gender))
+                    }
+                  ))</code></pre></div>
+<p>创建子类Worker继承父类Person，并在子类增加bye()公有方法</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Worker &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Worker&quot;</span>,
+                   <span class="dt">inherit =</span> Person, <span class="co">#继承，指向父类</span>
+                   <span class="dt">public =</span> <span class="kw">list</span>(
+                     <span class="dt">bye =</span> <span class="cf">function</span>(){
+                       <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;bye&quot;</span>,self<span class="op">$</span>name))
+                     }
+                   )
+                   )</code></pre></div>
+<p>实例化父类和子类，看看继承关系是不是生效</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u1 &lt;-<span class="st"> </span>Person<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Conan&quot;</span>,<span class="st">&quot;Male&quot;</span>) <span class="co">#实例化父类</span>
+
+u1<span class="op">$</span><span class="kw">hello</span>()</code></pre></div>
+<pre><code>## [1] &quot;hello Conan&quot;
+## [1] &quot;Conan is Male&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u2 &lt;-<span class="st"> </span>Worker<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Conan&quot;</span>,<span class="st">&quot;Male&quot;</span>) <span class="co"># 实例化子类</span>
+u2<span class="op">$</span><span class="kw">hello</span>()</code></pre></div>
+<pre><code>## [1] &quot;hello Conan&quot;
+## [1] &quot;Conan is Male&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u2<span class="op">$</span><span class="kw">bye</span>()</code></pre></div>
+<pre><code>## [1] &quot;bye Conan&quot;</code></pre>
+<p>我们看到继承确实生效了，在子类中我们并没有定义hello()方法，子类实例u2可以直接使用hello()方法。同时，子类u2的bye()方法，用到了再付类中定义的name属性，输出的结果完全正确。</p>
+<p>接下来我们在子类中定义父类的同名方法，然后再查看方法的调用，看看是否会出现继承中函数重写的特征。修改Worker类,在子类中定义private的属性和方法。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Worker &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Worker&quot;</span>,
+                  <span class="dt">inherit =</span> Person,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">bye =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;bye&quot;</span>,self<span class="op">$</span>name))
+                    }
+                  ),
+                  <span class="dt">private =</span> <span class="kw">list</span>(
+                    <span class="dt">gender =</span> <span class="ot">NA</span>,
+                    <span class="dt">myGender =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;worker&quot;</span>,self<span class="op">$</span>name,<span class="st">&quot;is&quot;</span>,private<span class="op">$</span>gender))
+                    }
+                  ))</code></pre></div>
+<p>实例化子类，调用hello方法</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u2 &lt;-<span class="st"> </span>Worker<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Conan&quot;</span>,<span class="st">&quot;Male&quot;</span>)
+u2<span class="op">$</span><span class="kw">hello</span>() <span class="co"># 调用hello()方法</span></code></pre></div>
+<pre><code>## [1] &quot;hello Conan&quot;
+## [1] &quot;worker Conan is Male&quot;</code></pre>
+<p>由于子类中的myGender()私有方法，覆盖了父类同名私有方法，所以在调用的时候，hello()会调用子类中的myGender()方法实现，而忽略父类中的方法。</p>
+<p>如果在子类中像调用父类的方法，有一个办法是使用super对象，通过super$xx()的语法进行调用。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Worker &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Worker&quot;</span>,
+                  <span class="dt">inherit =</span> Person,
+                  <span class="dt">public =</span> <span class="kw">list</span>(
+                    <span class="dt">bye =</span> <span class="cf">function</span>(){
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;bye&quot;</span>,self<span class="op">$</span>name))
+                    }
+                  ),
+                  <span class="dt">private =</span> <span class="kw">list</span>(
+                    <span class="dt">gender =</span> <span class="ot">NA</span>,
+                    <span class="dt">myGender =</span> <span class="cf">function</span>(){
+                      super<span class="op">$</span><span class="kw">myGender</span>()<span class="co"># 调用父类的方法</span>
+                      <span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;worker&quot;</span>,self<span class="op">$</span>name,<span class="st">&quot;is&quot;</span>,private<span class="op">$</span>gender))
+                    }
+                  ))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u2 &lt;-<span class="st"> </span>Worker<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Conan&quot;</span>,<span class="st">&quot;Male&quot;</span>)
+u2<span class="op">$</span><span class="kw">hello</span>()</code></pre></div>
+<pre><code>## [1] &quot;hello Conan&quot;
+## [1] &quot;Conan is Male&quot;
+## [1] &quot;worker Conan is Male&quot;</code></pre>
+<p>在子类myGender()方法中，用super对象调用父类的myGender()方法，从输出可以看出，父类的同名方法也同时被调用了。</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.5</span> R6类的对象的静态属性</h2>
+<p>用面向对象的方法进行编程，那么所有变量其实都是对象，我们可以把一个实例化的对象定义成另一个类的属性，这样就形成了对象的引用关系链。</p>
+<p>需要注意的是，当属性赋值给另一个R6的对象时，属性的值保存了对象的引用，而非对象实例本身。利用这个规则就可以实现对象的静态属性，也就是可以在多种不同的实例中是共享对象属性，类似于Java中的static属性一样。</p>
+<p>下面用代码描述一下，就能很容易的理解。定义两个类A和B,A类中有一个公有属性x，B类中有一个公有属性a,a为A类的实例化对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">public=</span><span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="ot">NULL</span>
+             ))
+
+B &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;B&quot;</span>,
+             <span class="dt">public=</span><span class="kw">list</span>(
+               <span class="dt">a =</span> A<span class="op">$</span><span class="kw">new</span>()
+             ))</code></pre></div>
+<p>运行程序，实现B实例化对象A实例化对象的调用，并给x变量赋值。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b &lt;-<span class="st"> </span>B<span class="op">$</span><span class="kw">new</span>() <span class="co"># 实例化B对象</span>
+
+b<span class="op">$</span>a<span class="op">$</span>x &lt;-<span class="st"> </span><span class="dv">1</span> <span class="co"># 给x变量赋值</span>
+b<span class="op">$</span>a<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b2 &lt;-<span class="st"> </span>B<span class="op">$</span><span class="kw">new</span>()
+b2<span class="op">$</span>a<span class="op">$</span>x &lt;-<span class="dv">2</span>
+b2<span class="op">$</span>a<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b<span class="op">$</span>a<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p>从输出结果上来看，a对象实现了在多个b实例的共享，当b2实例修改a对象x值得时候，b实例的a对象的x值也发生了变化。</p>
+<p>这里有一种写法，我们是应该避免的，就是通过initialize()方法赋值</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;C&quot;</span>,
+             <span class="dt">public =</span> <span class="kw">list</span>(
+               <span class="dt">a =</span> <span class="ot">NULL</span>,
+               <span class="dt">initialize =</span> <span class="cf">function</span>(){
+                 a &lt;&lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+               }
+             ))
+
+cc &lt;-<span class="st"> </span>C<span class="op">$</span><span class="kw">new</span>()
+
+cc<span class="op">$</span>a<span class="op">$</span>x &lt;-<span class="st"> </span><span class="dv">1</span>
+
+cc<span class="op">$</span>a<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cc2 &lt;-C<span class="op">$</span><span class="kw">new</span>()
+cc2<span class="op">$</span>a<span class="op">$</span>x &lt;-<span class="st"> </span><span class="dv">2</span>
+cc2<span class="op">$</span>a<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cc<span class="op">$</span>a<span class="op">$</span>x <span class="co"># x值未发生改变</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>通过initialize()构建a对象，是对单独的环境空间中的引用，所以不能实现引用对象的共享。</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.6</span> R6类的可移植类型</h2>
+<p>在R6类的定义中，portable参数可以设置R6类的类型为可移植类型和不可移植类型。可移植类型和不可移植类型主要有两个明显的特征。</p>
+<ul>
+<li><p>可移植类型支持跨R包的继承；不可移植类型，在跨R包的继承的时候，兼容性不太好</p></li>
+<li><p>可移植类型必须用self和private对象来访问类中的成员，如self$x.private$y。不可移植类型，可以直接使用变量x,y，并通过“&lt;&lt;-”(超赋值)实现赋值。</p></li>
+</ul>
+<p>本文使用的是R6的2.2.2版本，所以默认创建的是可移植类型。所以，当我们要考虑是否有跨包继承的需要时，可以再可移植类型和不可移植类型之间进行选择。</p>
+<p>我们比较一下RC类型，R6的可移植类型和R6的不可移植类型三者的区别，定义一个简单的类，包括一个属性x和两个方法getx()，setx()</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RC &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;RC&quot;</span>,
+                  <span class="dt">fields =</span> <span class="kw">list</span>(<span class="dt">x=</span><span class="st">&quot;numeric&quot;</span>),
+                  <span class="dt">methods =</span> <span class="kw">list</span>(
+                    <span class="dt">getx =</span> <span class="cf">function</span>() x,
+                    <span class="dt">setx =</span> <span class="cf">function</span>(value) x &lt;&lt;-<span class="st"> </span>value
+                  ))
+
+rc &lt;-<span class="st"> </span>RC<span class="op">$</span><span class="kw">new</span>()
+rc<span class="op">$</span><span class="kw">setx</span>(<span class="dv">10</span>)
+rc<span class="op">$</span><span class="kw">getx</span>()</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>创建一个行为完全一样的不可移植类型的R6类</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NR6 &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;NR6&quot;</span>,<span class="co"># R6不可移植类型</span>
+               <span class="dt">portable=</span> <span class="ot">FALSE</span>,
+               <span class="dt">public =</span> <span class="kw">list</span>(
+                 <span class="dt">x =</span> <span class="ot">NA</span>,
+                 <span class="dt">getx =</span> <span class="cf">function</span>() x,
+                 <span class="dt">setx =</span> <span class="cf">function</span>(value) x &lt;&lt;-<span class="st"> </span>value
+               ))
+
+np6 &lt;-<span class="st"> </span>NR6<span class="op">$</span><span class="kw">new</span>()
+np6<span class="op">$</span><span class="kw">setx</span>(<span class="dv">10</span>)
+np6<span class="op">$</span><span class="kw">getx</span>()</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>再创建一个行为完全一样的可移植类型的R6类</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PR6 &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;PR6&quot;</span>,
+               <span class="dt">portable =</span> <span class="ot">TRUE</span>,
+               <span class="dt">public=</span> <span class="kw">list</span>(
+                 <span class="dt">x =</span> <span class="ot">NA</span>,
+                 <span class="dt">getx =</span> <span class="cf">function</span>() self<span class="op">$</span>x,
+                 <span class="dt">setx =</span> <span class="cf">function</span>(value) self<span class="op">$</span>x &lt;-<span class="st"> </span>value
+               ))
+
+pr6 &lt;-<span class="st"> </span>PR6<span class="op">$</span><span class="kw">new</span>()
+
+pr6<span class="op">$</span><span class="kw">setx</span>(<span class="dv">10</span>)
+
+pr6<span class="op">$</span><span class="kw">getx</span>()</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<p>从这个例子中，可移植类型的R6类和不可移植类型的区别在于self对象的使用。</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.7</span> R6类的动态绑定</h2>
+<p>对于静态类型的编程语言来说，一旦类定义后，就不能修改类中的属性和方法。对于动态类型的编程语言来说，通常不存在这样的限制，可以任意修改其类的结构或者已经实例化的对象结构。R作为动态语言来说，同样支持动态变量修改的，基于S3,S4可以通过泛型函数动态的增加函数定义，但RC类型是不支持的，再次感觉到R语言的面向对象系统设计的奇葩了。</p>
+<p>R6包已经考虑这种情况，提供了一种动态设置成员变量的方法用$get()函数。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">public =</span> <span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="dv">1</span>,
+               <span class="dt">getx =</span> <span class="cf">function</span>() x
+             ))
+
+A<span class="op">$</span><span class="kw">set</span>(<span class="st">&quot;public&quot;</span>,<span class="st">&quot;getx2&quot;</span>,<span class="cf">function</span>() self<span class="op">$</span>x<span class="op">*</span><span class="dv">2</span>) <span class="co"># 动态增加getx2()方法</span>
+
+s &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+s<span class="op">$</span><span class="kw">getx2</span>()</code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p>同样的，属性也可以动态的修改，动态改变x属性的值</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A<span class="op">$</span><span class="kw">set</span>(<span class="st">&quot;public&quot;</span>,<span class="st">&quot;x&quot;</span>,<span class="dv">10</span>,<span class="dt">overwrite=</span><span class="ot">TRUE</span>) <span class="co"># 动态改变x属性</span>
+
+s &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+s<span class="op">$</span>x</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s<span class="op">$</span><span class="kw">getx2</span>()</code></pre></div>
+<pre><code>## [1] 20</code></pre>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.8</span> R6类的打印函数</h2>
+<p>R6提供了用于打印的默认方法print()，每当要打印实例化对象时，都会调用这个默认的print()方法，有点类似于Java类中默认的toString()方法</p>
+<p>我们可以覆盖print()方法，使用自定义的打印提示</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">public =</span> <span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="dv">1</span>,
+               <span class="dt">getx =</span> <span class="cf">function</span>() self<span class="op">$</span>x
+             ))
+
+a &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+<span class="kw">print</span>(a) <span class="co">#使用默认的打印方法</span></code></pre></div>
+<pre><code>## &lt;A&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     getx: function () 
+##     x: 1</code></pre>
+<p>自定义打印方法，覆盖print()方法</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">public =</span> <span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="dv">1</span>,
+               <span class="dt">getx =</span> <span class="cf">function</span>() self<span class="op">$</span>x,
+               <span class="dt">print =</span> <span class="cf">function</span>(...){
+                 <span class="kw">cat</span>(<span class="st">&quot;Class &lt;A&gt; of public&quot;</span>,<span class="kw">ls</span>(self),<span class="st">&quot;:&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)
+                 <span class="kw">cat</span>(<span class="kw">ls</span>(self),<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)
+                 <span class="kw">invisible</span>(self)
+               }
+             ))
+
+a &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+<span class="kw">print</span>(a)</code></pre></div>
+<pre><code>## Class &lt;A&gt; of publicclonegetxprintx:clone,getx,print,x</code></pre>
+<p>通过自定义方法，就可以覆盖系统默认的方法，从而输出我们想显示的文字。</p>
+</div>
+<div id="section-6.9" class="section level2">
+<h2><span class="header-section-number">6.9</span> 实例化对象的存储</h2>
+<p>R6是基于S3面向对象系统的构建，而S3类型又是一种比较松散的类型，会造成用户环境空间的变量泛滥的问题。R6提供了一种方式，设置R6Class()的class参数，把类中定义的属性和方法统一存储到一个S3对象中，这种方式是默认的。另一种方式为，把类中定义的属性和方法统一存储到一个单独的环境空间中。</p>
+<p>class=TRUE,实例化a对象，就是一个S3类</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">class=</span><span class="ot">TRUE</span>,
+             <span class="dt">public=</span><span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="dv">1</span>,
+               <span class="dt">getx =</span> <span class="cf">function</span>() self<span class="op">$</span>x
+             ))
+
+a &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+<span class="kw">class</span>(a)</code></pre></div>
+<pre><code>## [1] &quot;A&quot;  &quot;R6&quot;</code></pre>
+<p>class=FALSE，实例化a对象，是一个环境空间，在环境空间中存储了类的变量数据</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">B &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;B&quot;</span>,
+             <span class="dt">class=</span><span class="ot">TRUE</span>,
+             <span class="dt">public=</span><span class="kw">list</span>(
+               <span class="dt">x =</span> <span class="dv">1</span>,
+               <span class="dt">getx =</span> <span class="cf">function</span>() self<span class="op">$</span>x
+             ))
+
+b &lt;-<span class="st"> </span>B<span class="op">$</span><span class="kw">new</span>()
+<span class="kw">class</span>(b)</code></pre></div>
+<pre><code>## [1] &quot;B&quot;  &quot;R6&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b</code></pre></div>
+<pre><code>## &lt;B&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     getx: function () 
+##     x: 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ls</span>(<span class="dt">envir =</span> b)</code></pre></div>
+<pre><code>## [1] &quot;clone&quot; &quot;getx&quot;  &quot;x&quot;</code></pre>
+<p>实例化对象的存储还有另外一个方面的考虑，由于类中的变量都存在于一个环境空间中，我们也可以通过手动的方式找到这个环境空间，从而进行变量的增加和修改。如果对于环境空间的变量进行修改，我们的程序将会变得非常不安全，所以为了预防安全上的问题，乐意通过R6Class()的lock参数锁定环境空间，不允许动态修改，默认值为锁定不能修改。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;A&quot;</span>,
+             <span class="dt">lock =</span> <span class="ot">TRUE</span>,<span class="co"># 锁定环境空间</span>
+             <span class="dt">public=</span> <span class="kw">list</span>(
+             <span class="dt">x =</span> <span class="dv">1</span>
+             ))</code></pre></div>
+<pre><code>## R6Class A: &#39;lock&#39; argument has been renamed to &#39;lock_objects&#39; as of version 2.1.This code will continue to work, but the &#39;lock&#39; option will be removed in a later version of R6</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span>A<span class="op">$</span><span class="kw">new</span>()
+<span class="kw">ls</span>(s)</code></pre></div>
+<pre><code>## [1] &quot;clone&quot; &quot;x&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># s$aa &lt;- 11 # 增加新变量 Error</span>
+<span class="co"># rm(&quot;x&quot;,envir=s) # Error</span></code></pre></div>
+<p>如果不锁定环境空间，让lock = FALSE，则环境完全处于开放状态，可以对变量任意修改。</p>
+<p>通过上面对R6的介绍，我们基本掌握了R6面向对象系统的只是，我们最后介绍一个基于R6的例子</p>
+</div>
+<div id="r6" class="section level2">
+<h2><span class="header-section-number">6.10</span> R6面向对象案例</h2>
+<p>用R6面向对象系统，构建一个图书分类的使用案例</p>
+<p>任务1： 定义图书的静态结构</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Book &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Book&quot;</span>,
+                <span class="dt">private =</span> <span class="kw">list</span>(
+                  <span class="dt">title =</span> <span class="ot">NA</span>,
+                  <span class="dt">price=</span> <span class="ot">NA</span>,
+                  <span class="dt">category =</span> <span class="ot">NA</span>
+                ),
+                <span class="dt">public =</span> <span class="kw">list</span>(
+                  <span class="dt">initialize =</span> <span class="cf">function</span>(title,price,category){
+                    private<span class="op">$</span>title &lt;-<span class="st"> </span>title
+                    private<span class="op">$</span>price &lt;-<span class="st"> </span>price
+                    private<span class="op">$</span>category &lt;-<span class="st"> </span>category
+                  },
+                  <span class="dt">getPrice =</span> <span class="cf">function</span>(){
+                    private<span class="op">$</span>price
+                  }
+                ))
+
+R &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;R&quot;</span>,<span class="dt">inherit=</span>Book)
+Java &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Java&quot;</span>,<span class="dt">inherit=</span>Book)
+Php &lt;-<span class="st"> </span><span class="kw">R6Class</span>(<span class="st">&quot;Php&quot;</span>,<span class="dt">inherit=</span>Book)
+
+
+r1 &lt;-<span class="st"> </span>R<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;R的极客思想&quot;</span>,<span class="dv">59</span>,<span class="st">&quot;R&quot;</span>)
+r1<span class="op">$</span><span class="kw">getPrice</span>()</code></pre></div>
+<pre><code>## [1] 59</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">j1 &lt;-<span class="st"> </span>Java<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;Java编程思想&quot;</span>,<span class="dv">108</span>,<span class="st">&quot;Java&quot;</span>)
+j1<span class="op">$</span><span class="kw">getPrice</span>()</code></pre></div>
+<pre><code>## [1] 108</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p1 &lt;-<span class="st"> </span>Php<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;head First PHP &amp; MySQL&quot;</span>,<span class="dv">98</span>,<span class="st">&quot;PHP&quot;</span>)
+p1<span class="op">$</span><span class="kw">getPrice</span>()</code></pre></div>
+<pre><code>## [1] 98</code></pre>
+<p>任务2：双11图书打折</p>
+<ul>
+<li><p>所有图书9折</p></li>
+<li><p>Java图书7折，不支持重复打折</p></li>
+<li><p>R打7折，支持重复打折</p></li>
+<li><p>PHP图书无特别优惠</p></li>
+</ul>
+<p>这个我们可以自己去实现了，本书就不再赘述了。</p>
+<p>通过这个例子，我们用R6实现了面向对象编程的封装，继承和多态的3个特性，证明R6是一个完全的面向对象的实现，由于R6底层基于S3实现，所以比RC的类更加有效果，因此除了推荐大家使用RC外，也极力推荐大家使用R6.</p>
+<p>截止到现在，我们介绍了4种R语言的面向对象体系结构，选择自己理解的，总有一种适合你。</p>
+
+</div>
 </div>
             </section>
 

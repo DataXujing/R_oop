@@ -25,7 +25,7 @@
 <meta name="author" content="徐静">
 
 
-<meta name="date" content="2018-08-05">
+<meta name="date" content="2018-08-06">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -175,7 +175,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.7.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>5.7.3</b> 任务3：定义动物的行动方式</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
+<li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a><ul>
+<li class="chapter" data-level="6.1" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.1</b> 初识R6</a></li>
+<li class="chapter" data-level="6.2" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2</b> 创建R6类和实例化对象</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2.1</b> 如何创建R6类?</a></li>
+<li class="chapter" data-level="6.2.2" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.2.2</b> 创建R6的类和实例化对象</a></li>
+<li class="chapter" data-level="6.2.3" data-path="R6.html"><a href="R6.html#section-6.2.3"><i class="fa fa-check"></i><b>6.2.3</b> 公有成员和私有成员</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.3</b> R6类的主动绑定</a></li>
+<li class="chapter" data-level="6.4" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.4</b> R6类的继承关系</a></li>
+<li class="chapter" data-level="6.5" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.5</b> R6类的对象的静态属性</a></li>
+<li class="chapter" data-level="6.6" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.6</b> R6类的可移植类型</a></li>
+<li class="chapter" data-level="6.7" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.7</b> R6类的动态绑定</a></li>
+<li class="chapter" data-level="6.8" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.8</b> R6类的打印函数</a></li>
+<li class="chapter" data-level="6.9" data-path="R6.html"><a href="R6.html#section-6.9"><i class="fa fa-check"></i><b>6.9</b> 实例化对象的存储</a></li>
+<li class="chapter" data-level="6.10" data-path="R6.html"><a href="R6.html#r6"><i class="fa fa-check"></i><b>6.10</b> R6面向对象案例</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
 <li class="chapter" data-level="7.1" data-path="env.html"><a href="env.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 环境基础</a></li>
 <li class="chapter" data-level="7.2" data-path="env.html"><a href="env.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 环境递归</a></li>
@@ -236,8 +251,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>多态可以说是面向对象的程序设计中最关键的特性，如果某种语言支持以上所有特性但是不支持多态，我们称其为“基于对象”而不是面向对象，所谓多态简单来说就是希望能用相同的命令作用于不同的类，根据类的不同产生不同的结果。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在数值数据</span>
 <span class="kw">summary</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>))</code></pre></div>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -1.6474 -1.0625 -0.7016 -0.4267 -0.1363  2.1232</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -2.69364 -0.65721 -0.02727 -0.13618  0.58467  1.68234</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#作用在Model上</span>
 <span class="kw">summary</span>(<span class="kw">lm</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>)<span class="op">~</span><span class="kw">rnorm</span>(<span class="dv">10</span>)))</code></pre></div>
 <pre><code>## 
@@ -245,16 +260,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## lm(formula = rnorm(10) ~ rnorm(10))
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.53698 -0.20735 -0.01946  0.49899  1.49425 
+##     Min      1Q  Median      3Q     Max 
+## -1.6121 -0.8625  0.1777  0.8150  1.7043 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)   0.5178     0.2721   1.903   0.0894 .
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) -0.08898    0.33865  -0.263    0.799
 ## 
-## Residual standard error: 0.8604 on 9 degrees of freedom</code></pre>
+## Residual standard error: 1.071 on 9 degrees of freedom</code></pre>
 </div>
 <div id="r" class="section level2">
 <h2><span class="header-section-number">2.2</span> R为什么要进行面向对象的编程</h2>

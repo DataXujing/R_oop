@@ -1,1 +1,649 @@
 # 基于R6的面向对象 {#R6}
+
+R6是什么？听说过S3,S4,RC(R5),R6难道是一种新的类型吗？其实R6是R语言的一个面向对象的R包，R6类型非常接近RC类型，但是比RC类型更轻，由于R6不依赖于S4的对象系统，所以用R6的构建面向对象系统更加有效率。
+
+## 初识R6
+
+R6是一个单独的R包，与我们熟悉的原生的面向对象系统S3,S4,RC类型不一样。在R语言的面向对象系统中，R6类型与RC类型是比较相似的，但R6并不急于S4的对象系统，因此我们在使用R6类型开发R包的时候，不依赖于methods包，而用RC类开发R包时必须设置methods包的依赖，可以参见：[发布gridgame游戏包](http://blog.fens.me/tag/package/)
+
+RC类型比RC类型更符合其他编程对于现象对象的设置，支持类的公有成员和私有成员，支持函数的主动绑定，并支持跨包的继承关系，由于RC类型的面向对象系统设计并不彻底，所以才会有R6这样的包出现。
+
+## 创建R6类和实例化对象
+
+```{r warning=FALSE}
+# install.packages("R6")
+library(R6)
+library(pryr)
+
+```
+
+### 如何创建R6类?
+
+R6对象系统是以类为基本类型，有专门的类的定义函数R6Class()和实例化对象的生成方法，下面我们用R6对象创建一个类
+
+先查看R6的类创建函数R6Class()函数定义
+
+```r
+R6Class
+function(classname=NULL,public=list(),private=NULL,activate=NULL,inherit=NULL,lock=TRUE,class=TRUE,portable=TRUE,parent_env=parent.frame())
+
+```
+
+参数列表：
+
++ classname 定义类名
+
++ public 定义共有成员，包括公有方法和属性
+
++ private 定义私有成员，包括私有方法和属性
+
++ active 主动绑定的函数列表
+
++ inherit 定义父类，继承关系
+
++ lock 是否上锁，如果上锁则用于变量存储的环境空间被锁定，不能修改
+
++ class 是否把属性封装成对象，默认是封装，如果选择不封装，类中属性存在一个环境空间中
+
++ portable 是否可移植类型，默认是可移植型类，类中成员访问需要调用self和private对象
+
++ parent_env 定义对象的父环境空间
+
+从R6Class()函数的定义来看，参数比RC类定义的setRefClass()函数有更多的对象特征。
+
+### 创建R6的类和实例化对象
+
+首先创建一个最简单的R6的类，只包括一个公有方法。
+
+```{r warning=FALSE}
+Person <- R6Class("Person",# 定义一个R6类
+                  public=list(
+                    hello = function(){ # 定义公有方法hello
+                      print(paste("hello"))
+                    }
+                  ))
+
+Person # 查看Person的定义
+
+class(Person) # 检查Person的类型
+```
+
+接下来，实例化Person对象，使用\$new()函数完成。
+
+```{r warning=FALSE}
+u1 <- Person$new() # 实例化一个Person对象u1
+
+u1
+
+class(u1)
+```
+
+通过pryr包的otype检查Person类的类型和u1对象的实例化类型
+
+```{r warning=FALSE}
+otype(Person) # 查看Person类型
+
+otype(u1) # 查看u1类型
+```
+完全没有想到，Person和u1都是S3类型的，如果R6是基于S3系统构建的，那么其实就可以解释R6类型与RC类型的不同，并且R6在传值和继承上会更有效率。
+
+### 公有成员和私有成员
+
+类的成员，包括属性和方法2部分。R6类定义中，可以分为设置公有成员和私有成员。我们设置类的共有成员，修改Person类的定义，在public参数中增加公有属性name,并通过help()方法打印name的属性值，让这个R6的类更像是Java语言.在类中访问公有成员时，需要使用self对象进行调用。
+
+```{r warning=FALSE}
+Person <- R6Class("Person",
+                  public=list(
+                    name=NA, # 公有属性
+                    initialize = function(name){ #构造函数
+                      self$name <- name
+                    },
+                    hello = function(){ #public方法
+                      print(paste("hello",self$name))
+                    }
+                    
+                  ))
+
+connan <- Person$new("Connan") # 实例化对象
+connan$hello()  # 调用hello方法
+```
+
+接下来设置私有成员，给person类中增加private参数，并在公有函数有调用私有成员变量，调用私有成员变量时，通过private对象进行访问。
+
+```{r warning=FALSE}
+Person <- R6Class("Person",
+                  public = list(
+                    name=NA,
+                    initialize = function(name,gender){
+                      self$name <- name
+                      private$gender <- gender # 给私有属性赋值
+                      
+                    },
+                    hello = function(){
+                      print(paste("hello",self$name))
+                      private$myGender() # 调用私有方法
+                    }
+                  ),
+                  private = list( # 私有成员
+                    gender = NA,
+                    myGender = function(){
+                      print(paste(self$name,"is",private$gender))
+                    }
+                    
+                  ))
+
+conan <- Person$new("Connan","Male") # 实例化对象
+
+connan$hello() # 调用hello()方法
+```
+
+在给Person类中增加私有成员时,通过private参数定义gender的私有属性和mygender()的私有方法。值得注意的是在类的内部，需要访问私有成员时，需要使用private对象进行调用。
+
+那我直接访问公有属性和私有属性时，公有属性返回正确，而私有属性就是NULL值，并且访问私有方法不可见
+
+```{r warning=FALSE}
+connan$name  # 公有属性
+
+connan$gender # 私有属性
+
+# connan$myGender() # 私有方法
+```
+
+进一步的，我们看看self对象和private对象,具体是什么。在Person类中，增加公有方法member(),在member方法中分别打印self和private对象
+
+```{r warning=FALSE}
+Person <- R6Class("Person",
+                  public = list(
+                    name = NA,
+                    initialize = function(name,gender){
+                      self$name <- name
+                      private$gender <- gender
+                    },
+                    hello = function(){
+                      print(paste("Hello",self$name))
+                      private$myGender()
+                    },
+                    member = function(){
+                      print(self)
+                      print(private)
+                      print(ls(envir = private))
+                    }
+                  ),
+                  private = list(
+                    gender = NA,
+                    myGender = function(){
+                      print(paste(self$name,"is",private$gender))
+                    }
+                  ))
+
+conan <- Person$new("Conan","Male")
+
+conan$member()
+```
+
+从测试结果看，我们可以看出self对象，就像实例化的对象本身。private对象则是一个环境空间，是self对象所在环境空间中的一个子空间，所以私有成员只能在当前类中被调用，外部访问私有成员时，就会找不到。在环境中保存私有成员的属性和方法，通过环境控件的访问控制让外部调用无法使用私有属性和方法，这种方式经常被用在R包开发上的技巧。关于R的环境请详细阅读本书第七章。
+
+## R6类的主动绑定
+
+主动绑定(Active binding)是R6中一种特殊的函数调用方式，把对函数的访问表现为对属性的访问，主动绑定属于公有成员。在类的定义中，通过设置activate参数实现主动绑定的功能，给Person类增加两个主动绑定的函数activate和rand
+
+```{r warning=FALSE}
+Person <- R6Class("Person",
+                  public = list(
+                    num=100
+                  ),
+                  active = list( # 主动绑定
+                    active= function(value){
+                      if(missing(value)) 
+                        return (self$num+10)
+else self$num <- value/2                    },
+
+rand = function() rnorm(1)
+
+                    
+                  )
+                  )
+
+conan <- Person$new()
+
+conan$num # 查看公有属性
+
+conan$active #调用主动绑定的active()函数,结果为num +10 = 100+10 
+
+# 给主动绑定额active函数传参书，用赋值符号"<-",而不是方法调用"()"
+conan$active <- 20
+
+conan$num
+conan$active
+
+
+```
+
+通过主动绑定，可以把函数的行为转换成属性的行为，让类中额函数操作更加灵活。
+
+
+## R6类的继承关系
+
+继承是函数面向对象的基本特征，R6的面向对象系统也是支持继承的。当创建一个类时，可以继承另一个类作为父类存在。
+
+先创建一个父类Person,包括共有尘缘和私有成员
+
+```{r warning=FALSE}
+
+Person <- R6Class("Person",
+                  public = list(
+                    name=NA,
+                    initialize = function(name,gender){
+                      self$name <- name
+                      private$gender <- gender
+                      
+                    },
+                    hello = function(){
+                      print(paste("hello",self$name))
+                      private$myGender()
+                    }
+                  ),
+                  private=list(
+                    gender = NA,
+                    myGender = function(){
+                      print(paste(self$name,"is",private$gender))
+                    }
+                  ))
+```
+
+创建子类Worker继承父类Person，并在子类增加bye()公有方法
+
+```{r warning=FALSE}
+Worker <- R6Class("Worker",
+                   inherit = Person, #继承，指向父类
+                   public = list(
+                     bye = function(){
+                       print(paste("bye",self$name))
+                     }
+                   )
+                   )
+```
+
+实例化父类和子类，看看继承关系是不是生效
+
+```{r warning=FALSE}
+
+u1 <- Person$new("Conan","Male") #实例化父类
+
+u1$hello()
+
+u2 <- Worker$new("Conan","Male") # 实例化子类
+u2$hello()
+
+u2$bye()
+```
+
+我们看到继承确实生效了，在子类中我们并没有定义hello()方法，子类实例u2可以直接使用hello()方法。同时，子类u2的bye()方法，用到了再付类中定义的name属性，输出的结果完全正确。
+
+接下来我们在子类中定义父类的同名方法，然后再查看方法的调用，看看是否会出现继承中函数重写的特征。修改Worker类,在子类中定义private的属性和方法。
+
+```{r warning=FALSE}
+Worker <- R6Class("Worker",
+                  inherit = Person,
+                  public = list(
+                    bye = function(){
+                      print(paste("bye",self$name))
+                    }
+                  ),
+                  private = list(
+                    gender = NA,
+                    myGender = function(){
+                      print(paste("worker",self$name,"is",private$gender))
+                    }
+                  ))
+```
+
+实例化子类，调用hello方法
+
+```{r warning=FALSE}
+u2 <- Worker$new("Conan","Male")
+u2$hello() # 调用hello()方法
+```
+
+由于子类中的myGender()私有方法，覆盖了父类同名私有方法，所以在调用的时候，hello()会调用子类中的myGender()方法实现，而忽略父类中的方法。
+
+如果在子类中像调用父类的方法，有一个办法是使用super对象，通过super$xx()的语法进行调用。
+
+```{r warning=FALSE}
+Worker <- R6Class("Worker",
+                  inherit = Person,
+                  public = list(
+                    bye = function(){
+                      print(paste("bye",self$name))
+                    }
+                  ),
+                  private = list(
+                    gender = NA,
+                    myGender = function(){
+                      super$myGender()# 调用父类的方法
+                      print(paste("worker",self$name,"is",private$gender))
+                    }
+                  ))
+
+```
+
+```{r warning=FALSE}
+
+u2 <- Worker$new("Conan","Male")
+u2$hello()
+
+```
+
+在子类myGender()方法中，用super对象调用父类的myGender()方法，从输出可以看出，父类的同名方法也同时被调用了。
+
+## R6类的对象的静态属性
+
+用面向对象的方法进行编程，那么所有变量其实都是对象，我们可以把一个实例化的对象定义成另一个类的属性，这样就形成了对象的引用关系链。
+
+需要注意的是，当属性赋值给另一个R6的对象时，属性的值保存了对象的引用，而非对象实例本身。利用这个规则就可以实现对象的静态属性，也就是可以在多种不同的实例中是共享对象属性，类似于Java中的static属性一样。
+
+下面用代码描述一下，就能很容易的理解。定义两个类A和B,A类中有一个公有属性x，B类中有一个公有属性a,a为A类的实例化对象
+
+```{r warning=FALSE}
+
+A <- R6Class("A",
+             public=list(
+               x = NULL
+             ))
+
+B <- R6Class("B",
+             public=list(
+               a = A$new()
+             ))
+```
+
+运行程序，实现B实例化对象A实例化对象的调用，并给x变量赋值。
+
+```{r warning=FALSE}
+b <- B$new() # 实例化B对象
+
+b$a$x <- 1 # 给x变量赋值
+b$a$x
+
+b2 <- B$new()
+b2$a$x <-2
+b2$a$x
+
+b$a$x
+```
+
+从输出结果上来看，a对象实现了在多个b实例的共享，当b2实例修改a对象x值得时候，b实例的a对象的x值也发生了变化。
+
+这里有一种写法，我们是应该避免的，就是通过initialize()方法赋值
+
+```{r warning=FALSE}
+
+C <- R6Class("C",
+             public = list(
+               a = NULL,
+               initialize = function(){
+                 a <<- A$new()
+               }
+             ))
+
+cc <- C$new()
+
+cc$a$x <- 1
+
+cc$a$x
+
+cc2 <-C$new()
+cc2$a$x <- 2
+cc2$a$x
+
+cc$a$x # x值未发生改变
+```
+
+通过initialize()构建a对象，是对单独的环境空间中的引用，所以不能实现引用对象的共享。
+
+## R6类的可移植类型
+
+在R6类的定义中，portable参数可以设置R6类的类型为可移植类型和不可移植类型。可移植类型和不可移植类型主要有两个明显的特征。
+
++ 可移植类型支持跨R包的继承；不可移植类型，在跨R包的继承的时候，兼容性不太好
+
++ 可移植类型必须用self和private对象来访问类中的成员，如self\$x.private\$y。不可移植类型，可以直接使用变量x,y，并通过"<<-"(超赋值)实现赋值。
+
+本文使用的是R6的2.2.2版本，所以默认创建的是可移植类型。所以，当我们要考虑是否有跨包继承的需要时，可以再可移植类型和不可移植类型之间进行选择。
+
+我们比较一下RC类型，R6的可移植类型和R6的不可移植类型三者的区别，定义一个简单的类，包括一个属性x和两个方法getx()，setx()
+
+```{r warning=FALSE}
+RC <- setRefClass("RC",
+                  fields = list(x="numeric"),
+                  methods = list(
+                    getx = function() x,
+                    setx = function(value) x <<- value
+                  ))
+
+rc <- RC$new()
+rc$setx(10)
+rc$getx()
+```
+
+创建一个行为完全一样的不可移植类型的R6类
+
+```{r warning=FALSE}
+NR6 <- R6Class("NR6",# R6不可移植类型
+               portable= FALSE,
+               public = list(
+                 x = NA,
+                 getx = function() x,
+                 setx = function(value) x <<- value
+               ))
+
+np6 <- NR6$new()
+np6$setx(10)
+np6$getx()
+```
+
+再创建一个行为完全一样的可移植类型的R6类
+
+```{r warning=FALSE}
+PR6 <- R6Class("PR6",
+               portable = TRUE,
+               public= list(
+                 x = NA,
+                 getx = function() self$x,
+                 setx = function(value) self$x <- value
+               ))
+
+pr6 <- PR6$new()
+
+pr6$setx(10)
+
+pr6$getx()
+
+```
+从这个例子中，可移植类型的R6类和不可移植类型的区别在于self对象的使用。
+
+## R6类的动态绑定
+
+对于静态类型的编程语言来说，一旦类定义后，就不能修改类中的属性和方法。对于动态类型的编程语言来说，通常不存在这样的限制，可以任意修改其类的结构或者已经实例化的对象结构。R作为动态语言来说，同样支持动态变量修改的，基于S3,S4可以通过泛型函数动态的增加函数定义，但RC类型是不支持的，再次感觉到R语言的面向对象系统设计的奇葩了。
+
+R6包已经考虑这种情况，提供了一种动态设置成员变量的方法用\$get()函数。
+
+```{r warning=FALSE}
+
+A <- R6Class("A",
+             public = list(
+               x = 1,
+               getx = function() x
+             ))
+
+A$set("public","getx2",function() self$x*2) # 动态增加getx2()方法
+
+s <- A$new()
+s$getx2()
+```
+
+同样的，属性也可以动态的修改，动态改变x属性的值
+
+```{r warning=FALSE}
+A$set("public","x",10,overwrite=TRUE) # 动态改变x属性
+
+s <- A$new()
+s$x
+s$getx2()
+```
+
+## R6类的打印函数
+
+R6提供了用于打印的默认方法print()，每当要打印实例化对象时，都会调用这个默认的print()方法，有点类似于Java类中默认的toString()方法
+
+我们可以覆盖print()方法，使用自定义的打印提示
+
+```{r warning=FALSE}
+A <- R6Class("A",
+             public = list(
+               x = 1,
+               getx = function() self$x
+             ))
+
+a <- A$new()
+print(a) #使用默认的打印方法
+```
+
+自定义打印方法，覆盖print()方法
+
+```{r warning=FALSE}
+A <- R6Class("A",
+             public = list(
+               x = 1,
+               getx = function() self$x,
+               print = function(...){
+                 cat("Class <A> of public",ls(self),":",sep="")
+                 cat(ls(self),sep=",")
+                 invisible(self)
+               }
+             ))
+
+a <- A$new()
+print(a)
+
+```
+
+通过自定义方法，就可以覆盖系统默认的方法，从而输出我们想显示的文字。
+
+## 实例化对象的存储
+
+R6是基于S3面向对象系统的构建，而S3类型又是一种比较松散的类型，会造成用户环境空间的变量泛滥的问题。R6提供了一种方式，设置R6Class()的class参数，把类中定义的属性和方法统一存储到一个S3对象中，这种方式是默认的。另一种方式为，把类中定义的属性和方法统一存储到一个单独的环境空间中。
+
+class=TRUE,实例化a对象，就是一个S3类
+
+```{r warning=FALSE}
+A <- R6Class("A",
+             class=TRUE,
+             public=list(
+               x = 1,
+               getx = function() self$x
+             ))
+
+a <- A$new()
+class(a)
+```
+
+class=FALSE，实例化a对象，是一个环境空间，在环境空间中存储了类的变量数据
+
+```{r warning =FALSE}
+
+B <- R6Class("B",
+             class=TRUE,
+             public=list(
+               x = 1,
+               getx = function() self$x
+             ))
+
+b <- B$new()
+class(b)
+
+b
+
+ls(envir = b)
+```
+
+实例化对象的存储还有另外一个方面的考虑，由于类中的变量都存在于一个环境空间中，我们也可以通过手动的方式找到这个环境空间，从而进行变量的增加和修改。如果对于环境空间的变量进行修改，我们的程序将会变得非常不安全，所以为了预防安全上的问题，乐意通过R6Class()的lock参数锁定环境空间，不允许动态修改，默认值为锁定不能修改。
+
+```{r warning=FALSE}
+A <- R6Class("A",
+             lock = TRUE,# 锁定环境空间
+             public= list(
+             x = 1
+             ))
+
+
+s <- A$new()
+ls(s)
+# s$aa <- 11 # 增加新变量 Error
+# rm("x",envir=s) # Error
+             
+             
+```
+
+如果不锁定环境空间，让lock = FALSE，则环境完全处于开放状态，可以对变量任意修改。
+
+通过上面对R6的介绍，我们基本掌握了R6面向对象系统的只是，我们最后介绍一个基于R6的例子
+
+## R6面向对象案例
+
+用R6面向对象系统，构建一个图书分类的使用案例
+
+任务1： 定义图书的静态结构
+
+```{r warning=FALSE}
+Book <- R6Class("Book",
+                private = list(
+                  title = NA,
+                  price= NA,
+                  category = NA
+                ),
+                public = list(
+                  initialize = function(title,price,category){
+                    private$title <- title
+                    private$price <- price
+                    private$category <- category
+                  },
+                  getPrice = function(){
+                    private$price
+                  }
+                ))
+
+R <- R6Class("R",inherit=Book)
+Java <- R6Class("Java",inherit=Book)
+Php <- R6Class("Php",inherit=Book)
+
+
+r1 <- R$new("R的极客思想",59,"R")
+r1$getPrice()
+
+j1 <- Java$new("Java编程思想",108,"Java")
+j1$getPrice()
+
+p1 <- Php$new("head First PHP & MySQL",98,"PHP")
+p1$getPrice()
+
+```
+
+任务2：双11图书打折
+
++ 所有图书9折
+
++ Java图书7折，不支持重复打折
+
++ R打7折，支持重复打折
+
++ PHP图书无特别优惠
+
+这个我们可以自己去实现了，本书就不再赘述了。
+
+通过这个例子，我们用R6实现了面向对象编程的封装，继承和多态的3个特性，证明R6是一个完全的面向对象的实现，由于R6底层基于S3实现，所以比RC的类更加有效果，因此除了推荐大家使用RC外，也极力推荐大家使用R6.
+
+截止到现在，我们介绍了4种R语言的面向对象体系结构，选择自己理解的，总有一种适合你。
+
+
+

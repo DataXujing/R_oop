@@ -124,7 +124,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2018-08-05}
+  \date{2018-08-06}
 
 \usepackage{booktabs}
 \usepackage{xeCJK}
@@ -470,7 +470,7 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 
 \begin{verbatim}
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -0.9158  0.3099  0.8531  0.6351  1.1072  1.5086
+## -1.0652 -0.7036 -0.2353  0.2621  1.2058  2.2533
 \end{verbatim}
 
 \begin{Shaded}
@@ -487,13 +487,13 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.2123 -1.1152 -0.2678  0.7361  2.0295 
+## -1.4959 -0.5513 -0.3392  0.6401  1.7993 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)
-## (Intercept)  -0.1538     0.4019  -0.383    0.711
+## (Intercept)  -0.1801     0.3618  -0.498    0.631
 ## 
-## Residual standard error: 1.271 on 9 degrees of freedom
+## Residual standard error: 1.144 on 9 degrees of freedom
 \end{verbatim}
 
 \section{R为什么要进行面向对象的编程}\label{r}
@@ -972,7 +972,7 @@ base包的S3对象
 \begin{verbatim}
 ## function (x, ...) 
 ## UseMethod("mean")
-## <bytecode: 0x0000000017826c10>
+## <bytecode: 0x000000001b953ed8>
 ## <environment: namespace:base>
 \end{verbatim}
 
@@ -3515,6 +3515,1001 @@ Animal中定义action方法，每一个子类使用callSuper()重写该方法。
 
 \chapter{基于R6的面向对象}\label{R6}
 
+R6是什么？听说过S3,S4,RC(R5),R6难道是一种新的类型吗？其实R6是R语言的一个面向对象的R包，R6类型非常接近RC类型，但是比RC类型更轻，由于R6不依赖于S4的对象系统，所以用R6的构建面向对象系统更加有效率。
+
+\section{初识R6}\label{r6}
+
+R6是一个单独的R包，与我们熟悉的原生的面向对象系统S3,S4,RC类型不一样。在R语言的面向对象系统中，R6类型与RC类型是比较相似的，但R6并不急于S4的对象系统，因此我们在使用R6类型开发R包的时候，不依赖于methods包，而用RC类开发R包时必须设置methods包的依赖，可以参见：\href{http://blog.fens.me/tag/package/}{发布gridgame游戏包}
+
+RC类型比RC类型更符合其他编程对于现象对象的设置，支持类的公有成员和私有成员，支持函数的主动绑定，并支持跨包的继承关系，由于RC类型的面向对象系统设计并不彻底，所以才会有R6这样的包出现。
+
+\section{创建R6类和实例化对象}\label{r6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# install.packages("R6")}
+\KeywordTok{library}\NormalTok{(R6)}
+\KeywordTok{library}\NormalTok{(pryr)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{如何创建R6类?}\label{r6}
+
+R6对象系统是以类为基本类型，有专门的类的定义函数R6Class()和实例化对象的生成方法，下面我们用R6对象创建一个类
+
+先查看R6的类创建函数R6Class()函数定义
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R6Class}
+\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{classname=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{public=}\KeywordTok{list}\NormalTok{(),}\DataTypeTok{private=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{activate=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{inherit=}\OtherTok{NULL}\NormalTok{,}\DataTypeTok{lock=}\OtherTok{TRUE}\NormalTok{,}\DataTypeTok{class=}\OtherTok{TRUE}\NormalTok{,}\DataTypeTok{portable=}\OtherTok{TRUE}\NormalTok{,}\DataTypeTok{parent_env=}\KeywordTok{parent.frame}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+参数列表：
+
+\begin{itemize}
+\item
+  classname 定义类名
+\item
+  public 定义共有成员，包括公有方法和属性
+\item
+  private 定义私有成员，包括私有方法和属性
+\item
+  active 主动绑定的函数列表
+\item
+  inherit 定义父类，继承关系
+\item
+  lock 是否上锁，如果上锁则用于变量存储的环境空间被锁定，不能修改
+\item
+  class
+  是否把属性封装成对象，默认是封装，如果选择不封装，类中属性存在一个环境空间中
+\item
+  portable
+  是否可移植类型，默认是可移植型类，类中成员访问需要调用self和private对象
+\item
+  parent\_env 定义对象的父环境空间
+\end{itemize}
+
+从R6Class()函数的定义来看，参数比RC类定义的setRefClass()函数有更多的对象特征。
+
+\subsection{创建R6的类和实例化对象}\label{r6}
+
+首先创建一个最简单的R6的类，只包括一个公有方法。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}\CommentTok{# 定义一个R6类}
+                  \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{hello =} \ControlFlowTok{function}\NormalTok{()\{ }\CommentTok{# 定义公有方法hello}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"hello"}\NormalTok{))}
+\NormalTok{                    \}}
+\NormalTok{                  ))}
+
+\NormalTok{Person }\CommentTok{# 查看Person的定义}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <Person> object generator
+##   Public:
+##     hello: function () 
+##     clone: function (deep = FALSE) 
+##   Parent env: <environment: R_GlobalEnv>
+##   Locked objects: TRUE
+##   Locked class: FALSE
+##   Portable: TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(Person) }\CommentTok{# 检查Person的类型}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "R6ClassGenerator"
+\end{verbatim}
+
+接下来，实例化Person对象，使用\$new()函数完成。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{() }\CommentTok{# 实例化一个Person对象u1}
+
+\NormalTok{u1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <Person>
+##   Public:
+##     clone: function (deep = FALSE) 
+##     hello: function ()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(u1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Person" "R6"
+\end{verbatim}
+
+通过pryr包的otype检查Person类的类型和u1对象的实例化类型
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(Person) }\CommentTok{# 查看Person类型}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(u1) }\CommentTok{# 查看u1类型}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S3"
+\end{verbatim}
+
+完全没有想到，Person和u1都是S3类型的，如果R6是基于S3系统构建的，那么其实就可以解释R6类型与RC类型的不同，并且R6在传值和继承上会更有效率。
+
+\subsection{公有成员和私有成员}
+
+类的成员，包括属性和方法2部分。R6类定义中，可以分为设置公有成员和私有成员。我们设置类的共有成员，修改Person类的定义，在public参数中增加公有属性name,并通过help()方法打印name的属性值，让这个R6的类更像是Java语言.在类中访问公有成员时，需要使用self对象进行调用。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}
+                  \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{name=}\OtherTok{NA}\NormalTok{, }\CommentTok{# 公有属性}
+                    \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name)\{ }\CommentTok{#构造函数}
+\NormalTok{                      self}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\NormalTok{name}
+\NormalTok{                    \},}
+                    \DataTypeTok{hello =} \ControlFlowTok{function}\NormalTok{()\{ }\CommentTok{#public方法}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"hello"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                    \}}
+                    
+\NormalTok{                  ))}
+
+\NormalTok{connan <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Connan"}\NormalTok{) }\CommentTok{# 实例化对象}
+\NormalTok{connan}\OperatorTok{$}\KeywordTok{hello}\NormalTok{()  }\CommentTok{# 调用hello方法}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Connan"
+\end{verbatim}
+
+接下来设置私有成员，给person类中增加private参数，并在公有函数有调用私有成员变量，调用私有成员变量时，通过private对象进行访问。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{name=}\OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name,gender)\{}
+\NormalTok{                      self}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\NormalTok{name}
+\NormalTok{                      private}\OperatorTok{$}\NormalTok{gender <-}\StringTok{ }\NormalTok{gender }\CommentTok{# 给私有属性赋值}
+                      
+\NormalTok{                    \},}
+                    \DataTypeTok{hello =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"hello"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                      private}\OperatorTok{$}\KeywordTok{myGender}\NormalTok{() }\CommentTok{# 调用私有方法}
+\NormalTok{                    \}}
+\NormalTok{                  ),}
+                  \DataTypeTok{private =} \KeywordTok{list}\NormalTok{( }\CommentTok{# 私有成员}
+                    \DataTypeTok{gender =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{myGender =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(self}\OperatorTok{$}\NormalTok{name,}\StringTok{"is"}\NormalTok{,private}\OperatorTok{$}\NormalTok{gender))}
+\NormalTok{                    \}}
+                    
+\NormalTok{                  ))}
+
+\NormalTok{conan <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Connan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{) }\CommentTok{# 实例化对象}
+
+\NormalTok{connan}\OperatorTok{$}\KeywordTok{hello}\NormalTok{() }\CommentTok{# 调用hello()方法}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Connan"
+\end{verbatim}
+
+在给Person类中增加私有成员时,通过private参数定义gender的私有属性和mygender()的私有方法。值得注意的是在类的内部，需要访问私有成员时，需要使用private对象进行调用。
+
+那我直接访问公有属性和私有属性时，公有属性返回正确，而私有属性就是NULL值，并且访问私有方法不可见
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{connan}\OperatorTok{$}\NormalTok{name  }\CommentTok{# 公有属性}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Connan"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{connan}\OperatorTok{$}\NormalTok{gender }\CommentTok{# 私有属性}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# connan$myGender() # 私有方法}
+\end{Highlighting}
+\end{Shaded}
+
+进一步的，我们看看self对象和private对象,具体是什么。在Person类中，增加公有方法member(),在member方法中分别打印self和private对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{name =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name,gender)\{}
+\NormalTok{                      self}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\NormalTok{name}
+\NormalTok{                      private}\OperatorTok{$}\NormalTok{gender <-}\StringTok{ }\NormalTok{gender}
+\NormalTok{                    \},}
+                    \DataTypeTok{hello =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"Hello"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                      private}\OperatorTok{$}\KeywordTok{myGender}\NormalTok{()}
+\NormalTok{                    \},}
+                    \DataTypeTok{member =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(self)}
+                      \KeywordTok{print}\NormalTok{(private)}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{ls}\NormalTok{(}\DataTypeTok{envir =}\NormalTok{ private))}
+\NormalTok{                    \}}
+\NormalTok{                  ),}
+                  \DataTypeTok{private =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{gender =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{myGender =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(self}\OperatorTok{$}\NormalTok{name,}\StringTok{"is"}\NormalTok{,private}\OperatorTok{$}\NormalTok{gender))}
+\NormalTok{                    \}}
+\NormalTok{                  ))}
+
+\NormalTok{conan <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Conan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{)}
+
+\NormalTok{conan}\OperatorTok{$}\KeywordTok{member}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <Person>
+##   Public:
+##     clone: function (deep = FALSE) 
+##     hello: function () 
+##     initialize: function (name, gender) 
+##     member: function () 
+##     name: Conan
+##   Private:
+##     gender: Male
+##     myGender: function () 
+## <environment: 0x000000001bbbf410>
+## [1] "gender"   "myGender"
+\end{verbatim}
+
+从测试结果看，我们可以看出self对象，就像实例化的对象本身。private对象则是一个环境空间，是self对象所在环境空间中的一个子空间，所以私有成员只能在当前类中被调用，外部访问私有成员时，就会找不到。在环境中保存私有成员的属性和方法，通过环境控件的访问控制让外部调用无法使用私有属性和方法，这种方式经常被用在R包开发上的技巧。关于R的环境请详细阅读本书第七章。
+
+\section{R6类的主动绑定}\label{r6}
+
+主动绑定(Active
+binding)是R6中一种特殊的函数调用方式，把对函数的访问表现为对属性的访问，主动绑定属于公有成员。在类的定义中，通过设置activate参数实现主动绑定的功能，给Person类增加两个主动绑定的函数activate和rand
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{num=}\DecValTok{100}
+\NormalTok{                  ),}
+                  \DataTypeTok{active =} \KeywordTok{list}\NormalTok{( }\CommentTok{# 主动绑定}
+                    \DataTypeTok{active=} \ControlFlowTok{function}\NormalTok{(value)\{}
+                      \ControlFlowTok{if}\NormalTok{(}\KeywordTok{missing}\NormalTok{(value)) }
+                        \KeywordTok{return}\NormalTok{ (self}\OperatorTok{$}\NormalTok{num}\OperatorTok{+}\DecValTok{10}\NormalTok{)}
+\ControlFlowTok{else}\NormalTok{ self}\OperatorTok{$}\NormalTok{num <-}\StringTok{ }\NormalTok{value}\OperatorTok{/}\DecValTok{2}\NormalTok{                    \},}
+
+\DataTypeTok{rand =} \ControlFlowTok{function}\NormalTok{() }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+                    
+\NormalTok{                  )}
+\NormalTok{                  )}
+
+\NormalTok{conan <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+
+\NormalTok{conan}\OperatorTok{$}\NormalTok{num }\CommentTok{# 查看公有属性}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 100
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conan}\OperatorTok{$}\NormalTok{active }\CommentTok{#调用主动绑定的active()函数,结果为num +10 = 100+10 }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 110
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给主动绑定额active函数传参书，用赋值符号"<-",而不是方法调用"()"}
+\NormalTok{conan}\OperatorTok{$}\NormalTok{active <-}\StringTok{ }\DecValTok{20}
+
+\NormalTok{conan}\OperatorTok{$}\NormalTok{num}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{conan}\OperatorTok{$}\NormalTok{active}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+通过主动绑定，可以把函数的行为转换成属性的行为，让类中额函数操作更加灵活。
+
+\section{R6类的继承关系}\label{r6}
+
+继承是函数面向对象的基本特征，R6的面向对象系统也是支持继承的。当创建一个类时，可以继承另一个类作为父类存在。
+
+先创建一个父类Person,包括共有尘缘和私有成员
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Person"}\NormalTok{,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{name=}\OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name,gender)\{}
+\NormalTok{                      self}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\NormalTok{name}
+\NormalTok{                      private}\OperatorTok{$}\NormalTok{gender <-}\StringTok{ }\NormalTok{gender}
+                      
+\NormalTok{                    \},}
+                    \DataTypeTok{hello =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"hello"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                      private}\OperatorTok{$}\KeywordTok{myGender}\NormalTok{()}
+\NormalTok{                    \}}
+\NormalTok{                  ),}
+                  \DataTypeTok{private=}\KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{gender =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{myGender =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(self}\OperatorTok{$}\NormalTok{name,}\StringTok{"is"}\NormalTok{,private}\OperatorTok{$}\NormalTok{gender))}
+\NormalTok{                    \}}
+\NormalTok{                  ))}
+\end{Highlighting}
+\end{Shaded}
+
+创建子类Worker继承父类Person，并在子类增加bye()公有方法
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Worker <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Worker"}\NormalTok{,}
+                   \DataTypeTok{inherit =}\NormalTok{ Person, }\CommentTok{#继承，指向父类}
+                   \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                     \DataTypeTok{bye =} \ControlFlowTok{function}\NormalTok{()\{}
+                       \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"bye"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                     \}}
+\NormalTok{                   )}
+\NormalTok{                   )}
+\end{Highlighting}
+\end{Shaded}
+
+实例化父类和子类，看看继承关系是不是生效
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{Person}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Conan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{) }\CommentTok{#实例化父类}
+
+\NormalTok{u1}\OperatorTok{$}\KeywordTok{hello}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Conan"
+## [1] "Conan is Male"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u2 <-}\StringTok{ }\NormalTok{Worker}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Conan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{) }\CommentTok{# 实例化子类}
+\NormalTok{u2}\OperatorTok{$}\KeywordTok{hello}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Conan"
+## [1] "Conan is Male"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u2}\OperatorTok{$}\KeywordTok{bye}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "bye Conan"
+\end{verbatim}
+
+我们看到继承确实生效了，在子类中我们并没有定义hello()方法，子类实例u2可以直接使用hello()方法。同时，子类u2的bye()方法，用到了再付类中定义的name属性，输出的结果完全正确。
+
+接下来我们在子类中定义父类的同名方法，然后再查看方法的调用，看看是否会出现继承中函数重写的特征。修改Worker类,在子类中定义private的属性和方法。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Worker <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Worker"}\NormalTok{,}
+                  \DataTypeTok{inherit =}\NormalTok{ Person,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{bye =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"bye"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                    \}}
+\NormalTok{                  ),}
+                  \DataTypeTok{private =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{gender =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{myGender =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"worker"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name,}\StringTok{"is"}\NormalTok{,private}\OperatorTok{$}\NormalTok{gender))}
+\NormalTok{                    \}}
+\NormalTok{                  ))}
+\end{Highlighting}
+\end{Shaded}
+
+实例化子类，调用hello方法
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u2 <-}\StringTok{ }\NormalTok{Worker}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Conan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{)}
+\NormalTok{u2}\OperatorTok{$}\KeywordTok{hello}\NormalTok{() }\CommentTok{# 调用hello()方法}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Conan"
+## [1] "worker Conan is Male"
+\end{verbatim}
+
+由于子类中的myGender()私有方法，覆盖了父类同名私有方法，所以在调用的时候，hello()会调用子类中的myGender()方法实现，而忽略父类中的方法。
+
+如果在子类中像调用父类的方法，有一个办法是使用super对象，通过super\$xx()的语法进行调用。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Worker <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Worker"}\NormalTok{,}
+                  \DataTypeTok{inherit =}\NormalTok{ Person,}
+                  \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{bye =} \ControlFlowTok{function}\NormalTok{()\{}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"bye"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name))}
+\NormalTok{                    \}}
+\NormalTok{                  ),}
+                  \DataTypeTok{private =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{gender =} \OtherTok{NA}\NormalTok{,}
+                    \DataTypeTok{myGender =} \ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{                      super}\OperatorTok{$}\KeywordTok{myGender}\NormalTok{()}\CommentTok{# 调用父类的方法}
+                      \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"worker"}\NormalTok{,self}\OperatorTok{$}\NormalTok{name,}\StringTok{"is"}\NormalTok{,private}\OperatorTok{$}\NormalTok{gender))}
+\NormalTok{                    \}}
+\NormalTok{                  ))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u2 <-}\StringTok{ }\NormalTok{Worker}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Conan"}\NormalTok{,}\StringTok{"Male"}\NormalTok{)}
+\NormalTok{u2}\OperatorTok{$}\KeywordTok{hello}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "hello Conan"
+## [1] "Conan is Male"
+## [1] "worker Conan is Male"
+\end{verbatim}
+
+在子类myGender()方法中，用super对象调用父类的myGender()方法，从输出可以看出，父类的同名方法也同时被调用了。
+
+\section{R6类的对象的静态属性}\label{r6}
+
+用面向对象的方法进行编程，那么所有变量其实都是对象，我们可以把一个实例化的对象定义成另一个类的属性，这样就形成了对象的引用关系链。
+
+需要注意的是，当属性赋值给另一个R6的对象时，属性的值保存了对象的引用，而非对象实例本身。利用这个规则就可以实现对象的静态属性，也就是可以在多种不同的实例中是共享对象属性，类似于Java中的static属性一样。
+
+下面用代码描述一下，就能很容易的理解。定义两个类A和B,A类中有一个公有属性x，B类中有一个公有属性a,a为A类的实例化对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \OtherTok{NULL}
+\NormalTok{             ))}
+
+\NormalTok{B <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"B"}\NormalTok{,}
+             \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{a =}\NormalTok{ A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{             ))}
+\end{Highlighting}
+\end{Shaded}
+
+运行程序，实现B实例化对象A实例化对象的调用，并给x变量赋值。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b <-}\StringTok{ }\NormalTok{B}\OperatorTok{$}\KeywordTok{new}\NormalTok{() }\CommentTok{# 实例化B对象}
+
+\NormalTok{b}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\DecValTok{1} \CommentTok{# 给x变量赋值}
+\NormalTok{b}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b2 <-}\StringTok{ }\NormalTok{B}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{b2}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x <-}\DecValTok{2}
+\NormalTok{b2}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+从输出结果上来看，a对象实现了在多个b实例的共享，当b2实例修改a对象x值得时候，b实例的a对象的x值也发生了变化。
+
+这里有一种写法，我们是应该避免的，就是通过initialize()方法赋值
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{C <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"C"}\NormalTok{,}
+             \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{a =} \OtherTok{NULL}\NormalTok{,}
+               \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{                 a <<-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{               \}}
+\NormalTok{             ))}
+
+\NormalTok{cc <-}\StringTok{ }\NormalTok{C}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+
+\NormalTok{cc}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\DecValTok{1}
+
+\NormalTok{cc}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cc2 <-C}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{cc2}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\DecValTok{2}
+\NormalTok{cc2}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cc}\OperatorTok{$}\NormalTok{a}\OperatorTok{$}\NormalTok{x }\CommentTok{# x值未发生改变}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+通过initialize()构建a对象，是对单独的环境空间中的引用，所以不能实现引用对象的共享。
+
+\section{R6类的可移植类型}\label{r6}
+
+在R6类的定义中，portable参数可以设置R6类的类型为可移植类型和不可移植类型。可移植类型和不可移植类型主要有两个明显的特征。
+
+\begin{itemize}
+\item
+  可移植类型支持跨R包的继承；不可移植类型，在跨R包的继承的时候，兼容性不太好
+\item
+  可移植类型必须用self和private对象来访问类中的成员，如self\$x.private\$y。不可移植类型，可以直接使用变量x,y，并通过``\textless{}\textless{}-''(超赋值)实现赋值。
+\end{itemize}
+
+本文使用的是R6的2.2.2版本，所以默认创建的是可移植类型。所以，当我们要考虑是否有跨包继承的需要时，可以再可移植类型和不可移植类型之间进行选择。
+
+我们比较一下RC类型，R6的可移植类型和R6的不可移植类型三者的区别，定义一个简单的类，包括一个属性x和两个方法getx()，setx()
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RC <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"RC"}\NormalTok{,}
+                  \DataTypeTok{fields =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{x=}\StringTok{"numeric"}\NormalTok{),}
+                  \DataTypeTok{methods =} \KeywordTok{list}\NormalTok{(}
+                    \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() x,}
+                    \DataTypeTok{setx =} \ControlFlowTok{function}\NormalTok{(value) x <<-}\StringTok{ }\NormalTok{value}
+\NormalTok{                  ))}
+
+\NormalTok{rc <-}\StringTok{ }\NormalTok{RC}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{rc}\OperatorTok{$}\KeywordTok{setx}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\NormalTok{rc}\OperatorTok{$}\KeywordTok{getx}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+创建一个行为完全一样的不可移植类型的R6类
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{NR6 <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"NR6"}\NormalTok{,}\CommentTok{# R6不可移植类型}
+               \DataTypeTok{portable=} \OtherTok{FALSE}\NormalTok{,}
+               \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                 \DataTypeTok{x =} \OtherTok{NA}\NormalTok{,}
+                 \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() x,}
+                 \DataTypeTok{setx =} \ControlFlowTok{function}\NormalTok{(value) x <<-}\StringTok{ }\NormalTok{value}
+\NormalTok{               ))}
+
+\NormalTok{np6 <-}\StringTok{ }\NormalTok{NR6}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{np6}\OperatorTok{$}\KeywordTok{setx}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\NormalTok{np6}\OperatorTok{$}\KeywordTok{getx}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+再创建一个行为完全一样的可移植类型的R6类
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{PR6 <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"PR6"}\NormalTok{,}
+               \DataTypeTok{portable =} \OtherTok{TRUE}\NormalTok{,}
+               \DataTypeTok{public=} \KeywordTok{list}\NormalTok{(}
+                 \DataTypeTok{x =} \OtherTok{NA}\NormalTok{,}
+                 \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x,}
+                 \DataTypeTok{setx =} \ControlFlowTok{function}\NormalTok{(value) self}\OperatorTok{$}\NormalTok{x <-}\StringTok{ }\NormalTok{value}
+\NormalTok{               ))}
+
+\NormalTok{pr6 <-}\StringTok{ }\NormalTok{PR6}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+
+\NormalTok{pr6}\OperatorTok{$}\KeywordTok{setx}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+\NormalTok{pr6}\OperatorTok{$}\KeywordTok{getx}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+从这个例子中，可移植类型的R6类和不可移植类型的区别在于self对象的使用。
+
+\section{R6类的动态绑定}\label{r6}
+
+对于静态类型的编程语言来说，一旦类定义后，就不能修改类中的属性和方法。对于动态类型的编程语言来说，通常不存在这样的限制，可以任意修改其类的结构或者已经实例化的对象结构。R作为动态语言来说，同样支持动态变量修改的，基于S3,S4可以通过泛型函数动态的增加函数定义，但RC类型是不支持的，再次感觉到R语言的面向对象系统设计的奇葩了。
+
+R6包已经考虑这种情况，提供了一种动态设置成员变量的方法用\$get()函数。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \DecValTok{1}\NormalTok{,}
+               \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() x}
+\NormalTok{             ))}
+
+\NormalTok{A}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\StringTok{"public"}\NormalTok{,}\StringTok{"getx2"}\NormalTok{,}\ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x}\OperatorTok{*}\DecValTok{2}\NormalTok{) }\CommentTok{# 动态增加getx2()方法}
+
+\NormalTok{s <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{s}\OperatorTok{$}\KeywordTok{getx2}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+同样的，属性也可以动态的修改，动态改变x属性的值
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\StringTok{"public"}\NormalTok{,}\StringTok{"x"}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DataTypeTok{overwrite=}\OtherTok{TRUE}\NormalTok{) }\CommentTok{# 动态改变x属性}
+
+\NormalTok{s <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{s}\OperatorTok{$}\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{s}\OperatorTok{$}\KeywordTok{getx2}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+\section{R6类的打印函数}\label{r6}
+
+R6提供了用于打印的默认方法print()，每当要打印实例化对象时，都会调用这个默认的print()方法，有点类似于Java类中默认的toString()方法
+
+我们可以覆盖print()方法，使用自定义的打印提示
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \DecValTok{1}\NormalTok{,}
+               \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x}
+\NormalTok{             ))}
+
+\NormalTok{a <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(a) }\CommentTok{#使用默认的打印方法}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <A>
+##   Public:
+##     clone: function (deep = FALSE) 
+##     getx: function () 
+##     x: 1
+\end{verbatim}
+
+自定义打印方法，覆盖print()方法
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \DecValTok{1}\NormalTok{,}
+               \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x,}
+               \DataTypeTok{print =} \ControlFlowTok{function}\NormalTok{(...)\{}
+                 \KeywordTok{cat}\NormalTok{(}\StringTok{"Class <A> of public"}\NormalTok{,}\KeywordTok{ls}\NormalTok{(self),}\StringTok{":"}\NormalTok{,}\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+                 \KeywordTok{cat}\NormalTok{(}\KeywordTok{ls}\NormalTok{(self),}\DataTypeTok{sep=}\StringTok{","}\NormalTok{)}
+                 \KeywordTok{invisible}\NormalTok{(self)}
+\NormalTok{               \}}
+\NormalTok{             ))}
+
+\NormalTok{a <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Class <A> of publicclonegetxprintx:clone,getx,print,x
+\end{verbatim}
+
+通过自定义方法，就可以覆盖系统默认的方法，从而输出我们想显示的文字。
+
+\section{实例化对象的存储}
+
+R6是基于S3面向对象系统的构建，而S3类型又是一种比较松散的类型，会造成用户环境空间的变量泛滥的问题。R6提供了一种方式，设置R6Class()的class参数，把类中定义的属性和方法统一存储到一个S3对象中，这种方式是默认的。另一种方式为，把类中定义的属性和方法统一存储到一个单独的环境空间中。
+
+class=TRUE,实例化a对象，就是一个S3类
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{class=}\OtherTok{TRUE}\NormalTok{,}
+             \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \DecValTok{1}\NormalTok{,}
+               \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x}
+\NormalTok{             ))}
+
+\NormalTok{a <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\KeywordTok{class}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "A"  "R6"
+\end{verbatim}
+
+class=FALSE，实例化a对象，是一个环境空间，在环境空间中存储了类的变量数据
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"B"}\NormalTok{,}
+             \DataTypeTok{class=}\OtherTok{TRUE}\NormalTok{,}
+             \DataTypeTok{public=}\KeywordTok{list}\NormalTok{(}
+               \DataTypeTok{x =} \DecValTok{1}\NormalTok{,}
+               \DataTypeTok{getx =} \ControlFlowTok{function}\NormalTok{() self}\OperatorTok{$}\NormalTok{x}
+\NormalTok{             ))}
+
+\NormalTok{b <-}\StringTok{ }\NormalTok{B}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\KeywordTok{class}\NormalTok{(b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "B"  "R6"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <B>
+##   Public:
+##     clone: function (deep = FALSE) 
+##     getx: function () 
+##     x: 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ls}\NormalTok{(}\DataTypeTok{envir =}\NormalTok{ b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "clone" "getx"  "x"
+\end{verbatim}
+
+实例化对象的存储还有另外一个方面的考虑，由于类中的变量都存在于一个环境空间中，我们也可以通过手动的方式找到这个环境空间，从而进行变量的增加和修改。如果对于环境空间的变量进行修改，我们的程序将会变得非常不安全，所以为了预防安全上的问题，乐意通过R6Class()的lock参数锁定环境空间，不允许动态修改，默认值为锁定不能修改。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"A"}\NormalTok{,}
+             \DataTypeTok{lock =} \OtherTok{TRUE}\NormalTok{,}\CommentTok{# 锁定环境空间}
+             \DataTypeTok{public=} \KeywordTok{list}\NormalTok{(}
+             \DataTypeTok{x =} \DecValTok{1}
+\NormalTok{             ))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R6Class A: 'lock' argument has been renamed to 'lock_objects' as of version 2.1.This code will continue to work, but the 'lock' option will be removed in a later version of R6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{s <-}\StringTok{ }\NormalTok{A}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\KeywordTok{ls}\NormalTok{(s)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "clone" "x"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# s$aa <- 11 # 增加新变量 Error}
+\CommentTok{# rm("x",envir=s) # Error}
+\end{Highlighting}
+\end{Shaded}
+
+如果不锁定环境空间，让lock =
+FALSE，则环境完全处于开放状态，可以对变量任意修改。
+
+通过上面对R6的介绍，我们基本掌握了R6面向对象系统的只是，我们最后介绍一个基于R6的例子
+
+\section{R6面向对象案例}\label{r6}
+
+用R6面向对象系统，构建一个图书分类的使用案例
+
+任务1： 定义图书的静态结构
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Book <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Book"}\NormalTok{,}
+                \DataTypeTok{private =} \KeywordTok{list}\NormalTok{(}
+                  \DataTypeTok{title =} \OtherTok{NA}\NormalTok{,}
+                  \DataTypeTok{price=} \OtherTok{NA}\NormalTok{,}
+                  \DataTypeTok{category =} \OtherTok{NA}
+\NormalTok{                ),}
+                \DataTypeTok{public =} \KeywordTok{list}\NormalTok{(}
+                  \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(title,price,category)\{}
+\NormalTok{                    private}\OperatorTok{$}\NormalTok{title <-}\StringTok{ }\NormalTok{title}
+\NormalTok{                    private}\OperatorTok{$}\NormalTok{price <-}\StringTok{ }\NormalTok{price}
+\NormalTok{                    private}\OperatorTok{$}\NormalTok{category <-}\StringTok{ }\NormalTok{category}
+\NormalTok{                  \},}
+                  \DataTypeTok{getPrice =} \ControlFlowTok{function}\NormalTok{()\{}
+\NormalTok{                    private}\OperatorTok{$}\NormalTok{price}
+\NormalTok{                  \}}
+\NormalTok{                ))}
+
+\NormalTok{R <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"R"}\NormalTok{,}\DataTypeTok{inherit=}\NormalTok{Book)}
+\NormalTok{Java <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Java"}\NormalTok{,}\DataTypeTok{inherit=}\NormalTok{Book)}
+\NormalTok{Php <-}\StringTok{ }\KeywordTok{R6Class}\NormalTok{(}\StringTok{"Php"}\NormalTok{,}\DataTypeTok{inherit=}\NormalTok{Book)}
+
+
+\NormalTok{r1 <-}\StringTok{ }\NormalTok{R}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"R的极客思想"}\NormalTok{,}\DecValTok{59}\NormalTok{,}\StringTok{"R"}\NormalTok{)}
+\NormalTok{r1}\OperatorTok{$}\KeywordTok{getPrice}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 59
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{j1 <-}\StringTok{ }\NormalTok{Java}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"Java编程思想"}\NormalTok{,}\DecValTok{108}\NormalTok{,}\StringTok{"Java"}\NormalTok{)}
+\NormalTok{j1}\OperatorTok{$}\KeywordTok{getPrice}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 108
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p1 <-}\StringTok{ }\NormalTok{Php}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\StringTok{"head First PHP & MySQL"}\NormalTok{,}\DecValTok{98}\NormalTok{,}\StringTok{"PHP"}\NormalTok{)}
+\NormalTok{p1}\OperatorTok{$}\KeywordTok{getPrice}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 98
+\end{verbatim}
+
+任务2：双11图书打折
+
+\begin{itemize}
+\item
+  所有图书9折
+\item
+  Java图书7折，不支持重复打折
+\item
+  R打7折，支持重复打折
+\item
+  PHP图书无特别优惠
+\end{itemize}
+
+这个我们可以自己去实现了，本书就不再赘述了。
+
+通过这个例子，我们用R6实现了面向对象编程的封装，继承和多态的3个特性，证明R6是一个完全的面向对象的实现，由于R6底层基于S3实现，所以比RC的类更加有效果，因此除了推荐大家使用RC外，也极力推荐大家使用R6.
+
+截止到现在，我们介绍了4种R语言的面向对象体系结构，选择自己理解的，总有一种适合你。
+
 \chapter{环境}\label{env}
 
 环境就是作用域发挥作用的数据结构，本章将深入学习环境的概念，由于环境具有引用语义，所以本身他们也是一种很有用的数据结构，当在一个环境中对其绑定的元素进行修改时，环境不会被复制，修改会在原地进行。虽然不会经常使用引用语义，但他还是非常有用的。
@@ -3612,10 +4607,10 @@ Animal中定义action方法，每一个子类使用callSuper()重写该方法。
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] ".GlobalEnv"        "package:pryr"      "package:stats"    
-##  [4] "package:graphics"  "package:grDevices" "package:utils"    
-##  [7] "package:datasets"  "package:methods"   "Autoloads"        
-## [10] "package:base"
+##  [1] ".GlobalEnv"        "package:R6"        "package:pryr"     
+##  [4] "package:stats"     "package:graphics"  "package:grDevices"
+##  [7] "package:utils"     "package:datasets"  "package:methods"  
+## [10] "Autoloads"         "package:base"
 \end{verbatim}
 
 \begin{itemize}
@@ -3732,7 +4727,7 @@ Animal中定义action方法，每一个子类使用callSuper()重写该方法。
 \end{Shaded}
 
 \begin{verbatim}
-## <environment: 0x0000000016e25df8>
+## <environment: 0x000000002126a890>
 \end{verbatim}
 
 \begin{Shaded}
@@ -4185,25 +5180,33 @@ identical()与==是不同的，是对两个环境进行比较
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] ":)"                 "a"                  "a=b"               
-##  [4] "Animal"             "area"               "b"                 
-##  [7] "c1"                 "c2"                 "cat"               
-## [10] "Cat"                "circum"             "Dog"               
-## [13] "Duck"               "e"                  "e1"                
-## [16] "e2"                 "f"                  "f1"                
-## [19] "f1.character"       "f1.numeric"         "father"            
-## [22] "g"                  "genderFactor"       "getShape"          
-## [25] "h"                  "i"                  "m1"                
-## [28] "m2"                 "manager"            "member"            
-## [31] "Member"             "mother"             "n1"                
-## [34] "n2"                 "plus"               "plus_one"          
-## [37] "r1"                 "s1"                 "son"               
-## [40] "student"            "student.attend"     "student.default"   
-## [43] "student.exam"       "student.homework"   "teacher"           
-## [46] "teacher.assignment" "teacher.correcting" "teacher.default"   
-## [49] "teacher.lecture"    "u1"                 "u2"                
-## [52] "u3"                 "User"               "var"               
-## [55] "work"               "x"                  "y"
+##  [1] ":)"                 "a"                  "A"                 
+##  [4] "a=b"                "Animal"             "area"              
+##  [7] "b"                  "B"                  "b2"                
+## [10] "Book"               "C"                  "c1"                
+## [13] "c2"                 "cat"                "Cat"               
+## [16] "cc"                 "cc2"                "circum"            
+## [19] "conan"              "connan"             "Dog"               
+## [22] "Duck"               "e"                  "e1"                
+## [25] "e2"                 "f"                  "f1"                
+## [28] "f1.character"       "f1.numeric"         "father"            
+## [31] "g"                  "genderFactor"       "getShape"          
+## [34] "h"                  "i"                  "j1"                
+## [37] "Java"               "m1"                 "m2"                
+## [40] "manager"            "member"             "Member"            
+## [43] "mother"             "n1"                 "n2"                
+## [46] "np6"                "NR6"                "p1"                
+## [49] "Person"             "Php"                "plus"              
+## [52] "plus_one"           "pr6"                "PR6"               
+## [55] "R"                  "r1"                 "rc"                
+## [58] "RC"                 "s"                  "s1"                
+## [61] "son"                "student"            "student.attend"    
+## [64] "student.default"    "student.exam"       "student.homework"  
+## [67] "teacher"            "teacher.assignment" "teacher.correcting"
+## [70] "teacher.default"    "teacher.lecture"    "u1"                
+## [73] "u2"                 "u3"                 "User"              
+## [76] "var"                "work"               "Worker"            
+## [79] "x"                  "y"
 \end{verbatim}
 
 除了使用反引号外，还可以使用单引号或双引号来创建非语法的绑定，但是不推荐这样做(在赋值箭头左边使用字符串属于历史问题，在R开始支持反引号之前就已经开始使用了)
@@ -4273,7 +5276,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.09910975
+## [1] 0.6131557
 \end{verbatim}
 
 \begin{Shaded}
@@ -4283,7 +5286,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.9070813
+## [1] 0.6850947
 \end{verbatim}
 
 \begin{Shaded}
