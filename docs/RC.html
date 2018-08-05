@@ -25,7 +25,7 @@
 <meta name="author" content="徐静">
 
 
-<meta name="date" content="2018-08-04">
+<meta name="date" content="2018-08-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -164,6 +164,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="RC.html"><a href="RC.html#section-5.3"><i class="fa fa-check"></i><b>5.3</b> 对象赋值</a></li>
 <li class="chapter" data-level="5.4" data-path="RC.html"><a href="RC.html#section-5.4"><i class="fa fa-check"></i><b>5.4</b> 定义对象的方法</a></li>
+<li class="chapter" data-level="5.5" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.5</b> RC对象内置方法和内置属性</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="RC.html"><a href="RC.html#section-5.5.1"><i class="fa fa-check"></i><b>5.5.1</b> 内置方法：</a></li>
+<li class="chapter" data-level="5.5.2" data-path="RC.html"><a href="RC.html#section-5.5.2"><i class="fa fa-check"></i><b>5.5.2</b> 内置属性</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.6</b> RC类的辅助函数</a></li>
+<li class="chapter" data-level="5.7" data-path="RC.html"><a href="RC.html#rc"><i class="fa fa-check"></i><b>5.7</b> RC对象实例</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="S4.html"><a href="S4.html#1"><i class="fa fa-check"></i><b>5.7.1</b> 任务1：定义动物的数据结构和发声方法</a></li>
+<li class="chapter" data-level="5.7.2" data-path="S4.html"><a href="S4.html#2"><i class="fa fa-check"></i><b>5.7.2</b> 任务2：定义动物的体貌特征</a></li>
+<li class="chapter" data-level="5.7.3" data-path="S4.html"><a href="S4.html#3"><i class="fa fa-check"></i><b>5.7.3</b> 任务3：定义动物的行动方式</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="R6.html"><a href="R6.html"><i class="fa fa-check"></i><b>6</b> 基于R6的面向对象</a></li>
 <li class="chapter" data-level="7" data-path="env.html"><a href="env.html"><i class="fa fa-check"></i><b>7</b> 环境</a><ul>
@@ -416,7 +426,475 @@ u1<span class="op">$</span>age &lt;-<span class="st"> </span><span class="dv">30
 <div id="section-5.4" class="section level2">
 <h2><span class="header-section-number">5.4</span> 定义对象的方法</h2>
 <p>在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义一个RC类包括方法</span>
 
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,<span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">favorite=</span><span class="st">&#39;vector&#39;</span>),
+                    
+                    <span class="co"># 方法属性</span>
+                    <span class="dt">methods=</span> <span class="kw">list</span>(
+
+                      <span class="co"># 增加一个兴趣</span>
+                      <span class="dt">addFavorite =</span> <span class="cf">function</span>(x){
+                        favorite &lt;&lt;-<span class="st"> </span><span class="kw">c</span>(favorite,x)
+                      },
+                      <span class="co"># 删除一个兴趣</span>
+                      <span class="dt">delFavorite =</span> <span class="cf">function</span>(x){
+                        favorite &lt;&lt;-<span class="st"> </span>favorite[<span class="op">-</span><span class="kw">which</span>(favorite<span class="op">==</span>x)]
+                      },
+                      <span class="co"># 重新定义兴趣列表</span>
+                      <span class="dt">setFavorite =</span> <span class="cf">function</span>(x){
+                        favorite &lt;&lt;-<span class="st"> </span>x
+                      }
+                    ))
+
+<span class="co"># 实例化对象u1</span>
+
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&quot;u1&quot;</span>,<span class="dt">favorite=</span><span class="kw">c</span>(<span class="st">&#39;movie&#39;</span>,<span class="st">&#39;football&#39;</span>))
+
+<span class="co"># 查看u1对象</span>
+
+u1</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;u1&quot;
+## Field &quot;favorite&quot;:
+## [1] &quot;movie&quot;    &quot;football&quot;</code></pre>
+<p>接下来进行方法操作</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 删除一个兴趣</span>
+u1<span class="op">$</span><span class="kw">delFavorite</span>(<span class="st">&quot;football&quot;</span>)
+<span class="co"># 查看兴趣属性</span>
+u1<span class="op">$</span>favorite </code></pre></div>
+<pre><code>## [1] &quot;movie&quot;</code></pre>
+<p>直接到方法定义到类的内部，通过实例化的对象进行访问。这样就做到了，在定义时就能保证了方法的作用域，减少运行时检查的系统开销。</p>
+</div>
+<div id="rc" class="section level2">
+<h2><span class="header-section-number">5.5</span> RC对象内置方法和内置属性</h2>
+<p>对于RC的实例化对象，除了我们自己定义的方法函数，还有几个内置的方法。之前属性赋值赋值时使用的copy()方法，就是其中之一</p>
+<div id="section-5.5.1" class="section level3">
+<h3><span class="header-section-number">5.5.1</span> 内置方法：</h3>
+<ul>
+<li><p>initialize类的初始化函数，用于设置属性的默认值，只有在类定义的方法中使用。</p></li>
+<li><p>callSuper调用父类的同名方法，只能在类定义的方法中使用</p></li>
+<li><p>copy复制实例化对象的所有属性</p></li>
+<li><p>initFields给对象的属性赋值</p></li>
+<li><p>field查看属性或给属性赋值</p></li>
+<li><p>getClass查看对象的类定义</p></li>
+<li><p>getRefClass()同getClass()</p></li>
+<li><p>show 查看当前对象</p></li>
+<li><p>export查看属性值以类为作用域</p></li>
+<li><p>import 把一个对象的属性值赋值给另一个对象</p></li>
+<li><p>trace跟踪对象中方法调用，用于程序debug</p></li>
+<li><p>untrace取消跟踪</p></li>
+<li><p>usingMethods用于实现方法调用，只能在类定义的方法中使用，这个方法不利于程序的健壮性，所以不建议使用。</p></li>
+</ul>
+<p>接下来我们使用这些内置方法。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 类User</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,
+                    <span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">level=</span><span class="st">&quot;numeric&quot;</span>),
+                    <span class="dt">methods =</span> <span class="kw">list</span>(
+                      <span class="dt">initialize=</span><span class="cf">function</span>(name,level){
+                        <span class="kw">print</span>(<span class="st">&quot;User::initialize&quot;</span>)
+                        name &lt;&lt;-<span class="st"> &quot;conan&quot;</span>
+                        level &lt;&lt;-<span class="st"> </span><span class="dv">1</span>
+                      },
+                      <span class="dt">addLevel =</span> <span class="cf">function</span>(x){
+                        <span class="kw">print</span>(<span class="st">&quot;User::addlevel&quot;</span>)
+                        level&lt;&lt;-level<span class="op">+</span>x
+                      },
+                      <span class="dt">addHighLevel =</span> <span class="cf">function</span>(){
+                        <span class="kw">print</span>(<span class="st">&quot;user::addHighLevel&quot;</span>)
+                        <span class="kw">addLevel</span>(<span class="dv">2</span>)
+                      }
+                    ))</code></pre></div>
+<p>定义子类Member继承父类User,并包括同名方法addLevel覆盖父类的方法，在addLevel方法中，会调用父类的同名方法。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 子类Member</span>
+
+Member &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Member&quot;</span>,<span class="dt">contains=</span><span class="st">&quot;User&quot;</span>,
+                      <span class="co"># 子类中的属性</span>
+                      <span class="dt">fields =</span> <span class="kw">list</span>(<span class="dt">age=</span><span class="st">&#39;numeric&#39;</span>),
+                      <span class="dt">methods=</span><span class="kw">list</span>(
+                        
+                        <span class="co"># 覆盖父类的同名方法</span>
+                        <span class="dt">addLevel =</span> <span class="cf">function</span>(x){
+                          <span class="kw">print</span>(<span class="st">&quot;Member::addLevel&quot;</span>)
+                                                  <span class="kw">callSuper</span>(x)
+                        level &lt;&lt;-<span class="st"> </span>level<span class="op">+</span><span class="dv">1</span>
+                        
+                        }
+
+                      )
+                      )</code></pre></div>
+<p>分别实例化对象u1,m1</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化u1</span>
+
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>(<span class="dt">name=</span><span class="st">&#39;u1&#39;</span>,<span class="dt">level=</span><span class="dv">10</span>)</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看u1对象，$new()不能实现赋值操作</span>
+
+u1</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;conan&quot;
+## Field &quot;level&quot;:
+## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 通过$initFields（）向属性赋值</span>
+
+u1<span class="op">$</span><span class="kw">initFields</span>(<span class="dt">name=</span><span class="st">&#39;u1&#39;</span>,<span class="dt">level=</span><span class="dv">10</span>)</code></pre></div>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;u1&quot;
+## Field &quot;level&quot;:
+## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化m1</span>
+
+m1 &lt;-<span class="st"> </span>Member<span class="op">$</span><span class="kw">new</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1<span class="op">$</span><span class="kw">initFields</span>(<span class="dt">name=</span><span class="st">&#39;m1&#39;</span>,<span class="dt">level=</span><span class="dv">100</span>,<span class="dt">age=</span><span class="dv">12</span>)</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 100
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<p>执行$copy()方法，赋值对象属性并传值。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 属性赋值到u2</span>
+u2 &lt;-<span class="st"> </span>u1<span class="op">$</span><span class="kw">copy</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<p>使用方法field()，查看并给level属性赋值</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看level属性值</span>
+
+u1<span class="op">$</span><span class="kw">field</span>(<span class="st">&#39;level&#39;</span>)</code></pre></div>
+<pre><code>## [1] 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给level属性值为1</span>
+
+u1<span class="op">$</span><span class="kw">field</span>(<span class="st">&#39;level&#39;</span>,<span class="dv">1</span>)
+
+<span class="co"># 查看level属性值</span>
+
+u1<span class="op">$</span>level</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>使用getRefClass()和getClass()方法查看u1对象的类定义。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 类引入的定义</span>
+
+m1<span class="op">$</span><span class="kw">getRefClass</span>()</code></pre></div>
+<pre><code>## Generator for class &quot;Member&quot;:
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      &quot;addLevel#User&quot;, &quot;import&quot;, &quot;.objectParent&quot;, &quot;usingMethods&quot;, &quot;show&quot;, 
+##      &quot;getClass&quot;, &quot;untrace&quot;, &quot;export&quot;, &quot;.objectPackage&quot;, &quot;callSuper&quot;, 
+##      &quot;copy&quot;, &quot;initFields&quot;, &quot;getRefClass&quot;, &quot;trace&quot;, &quot;field&quot;, &quot;initialize&quot;, 
+##      &quot;addLevel&quot;, &quot;addHighLevel&quot;
+## 
+## Reference Superclasses: 
+##      &quot;User&quot;, &quot;envRefClass&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 类定义</span>
+
+m1<span class="op">$</span><span class="kw">getClass</span>()</code></pre></div>
+<pre><code>## Reference Class &quot;Member&quot;:
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      &quot;addLevel#User&quot;, &quot;import&quot;, &quot;.objectParent&quot;, &quot;usingMethods&quot;, &quot;show&quot;, 
+##      &quot;getClass&quot;, &quot;untrace&quot;, &quot;export&quot;, &quot;.objectPackage&quot;, &quot;callSuper&quot;, 
+##      &quot;copy&quot;, &quot;initFields&quot;, &quot;getRefClass&quot;, &quot;trace&quot;, &quot;field&quot;, &quot;initialize&quot;, 
+##      &quot;addLevel&quot;, &quot;addHighLevel&quot;
+## 
+## Reference Superclasses: 
+##      &quot;User&quot;, &quot;envRefClass&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 通过otype查看类型的不同</span>
+
+<span class="kw">otype</span>(m1<span class="op">$</span><span class="kw">getRefClass</span>())</code></pre></div>
+<pre><code>## [1] &quot;RC&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">otype</span>(m1<span class="op">$</span><span class="kw">getClass</span>())</code></pre></div>
+<pre><code>## [1] &quot;S4&quot;</code></pre>
+<p>使用$show()方法查看属性值，$show()，同show()函数，对象直接输出时就是调用了$show()方法</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1<span class="op">$</span><span class="kw">show</span>()</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 100
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">show</span>(m1)</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 100
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 100
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<p>使用$trace()跟踪方法调用,再用$untrace()方法取消跟踪绑定</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 对我addLevel()方法跟踪</span>
+
+m1<span class="op">$</span><span class="kw">trace</span>(<span class="st">&#39;addLevel&#39;</span>)</code></pre></div>
+<pre><code>## Tracing reference method &quot;addLevel&quot; for object from class
+## &quot;Member&quot;</code></pre>
+<pre><code>## [1] &quot;addLevel&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 调用addlevel()方法,tracing m1$addLevel(1)被打印跟踪生效</span>
+
+m1<span class="op">$</span><span class="kw">addLevel</span>(<span class="dv">1</span>)</code></pre></div>
+<pre><code>## Tracing m1$addLevel(1) on entry 
+## [1] &quot;Member::addLevel&quot;
+## [1] &quot;User::addlevel&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 取消对addLevel()方法跟踪</span>
+
+m1<span class="op">$</span><span class="kw">untrace</span>(<span class="st">&quot;addLevel&quot;</span>)</code></pre></div>
+<pre><code>## Untracing reference method &quot;addLevel&quot; for object from class
+## &quot;Member&quot;</code></pre>
+<pre><code>## [1] &quot;addLevel&quot;</code></pre>
+<p>使用$export()方法,以类作为作用域查看属性</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看在member类中的属性</span>
+m1<span class="op">$</span><span class="kw">export</span>(<span class="st">&quot;Member&quot;</span>)</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 102
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看在User类中的属性，当前作用域不包括age属性</span>
+
+m1<span class="op">$</span><span class="kw">export</span>(<span class="st">&quot;User&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<pre><code>## Reference class object of class &quot;User&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 102</code></pre>
+<p>使用$import()方法,把一个对象的属性值赋值给另一个对象</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化m2</span>
+
+m2 &lt;-<span class="st"> </span>Member<span class="op">$</span><span class="kw">new</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m2</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;conan&quot;
+## Field &quot;level&quot;:
+## [1] 1
+## Field &quot;age&quot;:
+## numeric(0)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 把m1对象的值赋值给m2对象</span>
+
+m2<span class="op">$</span><span class="kw">import</span>(m1)</code></pre></div>
+</div>
+<div id="section-5.5.2" class="section level3">
+<h3><span class="header-section-number">5.5.2</span> 内置属性</h3>
+<p>RC对象实例化后，有两个内置属性</p>
+<ul>
+<li><p>.self 实例化对象自身</p></li>
+<li><p>.refClassDef类的定义类型</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># $.self属性</span>
+m1<span class="op">$</span>.self</code></pre></div>
+<pre><code>## Reference class object of class &quot;Member&quot;
+## Field &quot;name&quot;:
+## [1] &quot;m1&quot;
+## Field &quot;level&quot;:
+## [1] 102
+## Field &quot;age&quot;:
+## [1] 12</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># m1$.self和m1完全相同</span>
+<span class="kw">identical</span>(m1<span class="op">$</span>.self,m1)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看类型</span>
+<span class="kw">otype</span>(m1<span class="op">$</span>.self)</code></pre></div>
+<pre><code>## [1] &quot;RC&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># $.refClassDef属性</span>
+m1<span class="op">$</span>.refClassDef</code></pre></div>
+<pre><code>## Reference Class &quot;Member&quot;:
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      &quot;addLevel#User&quot;, &quot;import&quot;, &quot;.objectParent&quot;, &quot;usingMethods&quot;, &quot;show&quot;, 
+##      &quot;getClass&quot;, &quot;untrace&quot;, &quot;export&quot;, &quot;.objectPackage&quot;, &quot;callSuper&quot;, 
+##      &quot;copy&quot;, &quot;initFields&quot;, &quot;getRefClass&quot;, &quot;trace&quot;, &quot;field&quot;, &quot;initialize&quot;, 
+##      &quot;addLevel&quot;, &quot;addHighLevel&quot;
+## 
+## Reference Superclasses: 
+##      &quot;User&quot;, &quot;envRefClass&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 与getClass()相同</span>
+
+<span class="kw">identical</span>(m1<span class="op">$</span>.refClassDef,m1<span class="op">$</span><span class="kw">getClass</span>())</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看类型</span>
+
+<span class="kw">otype</span>(m1<span class="op">$</span>.refClassDef)</code></pre></div>
+<pre><code>## [1] &quot;S4&quot;</code></pre>
+</div>
+</div>
+<div id="rc" class="section level2">
+<h2><span class="header-section-number">5.6</span> RC类的辅助函数</h2>
+<p>当定义好了RC类的结构，有一些辅助函数可以帮助我们查看类型的属性和方法，上面用于创建实例化的对象的$new()函数，也属于这类辅助函数</p>
+<ul>
+<li><p>new用于实例化对象</p></li>
+<li><p>help用于查询类中定义的所有方法</p></li>
+<li><p>methods列出类中定义的所有方法</p></li>
+<li><p>fields列出类中定义的所有属性</p></li>
+<li><p>lock给属性加锁，实例化的对象的属性只允许赋值依次，即赋值变量不可修改</p></li>
+<li><p>trace跟踪方法</p></li>
+<li><p>accessors给属性生成get/set方法</p></li>
+</ul>
+<p>接下来，使用辅助函数，继续定义之前的USER类的结构</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 定义User类</span>
+
+User &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;User&quot;</span>,
+                    <span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>,<span class="dt">level=</span><span class="st">&#39;numeric&#39;</span>),
+                    <span class="dt">methods=</span><span class="kw">list</span>(
+                      <span class="dt">initialize=</span><span class="cf">function</span>(name,level){
+                        <span class="kw">print</span>(<span class="st">&quot;User::initialize&quot;</span>)
+                        name &lt;&lt;-<span class="st"> &#39;conan&#39;</span>
+
+level &lt;&lt;-<span class="st"> </span><span class="dv">1</span>                   },
+
+<span class="dt">addLevel =</span> <span class="cf">function</span>(x){
+  <span class="kw">print</span>(<span class="st">&quot;User::addLevel&quot;</span>)
+  level &lt;&lt;-<span class="st"> </span>level<span class="op">+</span>x
+},
+<span class="dt">addHighLevel =</span> <span class="cf">function</span>(){
+  <span class="kw">print</span>(<span class="st">&quot;User::addhighLevel&quot;</span>)
+  <span class="kw">addLevel</span>(<span class="dv">2</span>)
+}
+                    ))
+
+<span class="co"># 实例化对象u1</span>
+
+u1 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 列出User类中的属性</span>
+
+User<span class="op">$</span><span class="kw">fields</span>()</code></pre></div>
+<pre><code>##        name       level 
+## &quot;character&quot;   &quot;numeric&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 列出User类中的方法</span>
+User<span class="op">$</span><span class="kw">methods</span>()</code></pre></div>
+<pre><code>##  [1] &quot;.objectPackage&quot; &quot;.objectParent&quot;  &quot;addHighLevel&quot;   &quot;addLevel&quot;      
+##  [5] &quot;callSuper&quot;      &quot;copy&quot;           &quot;export&quot;         &quot;field&quot;         
+##  [9] &quot;getClass&quot;       &quot;getRefClass&quot;    &quot;import&quot;         &quot;initFields&quot;    
+## [13] &quot;initialize&quot;     &quot;show&quot;           &quot;trace&quot;          &quot;untrace&quot;       
+## [17] &quot;usingMethods&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 查看User类中的方法调用</span>
+
+User<span class="op">$</span><span class="kw">help</span>(<span class="st">&quot;addLevel&quot;</span>)</code></pre></div>
+<pre><code>## Call:
+## $addLevel(x)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">User<span class="op">$</span><span class="kw">help</span>(<span class="st">&quot;show&quot;</span>)</code></pre></div>
+<pre><code>## Call:
+## $show()</code></pre>
+<p>给User类中的属性,增加get/set方法</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给level属性增加get/set方法</span>
+
+User<span class="op">$</span><span class="kw">accessors</span>(<span class="st">&quot;level&quot;</span>)
+
+<span class="co"># 列出所有方法</span>
+
+User<span class="op">$</span><span class="kw">methods</span>()</code></pre></div>
+<pre><code>##  [1] &quot;.objectPackage&quot; &quot;.objectParent&quot;  &quot;addHighLevel&quot;   &quot;addLevel&quot;      
+##  [5] &quot;callSuper&quot;      &quot;copy&quot;           &quot;export&quot;         &quot;field&quot;         
+##  [9] &quot;getClass&quot;       &quot;getLevel&quot;       &quot;getRefClass&quot;    &quot;import&quot;        
+## [13] &quot;initFields&quot;     &quot;initialize&quot;     &quot;setLevel&quot;       &quot;show&quot;          
+## [17] &quot;trace&quot;          &quot;untrace&quot;        &quot;usingMethods&quot;</code></pre>
+<p>使用$trace()函数,跟踪addLevel方法</p>
+<p>使用$lock()函数，把level属性设置为常量</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 锁定level属性</span>
+
+User<span class="op">$</span><span class="kw">lock</span>(<span class="st">&quot;level&quot;</span>)
+
+<span class="co"># 查看User类中被锁定的属性</span>
+User<span class="op">$</span><span class="kw">lock</span>()</code></pre></div>
+<pre><code>## [1] &quot;level&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 实例化u3，level就被初始化依次</span>
+u3 &lt;-<span class="st"> </span>User<span class="op">$</span><span class="kw">new</span>()</code></pre></div>
+<pre><code>## [1] &quot;User::initialize&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 给level属性再次赋值出错</span>
+
+<span class="co">#u3$level = 1</span></code></pre></div>
+</div>
+<div id="rc" class="section level2">
+<h2><span class="header-section-number">5.7</span> RC对象实例</h2>
+<p>我们用RC面向对象的系统做一个例子，定义一套动物叫声模型</p>
+<div id="1" class="section level3">
+<h3><span class="header-section-number">5.7.1</span> 任务1：定义动物的数据结构和发声方法</h3>
+<p>定义animal为动物的基类，包括：猫，狗，鸭</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建Animal类，包括name属性,构造方法initialize（），叫声方法bark()</span>
+
+Animal &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Animal&quot;</span>,
+                      <span class="dt">fields=</span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;character&quot;</span>),
+                      <span class="dt">methods=</span><span class="kw">list</span>(
+                        <span class="dt">initialize =</span> <span class="cf">function</span>(name){
+                          name &lt;&lt;-<span class="st"> &quot;Animal&quot;</span>
+                        },
+                        <span class="dt">bark =</span> <span class="cf">function</span>()<span class="kw">print</span>(<span class="st">&quot;Animal::bark&quot;</span>)
+                      ))
+
+<span class="co"># 创建Cat类，继承Animal类，并重写（overwrite</span>
+<span class="co">#)了initialize()和bark()</span>
+
+Cat &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Cat&quot;</span>,<span class="dt">contains=</span><span class="st">&quot;Animal&quot;</span>,
+                   <span class="dt">methods=</span><span class="kw">list</span>(
+                     <span class="dt">initialize =</span> <span class="cf">function</span>(name) name &lt;&lt;-<span class="st"> &#39;cat&#39;</span>,
+                     <span class="dt">bark =</span> <span class="cf">function</span>() <span class="kw">print</span>(<span class="kw">paste</span>(name,<span class="st">&quot;is miao miao&quot;</span>))
+                   ))
+
+<span class="co"># 创建Dog类</span>
+
+
+Dog &lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Dog&quot;</span>,<span class="dt">contains=</span><span class="st">&quot;Animal&quot;</span>,
+                   <span class="dt">methods=</span><span class="kw">list</span>(
+                     <span class="dt">initialize =</span> <span class="cf">function</span>(name) name &lt;&lt;-<span class="st"> &#39;Dog&#39;</span>,
+                     <span class="dt">bark =</span> <span class="cf">function</span>() <span class="kw">print</span>(<span class="kw">paste</span>(name,<span class="st">&quot;is wang wang&quot;</span>))
+                   ))
+
+<span class="co"># 创建Duck类</span>
+Duck&lt;-<span class="st"> </span><span class="kw">setRefClass</span>(<span class="st">&quot;Duck&quot;</span>,<span class="dt">contains=</span><span class="st">&quot;Animal&quot;</span>,
+                   <span class="dt">methods=</span><span class="kw">list</span>(
+                     <span class="dt">initialize =</span> <span class="cf">function</span>(name) name &lt;&lt;-<span class="st"> &#39;Duck&#39;</span>,
+                     <span class="dt">bark =</span> <span class="cf">function</span>() <span class="kw">print</span>(<span class="kw">paste</span>(name,<span class="st">&quot;is ga ga&quot;</span>))
+                   ))</code></pre></div>
+<p>接下来，我们实例化对象，然后研究他们的叫声</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 创建cat实例</span>
+
+cat &lt;-<span class="st"> </span>Cat<span class="op">$</span><span class="kw">new</span>()
+cat<span class="op">$</span>name</code></pre></div>
+<pre><code>## [1] &quot;cat&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cat叫声</span>
+cat<span class="op">$</span><span class="kw">bark</span>()</code></pre></div>
+<pre><code>## [1] &quot;cat is miao miao&quot;</code></pre>
+</div>
+<div id="2" class="section level3">
+<h3><span class="header-section-number">5.7.2</span> 任务2：定义动物的体貌特征</h3>
+<p>动物的体貌特征包括头，身体，肢，翅膀,我们只增加肢，只是在Animal中添加limbs属性</p>
+</div>
+<div id="3" class="section level3">
+<h3><span class="header-section-number">5.7.3</span> 任务3：定义动物的行动方式</h3>
+<p>Animal中定义action方法，每一个子类使用callSuper()重写该方法。</p>
+<p>通过这个例子，我们应该可以全面的理解R语言中基于RC对象系统的面向对象的程序设计，我本人推荐大家使用RC面向对象，因为这更像是传统语言的面向对象方式。</p>
+
+</div>
 </div>
 </div>
             </section>

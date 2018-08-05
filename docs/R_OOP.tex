@@ -124,7 +124,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2018-08-04}
+  \date{2018-08-05}
 
 \usepackage{booktabs}
 \usepackage{xeCJK}
@@ -469,8 +469,8 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 \end{Shaded}
 
 \begin{verbatim}
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## -1.30080 -0.68184 -0.37412 -0.28150  0.09321  0.64552
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -0.9158  0.3099  0.8531  0.6351  1.1072  1.5086
 \end{verbatim}
 
 \begin{Shaded}
@@ -487,13 +487,13 @@ Wickham等在R包开发中早就引入了面向对象的编程方式，R语言�
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.7837 -0.7340  0.3075  0.6405  1.2717 
+## -1.2123 -1.1152 -0.2678  0.7361  2.0295 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)
-## (Intercept)  0.04369    0.31364   0.139    0.892
+## (Intercept)  -0.1538     0.4019  -0.383    0.711
 ## 
-## Residual standard error: 0.9918 on 9 degrees of freedom
+## Residual standard error: 1.271 on 9 degrees of freedom
 \end{verbatim}
 
 \section{R为什么要进行面向对象的编程}\label{r}
@@ -972,7 +972,7 @@ base包的S3对象
 \begin{verbatim}
 ## function (x, ...) 
 ## UseMethod("mean")
-## <bytecode: 0x0000000018dc1800>
+## <bytecode: 0x0000000017826c10>
 ## <environment: namespace:base>
 \end{verbatim}
 
@@ -2649,6 +2649,870 @@ RC类有一个指定构造器方法\$initialize(),这个构造器方法在实例
 
 在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义一个RC类包括方法}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}\DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{favorite=}\StringTok{'vector'}\NormalTok{),}
+                    
+                    \CommentTok{# 方法属性}
+                    \DataTypeTok{methods=} \KeywordTok{list}\NormalTok{(}
+
+                      \CommentTok{# 增加一个兴趣}
+                      \DataTypeTok{addFavorite =} \ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{                        favorite <<-}\StringTok{ }\KeywordTok{c}\NormalTok{(favorite,x)}
+\NormalTok{                      \},}
+                      \CommentTok{# 删除一个兴趣}
+                      \DataTypeTok{delFavorite =} \ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{                        favorite <<-}\StringTok{ }\NormalTok{favorite[}\OperatorTok{-}\KeywordTok{which}\NormalTok{(favorite}\OperatorTok{==}\NormalTok{x)]}
+\NormalTok{                      \},}
+                      \CommentTok{# 重新定义兴趣列表}
+                      \DataTypeTok{setFavorite =} \ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{                        favorite <<-}\StringTok{ }\NormalTok{x}
+\NormalTok{                      \}}
+\NormalTok{                    ))}
+
+\CommentTok{# 实例化对象u1}
+
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{"u1"}\NormalTok{,}\DataTypeTok{favorite=}\KeywordTok{c}\NormalTok{(}\StringTok{'movie'}\NormalTok{,}\StringTok{'football'}\NormalTok{))}
+
+\CommentTok{# 查看u1对象}
+
+\NormalTok{u1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "u1"
+## Field "favorite":
+## [1] "movie"    "football"
+\end{verbatim}
+
+接下来进行方法操作
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 删除一个兴趣}
+\NormalTok{u1}\OperatorTok{$}\KeywordTok{delFavorite}\NormalTok{(}\StringTok{"football"}\NormalTok{)}
+\CommentTok{# 查看兴趣属性}
+\NormalTok{u1}\OperatorTok{$}\NormalTok{favorite }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "movie"
+\end{verbatim}
+
+直接到方法定义到类的内部，通过实例化的对象进行访问。这样就做到了，在定义时就能保证了方法的作用域，减少运行时检查的系统开销。
+
+\section{RC对象内置方法和内置属性}\label{rc}
+
+对于RC的实例化对象，除了我们自己定义的方法函数，还有几个内置的方法。之前属性赋值赋值时使用的copy()方法，就是其中之一
+
+\subsection{内置方法：}
+
+\begin{itemize}
+\item
+  initialize类的初始化函数，用于设置属性的默认值，只有在类定义的方法中使用。
+\item
+  callSuper调用父类的同名方法，只能在类定义的方法中使用
+\item
+  copy复制实例化对象的所有属性
+\item
+  initFields给对象的属性赋值
+\item
+  field查看属性或给属性赋值
+\item
+  getClass查看对象的类定义
+\item
+  getRefClass()同getClass()
+\item
+  show 查看当前对象
+\item
+  export查看属性值以类为作用域
+\item
+  import 把一个对象的属性值赋值给另一个对象
+\item
+  trace跟踪对象中方法调用，用于程序debug
+\item
+  untrace取消跟踪
+\item
+  usingMethods用于实现方法调用，只能在类定义的方法中使用，这个方法不利于程序的健壮性，所以不建议使用。
+\end{itemize}
+
+接下来我们使用这些内置方法。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 类User}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}
+                    \DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{level=}\StringTok{"numeric"}\NormalTok{),}
+                    \DataTypeTok{methods =} \KeywordTok{list}\NormalTok{(}
+                      \DataTypeTok{initialize=}\ControlFlowTok{function}\NormalTok{(name,level)\{}
+                        \KeywordTok{print}\NormalTok{(}\StringTok{"User::initialize"}\NormalTok{)}
+\NormalTok{                        name <<-}\StringTok{ "conan"}
+\NormalTok{                        level <<-}\StringTok{ }\DecValTok{1}
+\NormalTok{                      \},}
+                      \DataTypeTok{addLevel =} \ControlFlowTok{function}\NormalTok{(x)\{}
+                        \KeywordTok{print}\NormalTok{(}\StringTok{"User::addlevel"}\NormalTok{)}
+\NormalTok{                        level<<-level}\OperatorTok{+}\NormalTok{x}
+\NormalTok{                      \},}
+                      \DataTypeTok{addHighLevel =} \ControlFlowTok{function}\NormalTok{()\{}
+                        \KeywordTok{print}\NormalTok{(}\StringTok{"user::addHighLevel"}\NormalTok{)}
+                        \KeywordTok{addLevel}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\NormalTok{                      \}}
+\NormalTok{                    ))}
+\end{Highlighting}
+\end{Shaded}
+
+定义子类Member继承父类User,并包括同名方法addLevel覆盖父类的方法，在addLevel方法中，会调用父类的同名方法。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 子类Member}
+
+\NormalTok{Member <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Member"}\NormalTok{,}\DataTypeTok{contains=}\StringTok{"User"}\NormalTok{,}
+                      \CommentTok{# 子类中的属性}
+                      \DataTypeTok{fields =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{age=}\StringTok{'numeric'}\NormalTok{),}
+                      \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                        
+                        \CommentTok{# 覆盖父类的同名方法}
+                        \DataTypeTok{addLevel =} \ControlFlowTok{function}\NormalTok{(x)\{}
+                          \KeywordTok{print}\NormalTok{(}\StringTok{"Member::addLevel"}\NormalTok{)}
+                                                  \KeywordTok{callSuper}\NormalTok{(x)}
+\NormalTok{                        level <<-}\StringTok{ }\NormalTok{level}\OperatorTok{+}\DecValTok{1}
+                        
+\NormalTok{                        \}}
+
+\NormalTok{                      )}
+\NormalTok{                      )}
+\end{Highlighting}
+\end{Shaded}
+
+分别实例化对象u1,m1
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化u1}
+
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}\DataTypeTok{name=}\StringTok{'u1'}\NormalTok{,}\DataTypeTok{level=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看u1对象，$new()不能实现赋值操作}
+
+\NormalTok{u1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "conan"
+## Field "level":
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 通过$initFields（）向属性赋值}
+
+\NormalTok{u1}\OperatorTok{$}\KeywordTok{initFields}\NormalTok{(}\DataTypeTok{name=}\StringTok{'u1'}\NormalTok{,}\DataTypeTok{level=}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "u1"
+## Field "level":
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化m1}
+
+\NormalTok{m1 <-}\StringTok{ }\NormalTok{Member}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{initFields}\NormalTok{(}\DataTypeTok{name=}\StringTok{'m1'}\NormalTok{,}\DataTypeTok{level=}\DecValTok{100}\NormalTok{,}\DataTypeTok{age=}\DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 100
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+执行\$copy()方法，赋值对象属性并传值。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 属性赋值到u2}
+\NormalTok{u2 <-}\StringTok{ }\NormalTok{u1}\OperatorTok{$}\KeywordTok{copy}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+使用方法field()，查看并给level属性赋值
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看level属性值}
+
+\NormalTok{u1}\OperatorTok{$}\KeywordTok{field}\NormalTok{(}\StringTok{'level'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给level属性值为1}
+
+\NormalTok{u1}\OperatorTok{$}\KeywordTok{field}\NormalTok{(}\StringTok{'level'}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{# 查看level属性值}
+
+\NormalTok{u1}\OperatorTok{$}\NormalTok{level}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+使用getRefClass()和getClass()方法查看u1对象的类定义。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 类引入的定义}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{getRefClass}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Generator for class "Member":
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      "addLevel#User", "import", ".objectParent", "usingMethods", "show", 
+##      "getClass", "untrace", "export", ".objectPackage", "callSuper", 
+##      "copy", "initFields", "getRefClass", "trace", "field", "initialize", 
+##      "addLevel", "addHighLevel"
+## 
+## Reference Superclasses: 
+##      "User", "envRefClass"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 类定义}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{getClass}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference Class "Member":
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      "addLevel#User", "import", ".objectParent", "usingMethods", "show", 
+##      "getClass", "untrace", "export", ".objectPackage", "callSuper", 
+##      "copy", "initFields", "getRefClass", "trace", "field", "initialize", 
+##      "addLevel", "addHighLevel"
+## 
+## Reference Superclasses: 
+##      "User", "envRefClass"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 通过otype查看类型的不同}
+
+\KeywordTok{otype}\NormalTok{(m1}\OperatorTok{$}\KeywordTok{getRefClass}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RC"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{otype}\NormalTok{(m1}\OperatorTok{$}\KeywordTok{getClass}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S4"
+\end{verbatim}
+
+使用\$show()方法查看属性值，\$show()，同show()函数，对象直接输出时就是调用了\$show()方法
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{show}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 100
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{show}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 100
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 100
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+使用\$trace()跟踪方法调用,再用\$untrace()方法取消跟踪绑定
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 对我addLevel()方法跟踪}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{trace}\NormalTok{(}\StringTok{'addLevel'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Tracing reference method "addLevel" for object from class
+## "Member"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "addLevel"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 调用addlevel()方法,tracing m1$addLevel(1)被打印跟踪生效}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{addLevel}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Tracing m1$addLevel(1) on entry 
+## [1] "Member::addLevel"
+## [1] "User::addlevel"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 取消对addLevel()方法跟踪}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{untrace}\NormalTok{(}\StringTok{"addLevel"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Untracing reference method "addLevel" for object from class
+## "Member"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "addLevel"
+\end{verbatim}
+
+使用\$export()方法,以类作为作用域查看属性
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看在member类中的属性}
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{export}\NormalTok{(}\StringTok{"Member"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 102
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看在User类中的属性，当前作用域不包括age属性}
+
+\NormalTok{m1}\OperatorTok{$}\KeywordTok{export}\NormalTok{(}\StringTok{"User"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{verbatim}
+## Reference class object of class "User"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 102
+\end{verbatim}
+
+使用\$import()方法,把一个对象的属性值赋值给另一个对象
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化m2}
+
+\NormalTok{m2 <-}\StringTok{ }\NormalTok{Member}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "conan"
+## Field "level":
+## [1] 1
+## Field "age":
+## numeric(0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 把m1对象的值赋值给m2对象}
+
+\NormalTok{m2}\OperatorTok{$}\KeywordTok{import}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{内置属性}
+
+RC对象实例化后，有两个内置属性
+
+\begin{itemize}
+\item
+  .self 实例化对象自身
+\item
+  .refClassDef类的定义类型
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# $.self属性}
+\NormalTok{m1}\OperatorTok{$}\NormalTok{.self}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference class object of class "Member"
+## Field "name":
+## [1] "m1"
+## Field "level":
+## [1] 102
+## Field "age":
+## [1] 12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# m1$.self和m1完全相同}
+\KeywordTok{identical}\NormalTok{(m1}\OperatorTok{$}\NormalTok{.self,m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看类型}
+\KeywordTok{otype}\NormalTok{(m1}\OperatorTok{$}\NormalTok{.self)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "RC"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# $.refClassDef属性}
+\NormalTok{m1}\OperatorTok{$}\NormalTok{.refClassDef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reference Class "Member":
+## 
+## Class fields:
+##                                     
+## Name:       name     level       age
+## Class: character   numeric   numeric
+## 
+## Class Methods: 
+##      "addLevel#User", "import", ".objectParent", "usingMethods", "show", 
+##      "getClass", "untrace", "export", ".objectPackage", "callSuper", 
+##      "copy", "initFields", "getRefClass", "trace", "field", "initialize", 
+##      "addLevel", "addHighLevel"
+## 
+## Reference Superclasses: 
+##      "User", "envRefClass"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 与getClass()相同}
+
+\KeywordTok{identical}\NormalTok{(m1}\OperatorTok{$}\NormalTok{.refClassDef,m1}\OperatorTok{$}\KeywordTok{getClass}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看类型}
+
+\KeywordTok{otype}\NormalTok{(m1}\OperatorTok{$}\NormalTok{.refClassDef)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "S4"
+\end{verbatim}
+
+\section{RC类的辅助函数}\label{rc}
+
+当定义好了RC类的结构，有一些辅助函数可以帮助我们查看类型的属性和方法，上面用于创建实例化的对象的\$new()函数，也属于这类辅助函数
+
+\begin{itemize}
+\item
+  new用于实例化对象
+\item
+  help用于查询类中定义的所有方法
+\item
+  methods列出类中定义的所有方法
+\item
+  fields列出类中定义的所有属性
+\item
+  lock给属性加锁，实例化的对象的属性只允许赋值依次，即赋值变量不可修改
+\item
+  trace跟踪方法
+\item
+  accessors给属性生成get/set方法
+\end{itemize}
+
+接下来，使用辅助函数，继续定义之前的USER类的结构
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 定义User类}
+
+\NormalTok{User <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"User"}\NormalTok{,}
+                    \DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{,}\DataTypeTok{level=}\StringTok{'numeric'}\NormalTok{),}
+                    \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                      \DataTypeTok{initialize=}\ControlFlowTok{function}\NormalTok{(name,level)\{}
+                        \KeywordTok{print}\NormalTok{(}\StringTok{"User::initialize"}\NormalTok{)}
+\NormalTok{                        name <<-}\StringTok{ 'conan'}
+
+\NormalTok{level <<-}\StringTok{ }\DecValTok{1}\NormalTok{                   \},}
+
+\DataTypeTok{addLevel =} \ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"User::addLevel"}\NormalTok{)}
+\NormalTok{  level <<-}\StringTok{ }\NormalTok{level}\OperatorTok{+}\NormalTok{x}
+\NormalTok{\},}
+\DataTypeTok{addHighLevel =} \ControlFlowTok{function}\NormalTok{()\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"User::addhighLevel"}\NormalTok{)}
+  \KeywordTok{addLevel}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{                    ))}
+
+\CommentTok{# 实例化对象u1}
+
+\NormalTok{u1 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 列出User类中的属性}
+
+\NormalTok{User}\OperatorTok{$}\KeywordTok{fields}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        name       level 
+## "character"   "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 列出User类中的方法}
+\NormalTok{User}\OperatorTok{$}\KeywordTok{methods}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] ".objectPackage" ".objectParent"  "addHighLevel"   "addLevel"      
+##  [5] "callSuper"      "copy"           "export"         "field"         
+##  [9] "getClass"       "getRefClass"    "import"         "initFields"    
+## [13] "initialize"     "show"           "trace"          "untrace"       
+## [17] "usingMethods"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 查看User类中的方法调用}
+
+\NormalTok{User}\OperatorTok{$}\KeywordTok{help}\NormalTok{(}\StringTok{"addLevel"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Call:
+## $addLevel(x)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{User}\OperatorTok{$}\KeywordTok{help}\NormalTok{(}\StringTok{"show"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Call:
+## $show()
+\end{verbatim}
+
+给User类中的属性,增加get/set方法
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给level属性增加get/set方法}
+
+\NormalTok{User}\OperatorTok{$}\KeywordTok{accessors}\NormalTok{(}\StringTok{"level"}\NormalTok{)}
+
+\CommentTok{# 列出所有方法}
+
+\NormalTok{User}\OperatorTok{$}\KeywordTok{methods}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] ".objectPackage" ".objectParent"  "addHighLevel"   "addLevel"      
+##  [5] "callSuper"      "copy"           "export"         "field"         
+##  [9] "getClass"       "getLevel"       "getRefClass"    "import"        
+## [13] "initFields"     "initialize"     "setLevel"       "show"          
+## [17] "trace"          "untrace"        "usingMethods"
+\end{verbatim}
+
+使用\$trace()函数,跟踪addLevel方法
+
+使用\$lock()函数，把level属性设置为常量
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 锁定level属性}
+
+\NormalTok{User}\OperatorTok{$}\KeywordTok{lock}\NormalTok{(}\StringTok{"level"}\NormalTok{)}
+
+\CommentTok{# 查看User类中被锁定的属性}
+\NormalTok{User}\OperatorTok{$}\KeywordTok{lock}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "level"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 实例化u3，level就被初始化依次}
+\NormalTok{u3 <-}\StringTok{ }\NormalTok{User}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "User::initialize"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 给level属性再次赋值出错}
+
+\CommentTok{#u3$level = 1}
+\end{Highlighting}
+\end{Shaded}
+
+\section{RC对象实例}\label{rc}
+
+我们用RC面向对象的系统做一个例子，定义一套动物叫声模型
+
+\subsection{任务1：定义动物的数据结构和发声方法}\label{1}
+
+定义animal为动物的基类，包括：猫，狗，鸭
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建Animal类，包括name属性,构造方法initialize（），叫声方法bark()}
+
+\NormalTok{Animal <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Animal"}\NormalTok{,}
+                      \DataTypeTok{fields=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{name=}\StringTok{"character"}\NormalTok{),}
+                      \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                        \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name)\{}
+\NormalTok{                          name <<-}\StringTok{ "Animal"}
+\NormalTok{                        \},}
+                        \DataTypeTok{bark =} \ControlFlowTok{function}\NormalTok{()}\KeywordTok{print}\NormalTok{(}\StringTok{"Animal::bark"}\NormalTok{)}
+\NormalTok{                      ))}
+
+\CommentTok{# 创建Cat类，继承Animal类，并重写（overwrite}
+\CommentTok{#)了initialize()和bark()}
+
+\NormalTok{Cat <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Cat"}\NormalTok{,}\DataTypeTok{contains=}\StringTok{"Animal"}\NormalTok{,}
+                   \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                     \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name) name <<-}\StringTok{ 'cat'}\NormalTok{,}
+                     \DataTypeTok{bark =} \ControlFlowTok{function}\NormalTok{() }\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(name,}\StringTok{"is miao miao"}\NormalTok{))}
+\NormalTok{                   ))}
+
+\CommentTok{# 创建Dog类}
+
+
+\NormalTok{Dog <-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Dog"}\NormalTok{,}\DataTypeTok{contains=}\StringTok{"Animal"}\NormalTok{,}
+                   \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                     \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name) name <<-}\StringTok{ 'Dog'}\NormalTok{,}
+                     \DataTypeTok{bark =} \ControlFlowTok{function}\NormalTok{() }\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(name,}\StringTok{"is wang wang"}\NormalTok{))}
+\NormalTok{                   ))}
+
+\CommentTok{# 创建Duck类}
+\NormalTok{Duck<-}\StringTok{ }\KeywordTok{setRefClass}\NormalTok{(}\StringTok{"Duck"}\NormalTok{,}\DataTypeTok{contains=}\StringTok{"Animal"}\NormalTok{,}
+                   \DataTypeTok{methods=}\KeywordTok{list}\NormalTok{(}
+                     \DataTypeTok{initialize =} \ControlFlowTok{function}\NormalTok{(name) name <<-}\StringTok{ 'Duck'}\NormalTok{,}
+                     \DataTypeTok{bark =} \ControlFlowTok{function}\NormalTok{() }\KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(name,}\StringTok{"is ga ga"}\NormalTok{))}
+\NormalTok{                   ))}
+\end{Highlighting}
+\end{Shaded}
+
+接下来，我们实例化对象，然后研究他们的叫声
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 创建cat实例}
+
+\NormalTok{cat <-}\StringTok{ }\NormalTok{Cat}\OperatorTok{$}\KeywordTok{new}\NormalTok{()}
+\NormalTok{cat}\OperatorTok{$}\NormalTok{name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "cat"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# cat叫声}
+\NormalTok{cat}\OperatorTok{$}\KeywordTok{bark}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "cat is miao miao"
+\end{verbatim}
+
+\subsection{任务2：定义动物的体貌特征}\label{2}
+
+动物的体貌特征包括头，身体，肢，翅膀,我们只增加肢，只是在Animal中添加limbs属性
+
+\subsection{任务3：定义动物的行动方式}\label{3}
+
+Animal中定义action方法，每一个子类使用callSuper()重写该方法。
+
+通过这个例子，我们应该可以全面的理解R语言中基于RC对象系统的面向对象的程序设计，我本人推荐大家使用RC面向对象，因为这更像是传统语言的面向对象方式。
+
 \chapter{基于R6的面向对象}\label{R6}
 
 \chapter{环境}\label{env}
@@ -2868,7 +3732,7 @@ RC类有一个指定构造器方法\$initialize(),这个构造器方法在实例
 \end{Shaded}
 
 \begin{verbatim}
-## <environment: 0x000000001cd32420>
+## <environment: 0x0000000016e25df8>
 \end{verbatim}
 
 \begin{Shaded}
@@ -3322,22 +4186,24 @@ identical()与==是不同的，是对两个环境进行比较
 
 \begin{verbatim}
 ##  [1] ":)"                 "a"                  "a=b"               
-##  [4] "area"               "b"                  "c1"                
-##  [7] "c2"                 "circum"             "e"                 
-## [10] "e1"                 "e2"                 "f"                 
-## [13] "f1"                 "f1.character"       "f1.numeric"        
-## [16] "father"             "g"                  "genderFactor"      
-## [19] "getShape"           "h"                  "i"                 
-## [22] "manager"            "member"             "Member"            
-## [25] "mother"             "n1"                 "n2"                
-## [28] "plus"               "plus_one"           "r1"                
-## [31] "s1"                 "son"                "student"           
-## [34] "student.attend"     "student.default"    "student.exam"      
-## [37] "student.homework"   "teacher"            "teacher.assignment"
-## [40] "teacher.correcting" "teacher.default"    "teacher.lecture"   
-## [43] "u1"                 "u2"                 "u3"                
-## [46] "User"               "var"                "work"              
-## [49] "x"                  "y"
+##  [4] "Animal"             "area"               "b"                 
+##  [7] "c1"                 "c2"                 "cat"               
+## [10] "Cat"                "circum"             "Dog"               
+## [13] "Duck"               "e"                  "e1"                
+## [16] "e2"                 "f"                  "f1"                
+## [19] "f1.character"       "f1.numeric"         "father"            
+## [22] "g"                  "genderFactor"       "getShape"          
+## [25] "h"                  "i"                  "m1"                
+## [28] "m2"                 "manager"            "member"            
+## [31] "Member"             "mother"             "n1"                
+## [34] "n2"                 "plus"               "plus_one"          
+## [37] "r1"                 "s1"                 "son"               
+## [40] "student"            "student.attend"     "student.default"   
+## [43] "student.exam"       "student.homework"   "teacher"           
+## [46] "teacher.assignment" "teacher.correcting" "teacher.default"   
+## [49] "teacher.lecture"    "u1"                 "u2"                
+## [52] "u3"                 "User"               "var"               
+## [55] "work"               "x"                  "y"
 \end{verbatim}
 
 除了使用反引号外，还可以使用单引号或双引号来创建非语法的绑定，但是不推荐这样做(在赋值箭头左边使用字符串属于历史问题，在R开始支持反引号之前就已经开始使用了)
@@ -3407,7 +4273,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.4754039
+## [1] 0.09910975
 \end{verbatim}
 
 \begin{Shaded}
@@ -3417,7 +4283,7 @@ value就等价于assign(``name'',value,inherits=TRUE)
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.2683967
+## [1] 0.9070813
 \end{verbatim}
 
 \begin{Shaded}

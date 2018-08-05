@@ -776,4 +776,130 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.[0K
 [0K[?25h[?25l
 [0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
 $[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git a[0K[?25hd[0Kd[0K[11G[?25l$ git add .[0K[?25h[?25l
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/F74F687A/pcs/source-pane.pper.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+warning: LF will be replaced by CRLF in .Rproj.user/F74F687A/pcs/windowlayoutstate.pper.[0K
+The file will have its original line endings in your working directory.[0K
+warning: LF will be replaced by CRLF in .Rproj.user/F74F687A/sources/prop/73C92C3A.[0K
+The file will have its original line endings in your working directory.[0K
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/F74F687A/sources/prop/C204449A.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+warning: LF will be replaced by CRLF in .Rproj.user/F74F687A/sources/prop/E6C597ED.[0K
+The file will have its original line endings in your working directory.[0K
+[0K[?25hwarning: LF will be replaced by CRLF in .Rproj.user/F74F687A/sources/prop/FBF05902.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+[0K[?25hwarning: LF will be replaced by CRLF in img/logo.svg.[0K[?25l
+The file will have its original line endings in your working directory.[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git c[0K[?25ho[0Km[0Km[0Ki[0Kt[0K[14G[?25l$ git commit -[0K[?25hm[0K[17G[?25l$ git commit -m "[0K[?25h:[0Ka[0Kr[0Kt[0K"[0K[?25l$ git commit -m ":art[0K[23G[?25h[22G[?25l$ git commit -m ":art:[0K[?25h"[0K[?25l
+[0K[?25h[master c01a181] :art:[0K[?25l
+ 49 files changed, 1045 insertions(+), 2024 deletions(-)[0K
+ rewrite .Rproj.user/F74F687A/console06/INDEX001 (100%)[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/1080FE2F[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/1080FE2F-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/37CC149A[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/37CC149A-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/3A214E2E-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/43DBF0E9-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/64AF9A48-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/6A6BEEB0-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/6D034D76-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/7E658E03-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/7FC8EA6-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/8A572269[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/8A572269-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/8E28A3AE-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/9E1F8AF6-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/B56F813B[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/B56F813B-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/C5208515[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/C5208515-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF2117F2/lock_file[0K
+ rewrite .Rproj.user/shared/notebooks/EEF9A1A9-05-ch5/1/s/chunks.json (100%)[0K
+ create mode 100644 .gitignore[0K
+ create mode 100644 img/logo.svg[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Ky[0K[?25l$ gi[0K[?25ht[0K[7G[?25l[16A delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/7E658E03-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/7FC8EA6-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/8A572269[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/8A572269-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/8E28A3AE-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/9E1F8AF6-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/B56F813B[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/B56F813B-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/C5208515[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/C5208515-contents[0K
+ delete mode 100644 .Rproj.user/F74F687A/sources/s-CF21[0K1
+7F2/lock_file[0K
+ rewrite .Rproj.user/shared/notebooks/EEF9A1A9-05-ch5/1[0K/
+s/chunks.json (100%)[0K
+ create mode 100644 .gitignore[0K
+ create mode 100644 img/logo.svg[0K
+[0K
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0K
+[0m$ git[0K[7G[?25h[?25l$ git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[14G[?25l$ git remote a[0K[?25hd[0Kd[0K[18G[?25l$ git remote add o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[25G[?25l$ git remote add origin g[0K[?25hi[0Kt[0K[29G[28G[?25l$ git remote add origin gi[0K[?25h[?25l$ git remote add origin g[0K[?25h[?25l$ git remote add origin[0K[25G[?25h[?25l$ git remote add origin h[0K[?25ht[0Kt[0Ko[0K[?25l$ git remote add origin htt[0K[?25hp[0Ks[0K:[0K/[0K/[0Kg[0Ki[0Kt[0Kh[0Ku[0Kb[0K.[0Kc[0Ko[0Km[0K/[0KD[0Ka[0Kt[0Ka[0KX[0Ku[0Kj[0Ki[0Kn[0Kg[0K/[0KR[0K[?25l
+[0K[?25h_[0Ko[0Ko[0Kp[0K.[0Kg[0Kt[0K[?25l_oop.g[0K[?25hi[0Kt[0K[?25l
+[0K[?25hfatal: remote origin already exists.[0K[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git r[0K[?25he[0K[?25l$ git r[0K[?25h[?25l$ git[0K[7G[?25h[?25l$ git r[0K[?25hm[0K[10G[9G[?25l$ git r[0K[?25h[?25l$ git[0K[7G[?25h[?25l$ git r[0K[?25h[?25le[0K[8G[?25h[9G[10G[9G[?25l$ git r[0K[?25h[?25l$ git[0K[7G[?25h[?25l$ git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[?25l$ git remot[0K[?25h[?25l$ git remo[0K[?25h[?25l$ git rem[0K[?25h[?25l$ git re[0K[?25h[?25l$ git r[0K[?25h[?25l$ git[0K[7G[?25h[?25l$ git r[0K[?25he[0Km[0Ko[0Kt[0Ke[0K[14G[15G[?25l$ git remote  r[0K[?25hm[0K[18G[?25l$ git remote  rm o[0K[?25hr[0Ki[0Kg[0Ki[0Kn[0K[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K[1G[?25h[?25l
+$[0K[3G[?25h[?25l$ git remote  rm origin[0K[?25h[?25l$ git remote add origin https://github.com/DataXujing/R[0K[16G[?25h[?25l
+_oop.git[0K[?25h[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git o[0K[?25hu[0Ks[0Kh[0K[12G[?25l$ git oush -[0K[12G[?25h[13G[?25l$ git oush -u[0K[?25h[15G[?25l$ git oush -u o[0K[?25hr[0Ki[0Kf[0K[?25l$ git oush -u ori[0K[?25hg[0Ki[0Kn[0K[22G[?25l$ git oush -u origin m[0K[?25ha[0Ks[0Kt[0Ke[0Kr[0K[?25l
+[0K[?25hgit: 'oush' is not a git command. See 'git --help'.[0K[?25l
+[0K
+The most similar command is[0K
+        push[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[1G[?25h[3G[?25l$ git oush -u origin master[0K[?25h[27G[26G[25G[24G[23G[22G[20G[19G[18G[17G[16G[15G[14G[13G[12G[11G[10G[9G[8G[?25l$ git ush -u origin master[0K[7G[?25h[?25l$ git push -u origin master[0K[8G[?25h[?25l
+[0K[?25hEnumerating objects: 90, done.[0K[?25l
+Counting objects:  17% (16/90)[0K[1G[?25hCounting objects: 100% (90/90), done.[0K[?25l
+Delta compression using up to 4 threads.[0K
+Compressing objects:  10% (4/40)[0K[1G[?25h[?25lCompressing objects:  77% (31/40)[0K[1G[?25hCompressing objects: 100% (40/40), done.[0K[?25l
+Writing objects:  76% (36/47)[0K[1G[?25h[?25lWriting objects:  78% (37/47)[0K[1G[?25hWriting objects: 100% (47/47), 500.40 KiB | 9.62 MiB/s,[0K[?25l
+done.[0K
+Total 47 (delta 28), reused 0 (delta 0)[0K
+[0K[?25hremote: Resolving deltas:  64% (18/28)[0K[42G[1Gremote: Resolving deltas: 100% (28/28), completed with [0K2[?25l
+5 local objects.[0K
+[0K[?25hTo https://github.com/DataXujing/R_oop.git[0K[?25l
+   256173e..c01a181  master -> master[0K
+[0K[?25hBranch 'master' set up to track remote branch 'master' [0Kf[?25l
+rom 'origin'.[0K
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l[11AWriting objects: 100% (47/47), 500.40 KiB | 9.62 MiB/s, done.[0K
+Total 47 (delta 28), reused 0 (delta 0)[0K
+remote: Resolving deltas: 100% (28/28), completed with 25 local objects.[0K
+To https://github.com/DataXujing/R_oop.git[0K
+   256173e..c01a181  master -> master[0K
+Branch 'master' set up to track remote branch 'master' from 'origin'.[0K
+[0K
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0K
+[0m$[0K
+[0K
+[0K
+[0K[3A[3G[?25h[0m[0K]0;:/c/Users/xujing.LAPTOP-LLR84L1D/Desktop/R_OOP/R_OOP[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git i[0K[?25hn[0Ki[0Kt[0K[12G[?25l
+[0K[?25hReinitialized existing Git repository in C:/Users/xujing.LAPTOP-LLR84L1D/Desktop/R_OOP/R_OOP/.git/[0K[?25l
+[0K[?25h[?25l
+[0;32mxujing@LAPTOP-LLR84L1D [0;35m [0;33m~/Desktop/R_OOP/R_OOP[0;36m (master)[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git a[0K[?25hd[0Kd[0K[11G[?25l$ git add .[0K[?25h[?25l
 [0K[?25h

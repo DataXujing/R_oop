@@ -207,3 +207,442 @@ u1$age <- 30
 ## 定义对象的方法
 
 在S3,S4的对象系统中，我们实现对象行为时，都是借助于泛型函数实现的。这种实现方法的最大问题是：在定义函数和对象的代码是分离的，需要在运行时，通过判断对象的类型完成方法的调用。而RC对象系统中，方法可以定义在类的内部，通过实例化的对象完成方法的调用。
+
+```{r warning=FALSE}
+
+# 定义一个RC类包括方法
+
+User <- setRefClass("User",fields=list(name="character",favorite='vector'),
+                    
+                    # 方法属性
+                    methods= list(
+
+                      # 增加一个兴趣
+                      addFavorite = function(x){
+                        favorite <<- c(favorite,x)
+                      },
+                      # 删除一个兴趣
+                      delFavorite = function(x){
+                        favorite <<- favorite[-which(favorite==x)]
+                      },
+                      # 重新定义兴趣列表
+                      setFavorite = function(x){
+                        favorite <<- x
+                      }
+                    ))
+
+# 实例化对象u1
+
+u1 <- User$new(name="u1",favorite=c('movie','football'))
+
+# 查看u1对象
+
+u1
+```
+
+
+接下来进行方法操作
+
+```{r warning=FALSE}
+
+# 删除一个兴趣
+u1$delFavorite("football")
+# 查看兴趣属性
+u1$favorite 
+
+```
+
+直接到方法定义到类的内部，通过实例化的对象进行访问。这样就做到了，在定义时就能保证了方法的作用域，减少运行时检查的系统开销。
+
+## RC对象内置方法和内置属性
+
+对于RC的实例化对象，除了我们自己定义的方法函数，还有几个内置的方法。之前属性赋值赋值时使用的copy()方法，就是其中之一
+
+### 内置方法：
+
++ initialize类的初始化函数，用于设置属性的默认值，只有在类定义的方法中使用。
+
++ callSuper调用父类的同名方法，只能在类定义的方法中使用
+
++ copy复制实例化对象的所有属性
+
++ initFields给对象的属性赋值
+
++ field查看属性或给属性赋值
+
++ getClass查看对象的类定义
+
++ getRefClass()同getClass()
+
++ show 查看当前对象
+
++ export查看属性值以类为作用域
+
++ import 把一个对象的属性值赋值给另一个对象
+
++ trace跟踪对象中方法调用，用于程序debug
+
++ untrace取消跟踪
+
++ usingMethods用于实现方法调用，只能在类定义的方法中使用，这个方法不利于程序的健壮性，所以不建议使用。
+
+接下来我们使用这些内置方法。
+
+```{r warning=FALSE}
+# 类User
+
+User <- setRefClass("User",
+                    fields=list(name="character",level="numeric"),
+                    methods = list(
+                      initialize=function(name,level){
+                        print("User::initialize")
+                        name <<- "conan"
+                        level <<- 1
+                      },
+                      addLevel = function(x){
+                        print("User::addlevel")
+                        level<<-level+x
+                      },
+                      addHighLevel = function(){
+                        print("user::addHighLevel")
+                        addLevel(2)
+                      }
+                    ))
+
+```
+
+
+定义子类Member继承父类User,并包括同名方法addLevel覆盖父类的方法，在addLevel方法中，会调用父类的同名方法。
+
+```{r warning=FALSE}
+
+# 子类Member
+
+Member <- setRefClass("Member",contains="User",
+                      # 子类中的属性
+                      fields = list(age='numeric'),
+                      methods=list(
+                        
+                        # 覆盖父类的同名方法
+                        addLevel = function(x){
+                          print("Member::addLevel")
+                                                  callSuper(x)
+                        level <<- level+1
+                        
+                        }
+
+                      )
+                      )
+
+```
+
+
+分别实例化对象u1,m1
+
+```{r warning=FALSE}
+# 实例化u1
+
+u1 <- User$new(name='u1',level=10)
+
+# 查看u1对象，$new()不能实现赋值操作
+
+u1
+
+# 通过$initFields（）向属性赋值
+
+u1$initFields(name='u1',level=10)
+
+
+# 实例化m1
+
+m1 <- Member$new()
+m1$initFields(name='m1',level=100,age=12)
+```
+
+
+执行$copy()方法，赋值对象属性并传值。
+
+```{r warning=FALSE}
+# 属性赋值到u2
+u2 <- u1$copy()
+
+```
+
+使用方法field()，查看并给level属性赋值
+
+```{r warning=FALSE}
+# 查看level属性值
+
+u1$field('level')
+# 给level属性值为1
+
+u1$field('level',1)
+
+# 查看level属性值
+
+u1$level
+```
+
+使用getRefClass()和getClass()方法查看u1对象的类定义。
+
+```{r warning=FALSE}
+
+# 类引入的定义
+
+m1$getRefClass()
+
+# 类定义
+
+m1$getClass()
+
+# 通过otype查看类型的不同
+
+otype(m1$getRefClass())
+
+otype(m1$getClass())
+```
+
+使用\$show()方法查看属性值，\$show()，同show()函数，对象直接输出时就是调用了\$show()方法
+
+```{r warning=FALSE}
+m1$show()
+
+show(m1)
+
+m1
+
+```
+
+使用\$trace()跟踪方法调用,再用\$untrace()方法取消跟踪绑定
+
+```{r warning=FALSE}
+# 对我addLevel()方法跟踪
+
+m1$trace('addLevel')
+
+# 调用addlevel()方法,tracing m1$addLevel(1)被打印跟踪生效
+
+m1$addLevel(1)
+
+# 取消对addLevel()方法跟踪
+
+m1$untrace("addLevel")
+
+```
+
+使用\$export()方法,以类作为作用域查看属性
+
+```{r warning=FALSE}
+# 查看在member类中的属性
+m1$export("Member")
+
+# 查看在User类中的属性，当前作用域不包括age属性
+
+m1$export("User")
+
+```
+
+使用\$import()方法,把一个对象的属性值赋值给另一个对象
+
+```{r warning=FALSE}
+# 实例化m2
+
+m2 <- Member$new()
+
+m2
+
+# 把m1对象的值赋值给m2对象
+
+m2$import(m1)
+```
+
+### 内置属性
+
+RC对象实例化后，有两个内置属性
+
++ .self 实例化对象自身
+
++ .refClassDef类的定义类型
+
+```{r warning=FALSE}
+# $.self属性
+m1$.self
+
+# m1$.self和m1完全相同
+identical(m1$.self,m1)
+
+# 查看类型
+otype(m1$.self)
+
+# $.refClassDef属性
+m1$.refClassDef
+
+# 与getClass()相同
+
+identical(m1$.refClassDef,m1$getClass())
+
+# 查看类型
+
+otype(m1$.refClassDef)
+```
+
+## RC类的辅助函数
+
+当定义好了RC类的结构，有一些辅助函数可以帮助我们查看类型的属性和方法，上面用于创建实例化的对象的$new()函数，也属于这类辅助函数
+
++ new用于实例化对象
+
++ help用于查询类中定义的所有方法
+
++ methods列出类中定义的所有方法
+
++ fields列出类中定义的所有属性
+
++ lock给属性加锁，实例化的对象的属性只允许赋值依次，即赋值变量不可修改
+
++ trace跟踪方法
+
++ accessors给属性生成get/set方法
+
+接下来，使用辅助函数，继续定义之前的USER类的结构
+
+```{r warning=FALSE}
+# 定义User类
+
+User <- setRefClass("User",
+                    fields=list(name="character",level='numeric'),
+                    methods=list(
+                      initialize=function(name,level){
+                        print("User::initialize")
+                        name <<- 'conan'
+
+level <<- 1                   },
+
+addLevel = function(x){
+  print("User::addLevel")
+  level <<- level+x
+},
+addHighLevel = function(){
+  print("User::addhighLevel")
+  addLevel(2)
+}
+                    ))
+
+# 实例化对象u1
+
+u1 <- User$new()
+
+# 列出User类中的属性
+
+User$fields()
+
+# 列出User类中的方法
+User$methods()
+
+# 查看User类中的方法调用
+
+User$help("addLevel")
+User$help("show")
+```
+
+给User类中的属性,增加get/set方法
+
+```{r warning=FALSE}
+# 给level属性增加get/set方法
+
+User$accessors("level")
+
+# 列出所有方法
+
+User$methods()
+```
+
+使用$trace()函数,跟踪addLevel方法
+
+使用$lock()函数，把level属性设置为常量
+
+```{r warning=FALSE}
+# 锁定level属性
+
+User$lock("level")
+
+# 查看User类中被锁定的属性
+User$lock()
+
+# 实例化u3，level就被初始化依次
+u3 <- User$new()
+
+# 给level属性再次赋值出错
+
+#u3$level = 1
+```
+## RC对象实例
+
+我们用RC面向对象的系统做一个例子，定义一套动物叫声模型
+
+### 任务1：定义动物的数据结构和发声方法
+
+定义animal为动物的基类，包括：猫，狗，鸭
+
+```{r warning=FALSE}
+# 创建Animal类，包括name属性,构造方法initialize（），叫声方法bark()
+
+Animal <- setRefClass("Animal",
+                      fields=list(name="character"),
+                      methods=list(
+                        initialize = function(name){
+                          name <<- "Animal"
+                        },
+                        bark = function()print("Animal::bark")
+                      ))
+
+# 创建Cat类，继承Animal类，并重写（overwrite
+#)了initialize()和bark()
+
+Cat <- setRefClass("Cat",contains="Animal",
+                   methods=list(
+                     initialize = function(name) name <<- 'cat',
+                     bark = function() print(paste(name,"is miao miao"))
+                   ))
+
+# 创建Dog类
+
+
+Dog <- setRefClass("Dog",contains="Animal",
+                   methods=list(
+                     initialize = function(name) name <<- 'Dog',
+                     bark = function() print(paste(name,"is wang wang"))
+                   ))
+
+# 创建Duck类
+Duck<- setRefClass("Duck",contains="Animal",
+                   methods=list(
+                     initialize = function(name) name <<- 'Duck',
+                     bark = function() print(paste(name,"is ga ga"))
+                   ))
+
+
+```
+
+接下来，我们实例化对象，然后研究他们的叫声
+
+```{r warning=FALSE}
+# 创建cat实例
+
+cat <- Cat$new()
+cat$name
+
+# cat叫声
+cat$bark()
+```
+
+
+### 任务2：定义动物的体貌特征
+
+动物的体貌特征包括头，身体，肢，翅膀,我们只增加肢，只是在Animal中添加limbs属性
+
+### 任务3：定义动物的行动方式
+
+Animal中定义action方法，每一个子类使用callSuper()重写该方法。
+
+通过这个例子，我们应该可以全面的理解R语言中基于RC对象系统的面向对象的程序设计，我本人推荐大家使用RC面向对象，因为这更像是传统语言的面向对象方式。
